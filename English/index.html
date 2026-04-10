@@ -25,8 +25,12 @@
   .mod-name-area label { font-size: 12px; color: var(--text-muted); white-space: nowrap; font-weight: 500; }
   .mod-name-area input { background: transparent; border: none; outline: none; color: var(--accent); font-family: 'JetBrains Mono',monospace; font-size: 14px; font-weight: 600; width: 140px; }
   .mod-name-area input::placeholder { color: var(--text-dim); }
-  #guideBtn { background: var(--surface2); border: 1px solid var(--border); color: var(--accent3); padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans',sans-serif; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: all .2s; }
-  #guideBtn:hover { background: var(--surface3); border-color: var(--accent3); }
+  .hdr-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--accent3); padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans',sans-serif; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: all .2s; text-decoration: none; }
+  .hdr-btn:hover { background: var(--surface3); border-color: var(--accent3); }
+  .hdr-btn.bug { color: var(--accent2); }
+  .hdr-btn.bug:hover { border-color: var(--accent2); }
+  .hdr-btn.changelog { color: var(--text-muted); }
+  .hdr-btn.changelog:hover { color: var(--text); border-color: var(--border); }
 
   .main-layout { display: flex; min-height: calc(100vh - 85px); }
   .sidebar { width: 200px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; display: flex; flex-direction: column; gap: 4px; }
@@ -160,6 +164,18 @@
   #toast { position: fixed; bottom: 30px; right: 30px; background: var(--surface2); border: 1px solid var(--green); color: var(--green); padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; z-index: 300; opacity: 0; pointer-events: none; transition: opacity .3s; display: flex; align-items: center; gap: 8px; }
   #toast.show { opacity: 1; }
 
+  /* Changelog */
+  .cl-version { margin-bottom: 28px; }
+  .cl-version:last-child { margin-bottom: 0; }
+  .cl-version-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .cl-tag { font-family: 'JetBrains Mono',monospace; font-size: 15px; font-weight: 600; color: var(--accent); background: rgba(245,166,35,.1); padding: 3px 10px; border-radius: 6px; }
+  .cl-date { font-size: 12px; color: var(--text-dim); }
+  .cl-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; padding: 2px 8px; border-radius: 4px; }
+  .cl-badge.new { background: rgba(86,211,100,.15); color: var(--green); border: 1px solid rgba(86,211,100,.3); }
+  .cl-list { list-style: none; display: flex; flex-direction: column; gap: 7px; padding-left: 4px; }
+  .cl-list li { font-size: 13px; color: var(--text-muted); line-height: 1.5; padding-left: 4px; border-left: 2px solid var(--border); }
+  .cl-list code { font-family: 'JetBrains Mono',monospace; background: var(--surface3); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: var(--accent3); }
+
   @media (max-width:700px) {
     .sidebar { width: 56px; }
     .tab-btn span, .tab-count, .sidebar-label { display: none; }
@@ -186,9 +202,69 @@
       <label>Mod Name:</label>
       <input type="text" id="modNameInput" placeholder="mymods" maxlength="32" title="This becomes the prefix in your filenames">
     </div>
-    <button id="guideBtn">📖 How to Install</button>
+    <button id="guideBtn" class="hdr-btn">📖 How to Install</button>
+    <button id="changelogBtn" class="hdr-btn changelog">📋 Changelog</button>
+    <a href="https://github.com/Alagesia/MTT-Modcreator/issues" target="_blank" class="hdr-btn bug">🐛 Report Bug</a>
   </div>
 </header>
+
+<!-- CHANGELOG MODAL -->
+<div class="modal-overlay" id="changelogModal">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header">
+      <h2>📋 Changelog</h2>
+      <button class="modal-close" onclick="document.getElementById('changelogModal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="changelogBody">
+      <!-- ============================================================
+           CHANGELOG — edit the entries below to add new versions.
+           Copy a <div class="cl-version"> block to add a new version.
+           ============================================================ -->
+
+      <div class="cl-version">
+        <div class="cl-version-header">
+          <span class="cl-tag">v1.0.2</span>
+          <span class="cl-date">April 11, 2025</span>
+          <span class="cl-badge new">Latest</span>
+        </div>
+        <ul class="cl-list">
+          <li>🔧 <strong>Fix:</strong> Credits were not being written to exported JSON files — this is now resolved.</li>
+          <li>✨ <strong>New:</strong> Shows now have a Credits field, same as Movies and TV Series.</li>
+          <li>✨ <strong>New:</strong> Changelog button added to the header (you're reading it!).</li>
+          <li>✨ <strong>New:</strong> Report Bug button added, linking to the GitHub issue tracker.</li>
+          <li>✨ <strong>New:</strong> All content tabs renamed for clarity — "TV Shows" is now "Shows".</li>
+        </ul>
+      </div>
+
+      <div class="cl-version">
+        <div class="cl-version-header">
+          <span class="cl-tag">v1.0.1</span>
+          <span class="cl-date">April 10, 2025</span>
+        </div>
+        <ul class="cl-list">
+          <li>✨ <strong>New:</strong> Name Lists section now includes a plain-English explanation of what it does in-game.</li>
+          <li>✨ <strong>New:</strong> Credits field replaced with a searchable dropdown containing all 2,500+ vanilla cast members plus any cast you've added in your current mod session.</li>
+          <li>✨ <strong>New:</strong> Entry IDs are now editable and generated in a safe range (9,000,000–9,999,999) that does not overlap with any vanilla content, reducing mod conflicts across multiple sessions.</li>
+        </ul>
+      </div>
+
+      <div class="cl-version">
+        <div class="cl-version-header">
+          <span class="cl-tag">v1.0.0</span>
+          <span class="cl-date">April 10, 2025</span>
+        </div>
+        <ul class="cl-list">
+          <li>🎉 <strong>Initial release</strong> of the Mad Television Tycoon Mod Creator.</li>
+          <li>✨ Add Movies, TV Series, Shows, Cast Members, Name Lists, and Review Texts through a visual interface — no JSON knowledge required.</li>
+          <li>✨ Export mod-ready JSON files named correctly for the Modloader (<code>yourname_items.json</code>, <code>_cast</code>, <code>_names</code>, <code>_reviews</code>).</li>
+          <li>✨ Built-in How to Install guide with step-by-step instructions.</li>
+          <li>✨ Modloader download link and installation warning included.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <div class="main-layout">
   <nav class="sidebar">
@@ -623,6 +699,8 @@ function movieCard(m,i) {
 
 function saveMovie(i) {
   const m=store.movies[i]; const uid='mov_'+m._id;
+  // Read credits BEFORE render() destroys the DOM widgets
+  m.credits_ids=getSelectedCredits(uid);
   m._id=parseInt(document.getElementById(uid+'_id').value)||m._id;
   m.name=vv(uid+'_name'); m.name_de=vv(uid+'_name_de');
   m.desc=vv(uid+'_desc'); m.desc_de=vv(uid+'_desc_de');
@@ -632,7 +710,6 @@ function saveMovie(i) {
   m.chance=vn(uid+'_chance'); m.approval=vn(uid+'_approval');
   m.cult=vc(uid+'_cult'); m.timeless=vc(uid+'_timeless');
   m.evergreen=vc(uid+'_evergreen'); m.premium=vc(uid+'_premium'); m.pirated=vc(uid+'_pirated');
-  m.credits_ids=getSelectedCredits(uid);
   showToast('Movie saved!'); renderMovies();
 }
 
@@ -699,6 +776,8 @@ function seriesCard(s,i) {
 
 function saveSeries(i) {
   const s=store.series[i]; const uid='ser_'+s._id;
+  // Read credits BEFORE render() destroys the DOM widgets
+  s.credits_ids=getSelectedCredits(uid);
   s._id=parseInt(document.getElementById(uid+'_id').value)||s._id;
   s.name=vv(uid+'_name'); s.name_de=vv(uid+'_name_de');
   s.desc=vv(uid+'_desc'); s.desc_de=vv(uid+'_desc_de');
@@ -708,7 +787,6 @@ function saveSeries(i) {
   s.chance=vn(uid+'_chance'); s.approval=vn(uid+'_approval');
   s.cult=vc(uid+'_cult'); s.timeless=vc(uid+'_timeless');
   s.evergreen=vc(uid+'_evergreen'); s.premium=vc(uid+'_premium');
-  s.credits_ids=getSelectedCredits(uid);
   showToast('Series saved!'); renderSeries();
 }
 
@@ -754,6 +832,8 @@ function showCard(s,i) {
         <div class="field"><label>Audience Potential (0–100)</label>${range(uid+'_potential',0,100,s.potential||50)}</div>
         <div class="field"><label>Approval (255 = available)</label>${range(uid+'_approval',0,255,s.approval!=null?s.approval:255)}</div>
       </div>
+      <div class="section-divider">Credits <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">— pick presenter(s), hosts or cast</span></div>
+      ${buildCreditsWidget(uid, s.credits_ids||[])}
       <div style="margin-top:18px;display:flex;justify-content:flex-end">
         <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveShow(${i})">💾 Save</button>
       </div>
@@ -763,6 +843,8 @@ function showCard(s,i) {
 
 function saveShow(i) {
   const s=store.shows[i]; const uid='shw_'+s._id;
+  // Read credits BEFORE render() destroys the DOM widgets
+  s.credits_ids=getSelectedCredits(uid);
   s._id=parseInt(document.getElementById(uid+'_id').value)||s._id;
   s.name=vv(uid+'_name'); s.name_de=vv(uid+'_name_de');
   s.desc=vv(uid+'_desc'); s.desc_de=vv(uid+'_desc_de');
@@ -909,6 +991,8 @@ function openGuide() { document.getElementById('guideModal').classList.add('open
 function closeGuide() { document.getElementById('guideModal').classList.remove('open'); }
 document.getElementById('guideBtn').onclick = openGuide;
 document.getElementById('guideModal').onclick = function(e){ if(e.target===this) closeGuide(); };
+document.getElementById('changelogBtn').onclick = function() { document.getElementById('changelogModal').classList.add('open'); };
+document.getElementById('changelogModal').onclick = function(e){ if(e.target===this) this.classList.remove('open'); };
 
 // ============ EXPORT ============
 function openExport() { buildExportPanel(); document.getElementById('exportPanel').classList.add('open'); }
@@ -985,6 +1069,7 @@ function downloadItems() {
   store.shows.forEach((s,i)=>{
     const e={_comment:s.name||'Show '+(i+1),ID:s._id,ItemTyp:s.typ||16,Name:s.name||'',Desc:s.desc||'',Genre:s.typ||16,Date:s.year||0,Rating:s.rating||60,Blocks:s.blocks||1,AgeRate:s.age||0,Texture:1,Approval:s.approval??255,Potential:s.potential||50};
     if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de; if(s.price) e.Price=s.price;
+    const cr=creditsStr(s.credits_ids); if(cr) e.Credits=cr;
     data.push(e);
   });
   downloadFile(mn+'_items.json', JSON.stringify({data},null,2));
