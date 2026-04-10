@@ -3,618 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mad TV Tycoon — Mod Creator</title>
+<title>Mad Television Tycoon — Mod Creator</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0e0e14;
-    --surface: #16161f;
-    --surface2: #1e1e2a;
-    --surface3: #262634;
-    --border: #2e2e42;
-    --accent: #f5a623;
-    --accent2: #e8456a;
-    --accent3: #4ecdc4;
-    --text: #e8e8f0;
-    --text-muted: #7878a0;
-    --text-dim: #4a4a65;
-    --green: #56d364;
-    --red: #e8456a;
-    --radius: 10px;
-    --radius-sm: 6px;
+    --bg: #0e0e14; --surface: #16161f; --surface2: #1e1e2a; --surface3: #262634;
+    --border: #2e2e42; --accent: #f5a623; --accent2: #e8456a; --accent3: #4ecdc4;
+    --text: #e8e8f0; --text-muted: #7878a0; --text-dim: #4a4a65;
+    --green: #56d364; --red: #e8456a; --radius: 10px; --radius-sm: 6px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; font-size: 15px; line-height: 1.5; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-
-  /* HEADER */
-  header {
-    background: linear-gradient(135deg, #1a1a28 0%, #0e0e14 60%);
-    border-bottom: 1px solid var(--border);
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .logo-icon {
-    width: 44px; height: 44px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-  }
-  .logo h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px;
-    letter-spacing: 2px;
-    color: var(--text);
-    line-height: 1;
-  }
-  .logo p {
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
+  header { background: linear-gradient(135deg,#1a1a28 0%,#0e0e14 60%); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; gap: 20px; position: sticky; top: 0; z-index: 100; }
+  .logo { display: flex; align-items: center; gap: 14px; }
+  .logo-icon { width: 44px; height: 44px; background: linear-gradient(135deg,var(--accent),var(--accent2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .logo h1 { font-family: 'Bebas Neue',sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--text); line-height: 1; }
+  .logo p { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
   .header-actions { display: flex; gap: 10px; align-items: center; }
-
-  /* GUIDE BUTTON */
-  #guideBtn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--accent3);
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    display: flex; align-items: center; gap: 6px;
-    transition: all .2s;
-  }
+  .mod-name-area { display: flex; align-items: center; gap: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 12px; }
+  .mod-name-area label { font-size: 12px; color: var(--text-muted); white-space: nowrap; font-weight: 500; }
+  .mod-name-area input { background: transparent; border: none; outline: none; color: var(--accent); font-family: 'JetBrains Mono',monospace; font-size: 14px; font-weight: 600; width: 140px; }
+  .mod-name-area input::placeholder { color: var(--text-dim); }
+  #guideBtn { background: var(--surface2); border: 1px solid var(--border); color: var(--accent3); padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans',sans-serif; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: all .2s; }
   #guideBtn:hover { background: var(--surface3); border-color: var(--accent3); }
 
-  /* MOD NAME INPUT */
-  .mod-name-area {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 6px 12px;
-  }
-  .mod-name-area label {
-    font-size: 12px;
-    color: var(--text-muted);
-    white-space: nowrap;
-    font-weight: 500;
-  }
-  .mod-name-area input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--accent);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    font-weight: 600;
-    width: 140px;
-  }
-  .mod-name-area input::placeholder { color: var(--text-dim); }
-
-  /* LAYOUT */
-  .main-layout {
-    display: flex;
-    min-height: calc(100vh - 85px);
-  }
-
-  /* SIDEBAR TABS */
-  .sidebar {
-    width: 200px;
-    flex-shrink: 0;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 24px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .sidebar-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--text-dim);
-    padding: 0 16px;
-    margin-bottom: 8px;
-    margin-top: 16px;
-  }
+  .main-layout { display: flex; min-height: calc(100vh - 85px); }
+  .sidebar { width: 200px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; display: flex; flex-direction: column; gap: 4px; }
+  .sidebar-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); padding: 0 16px; margin-bottom: 8px; margin-top: 16px; }
   .sidebar-label:first-child { margin-top: 0; }
-
-  .tab-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 16px;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: var(--text-muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all .15s;
-    text-align: left;
-    width: 100%;
-    border-left: 3px solid transparent;
-    position: relative;
-  }
+  .tab-btn { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; border: none; background: transparent; color: var(--text-muted); font-family: 'DM Sans',sans-serif; font-size: 14px; font-weight: 500; transition: all .15s; text-align: left; width: 100%; border-left: 3px solid transparent; }
   .tab-btn:hover { background: var(--surface2); color: var(--text); }
-  .tab-btn.active {
-    background: var(--surface2);
-    color: var(--accent);
-    border-left-color: var(--accent);
-  }
+  .tab-btn.active { background: var(--surface2); color: var(--accent); border-left-color: var(--accent); }
   .tab-btn .tab-icon { font-size: 16px; width: 20px; text-align: center; }
-  .tab-count {
-    margin-left: auto;
-    background: var(--surface3);
-    color: var(--text-muted);
-    font-size: 11px;
-    padding: 2px 7px;
-    border-radius: 10px;
-    font-family: 'JetBrains Mono', monospace;
-  }
+  .tab-count { margin-left: auto; background: var(--surface3); color: var(--text-muted); font-size: 11px; padding: 2px 7px; border-radius: 10px; font-family: 'JetBrains Mono',monospace; }
   .tab-btn.active .tab-count { background: rgba(245,166,35,.15); color: var(--accent); }
-
-  .sidebar-export {
-    margin-top: auto;
-    padding: 16px;
-    border-top: 1px solid var(--border);
-  }
-  .export-btn {
-    width: 100%;
-    background: linear-gradient(135deg, var(--accent), #e8932a);
-    border: none;
-    color: #000;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 1.5px;
-    padding: 12px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: transform .15s, box-shadow .15s;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-  }
+  .sidebar-export { margin-top: auto; padding: 16px; border-top: 1px solid var(--border); }
+  .export-btn { width: 100%; background: linear-gradient(135deg,var(--accent),#e8932a); border: none; color: #000; font-family: 'Bebas Neue',sans-serif; font-size: 18px; letter-spacing: 1.5px; padding: 12px; border-radius: var(--radius-sm); cursor: pointer; transition: transform .15s,box-shadow .15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .export-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(245,166,35,.35); }
-  .export-btn:active { transform: translateY(0); }
 
-  /* CONTENT AREA */
-  .content {
-    flex: 1;
-    padding: 32px 40px;
-    overflow-y: auto;
-    max-width: 900px;
-  }
-
+  .content { flex: 1; padding: 32px 40px; overflow-y: auto; max-width: 900px; }
   .panel { display: none; }
   .panel.active { display: block; }
-
-  /* PANEL HEADER */
-  .panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 28px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .panel-title {
-    display: flex; align-items: center; gap: 12px;
-  }
-  .panel-title h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 1.5px;
-    color: var(--text);
-  }
-  .panel-title p {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
-
-  .add-btn {
-    background: var(--surface2);
-    border: 1px dashed var(--accent);
-    color: var(--accent);
-    padding: 9px 18px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex; align-items: center; gap: 7px;
-    transition: all .2s;
-  }
+  .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .panel-title h2 { font-family: 'Bebas Neue',sans-serif; font-size: 28px; letter-spacing: 1.5px; }
+  .panel-title p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .add-btn { background: var(--surface2); border: 1px dashed var(--accent); color: var(--accent); padding: 9px 18px; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans',sans-serif; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 7px; transition: all .2s; }
   .add-btn:hover { background: rgba(245,166,35,.1); border-style: solid; }
-
-  /* ENTRIES */
   .entries-list { display: flex; flex-direction: column; gap: 14px; }
 
-  .entry-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    transition: border-color .2s;
-  }
-  .entry-card:hover { border-color: var(--surface3); }
-
-  .entry-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    cursor: pointer;
-    background: var(--surface2);
-    user-select: none;
-  }
-  .entry-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-    background: var(--surface3);
-    padding: 3px 8px;
-    border-radius: 4px;
-    flex-shrink: 0;
-  }
-  .entry-name-preview {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--text);
-    flex: 1;
-  }
+  .entry-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color .2s; }
+  .entry-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; background: var(--surface2); user-select: none; }
+  .entry-num { font-family: 'JetBrains Mono',monospace; font-size: 11px; color: var(--text-dim); background: var(--surface3); padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+  .entry-id-badge { font-family: 'JetBrains Mono',monospace; font-size: 11px; color: var(--accent3); background: rgba(78,205,196,.1); padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+  .entry-name-preview { font-weight: 600; font-size: 14px; color: var(--text); flex: 1; }
   .entry-name-preview.empty { color: var(--text-dim); font-style: italic; font-weight: 400; }
-
   .entry-chevron { color: var(--text-dim); transition: transform .2s; font-size: 12px; }
   .entry-card.open .entry-chevron { transform: rotate(90deg); }
-
-  .entry-del {
-    background: none;
-    border: none;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 16px;
-    padding: 4px 6px;
-    border-radius: 4px;
-    transition: all .15s;
-    flex-shrink: 0;
-  }
+  .entry-del { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 16px; padding: 4px 6px; border-radius: 4px; transition: all .15s; flex-shrink: 0; }
   .entry-del:hover { background: rgba(232,69,106,.15); color: var(--red); }
-
-  .entry-body {
-    display: none;
-    padding: 20px 18px;
-    border-top: 1px solid var(--border);
-  }
+  .entry-body { display: none; padding: 20px 18px; border-top: 1px solid var(--border); }
   .entry-card.open .entry-body { display: block; }
 
-  /* FORM GRID */
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
   .form-full { grid-column: 1 / -1; }
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .field label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .8px;
-    color: var(--text-muted);
-  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--text-muted); }
   .field label .req { color: var(--accent2); margin-left: 3px; }
-  .field label .tip {
-    font-weight: 400;
-    text-transform: none;
-    letter-spacing: 0;
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-left: 4px;
-  }
-
-  .field input, .field select, .field textarea {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 9px 12px;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color .2s;
-    width: 100%;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: var(--accent);
-  }
+  .field label .tip { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--text-dim); margin-left: 4px; }
+  .field input, .field select, .field textarea { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: var(--radius-sm); font-family: 'DM Sans',sans-serif; font-size: 14px; outline: none; transition: border-color .2s; width: 100%; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
   .field select option { background: var(--surface2); }
   .field textarea { resize: vertical; min-height: 70px; }
-  .field input[type="range"] {
-    padding: 0;
-    cursor: pointer;
-    accent-color: var(--accent);
-  }
-  .range-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: var(--accent);
-    font-weight: 600;
-    margin-left: 8px;
-  }
-  .range-row { display: flex; align-items: center; gap: 0; }
-
-  .toggle-row {
-    display: flex; gap: 10px; flex-wrap: wrap;
-  }
-  .toggle-item {
-    display: flex; align-items: center; gap: 7px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 7px 12px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: all .15s;
-    font-size: 13px;
-    user-select: none;
-  }
-  .toggle-item input[type="checkbox"] {
-    width: 16px; height: 16px;
-    accent-color: var(--accent);
-    cursor: pointer;
-  }
-  .toggle-item:has(input:checked) {
-    background: rgba(245,166,35,.1);
-    border-color: rgba(245,166,35,.4);
-    color: var(--accent);
-  }
-
-  /* EMPTY STATE */
-  .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-dim);
-  }
+  .field input[type="range"] { padding: 0; cursor: pointer; accent-color: var(--accent); }
+  .range-val { font-family: 'JetBrains Mono',monospace; font-size: 13px; color: var(--accent); font-weight: 600; margin-left: 8px; }
+  .range-row { display: flex; align-items: center; }
+  .toggle-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .toggle-item { display: flex; align-items: center; gap: 7px; background: var(--surface2); border: 1px solid var(--border); padding: 7px 12px; border-radius: var(--radius-sm); cursor: pointer; transition: all .15s; font-size: 13px; user-select: none; }
+  .toggle-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+  .toggle-item:has(input:checked) { background: rgba(245,166,35,.1); border-color: rgba(245,166,35,.4); color: var(--accent); }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text-dim); }
   .empty-state .big-icon { font-size: 48px; margin-bottom: 16px; opacity: .5; }
   .empty-state h3 { font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }
-  .empty-state p { font-size: 14px; }
+  .section-divider { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
 
-  /* GUIDE MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.75);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
+  /* ID field row */
+  .id-row { display: flex; align-items: center; gap: 8px; }
+  .id-row input { font-family: 'JetBrains Mono',monospace; font-size: 13px; color: var(--accent3); }
+  .id-regen-btn { background: var(--surface3); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; white-space: nowrap; transition: all .15s; flex-shrink: 0; }
+  .id-regen-btn:hover { background: rgba(78,205,196,.1); color: var(--accent3); border-color: var(--accent3); }
+
+  /* Credits multi-select */
+  .credits-wrapper { position: relative; }
+  .credits-search { margin-bottom: 6px; }
+  .credits-search input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px; outline: none; width: 100%; }
+  .credits-search input:focus { border-color: var(--accent3); }
+  .credits-list { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); max-height: 200px; overflow-y: auto; }
+  .credits-item { display: flex; align-items: center; gap: 10px; padding: 7px 12px; cursor: pointer; transition: background .12s; border-bottom: 1px solid var(--border); }
+  .credits-item:last-child { border-bottom: none; }
+  .credits-item:hover { background: var(--surface3); }
+  .credits-item.selected { background: rgba(245,166,35,.1); }
+  .credits-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+  .credits-item .ci-job { font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 600; text-transform: uppercase; flex-shrink: 0; }
+  .ci-job.job-0 { background: rgba(245,166,35,.15); color: var(--accent); }
+  .ci-job.job-1 { background: rgba(78,205,196,.12); color: var(--accent3); }
+  .ci-job.job-2 { background: rgba(232,69,106,.12); color: var(--accent2); }
+  .ci-job.job-3 { background: rgba(86,211,100,.12); color: var(--green); }
+  .ci-job.job-4 { background: rgba(120,120,160,.15); color: var(--text-muted); }
+  .credits-item .ci-id { font-family: 'JetBrains Mono',monospace; font-size: 10px; color: var(--text-dim); margin-left: auto; }
+  .credits-selected-preview { margin-top: 8px; background: var(--surface3); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono',monospace; min-height: 34px; border: 1px solid var(--border); word-break: break-all; }
+
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    max-width: 720px;
-    width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-  }
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 28px 20px;
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0;
-    background: var(--surface);
-    z-index: 1;
-  }
-  .modal-header h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px;
-    letter-spacing: 1.5px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .modal-close {
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text-muted); cursor: pointer; font-size: 18px;
-    width: 34px; height: 34px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .15s;
-  }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; max-width: 720px; width: 100%; max-height: 85vh; overflow-y: auto; }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px 20px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); z-index: 1; }
+  .modal-header h2 { font-family: 'Bebas Neue',sans-serif; font-size: 26px; letter-spacing: 1.5px; }
+  .modal-close { background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; font-size: 18px; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all .15s; }
   .modal-close:hover { color: var(--text); background: var(--surface3); }
   .modal-body { padding: 24px 28px; }
-
-  .guide-step {
-    display: flex; gap: 16px;
-    margin-bottom: 28px;
-    align-items: flex-start;
-  }
-  .step-num {
-    width: 34px; height: 34px; flex-shrink: 0;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    color: #000;
-  }
+  .guide-step { display: flex; gap: 16px; margin-bottom: 28px; align-items: flex-start; }
+  .step-num { width: 34px; height: 34px; flex-shrink: 0; background: linear-gradient(135deg,var(--accent),var(--accent2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue',sans-serif; font-size: 18px; color: #000; }
   .guide-step h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
   .guide-step p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-  .guide-step .code-tag {
-    font-family: 'JetBrains Mono', monospace;
-    background: var(--surface3);
-    color: var(--accent3);
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-size: 12px;
-  }
-
-  .guide-note {
-    background: rgba(78,205,196,.08);
-    border: 1px solid rgba(78,205,196,.25);
-    border-radius: var(--radius-sm);
-    padding: 14px 16px;
-    font-size: 13px;
-    color: var(--text);
-    margin-top: 6px;
-    line-height: 1.6;
-  }
+  .code-tag { font-family: 'JetBrains Mono',monospace; background: var(--surface3); color: var(--accent3); padding: 2px 7px; border-radius: 4px; font-size: 12px; }
+  .guide-note { background: rgba(78,205,196,.08); border: 1px solid rgba(78,205,196,.25); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; color: var(--text); margin-top: 6px; line-height: 1.6; }
   .guide-note strong { color: var(--accent3); }
-
-  .guide-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    margin-top: 8px;
-  }
-  .guide-table th {
-    text-align: left; padding: 8px 12px;
-    background: var(--surface2);
-    color: var(--text-muted);
-    font-size: 11px; text-transform: uppercase; letter-spacing: .8px;
-    border-bottom: 1px solid var(--border);
-  }
-  .guide-table td {
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
+  .guide-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  .guide-table th { text-align: left; padding: 8px 12px; background: var(--surface2); color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: .8px; border-bottom: 1px solid var(--border); }
+  .guide-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
   .guide-table tr:last-child td { border-bottom: none; }
-  .guide-table .file-name {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--accent);
-    font-size: 12px;
-  }
+  .file-name { font-family: 'JetBrains Mono',monospace; color: var(--accent); font-size: 12px; }
 
-  /* TOAST */
-  #toast {
-    position: fixed; bottom: 30px; right: 30px;
-    background: var(--surface2);
-    border: 1px solid var(--green);
-    color: var(--green);
-    padding: 12px 20px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-weight: 500;
-    z-index: 300;
-    opacity: 0; pointer-events: none;
-    transition: opacity .3s;
-    display: flex; align-items: center; gap: 8px;
-  }
-  #toast.show { opacity: 1; }
-
-  /* EXPORT PANEL */
-  #exportPanel {
-    position: fixed; top: 0; right: -500px;
-    width: 460px; height: 100vh;
-    background: var(--surface);
-    border-left: 1px solid var(--border);
-    z-index: 150;
-    transition: right .3s cubic-bezier(.4,0,.2,1);
-    display: flex; flex-direction: column;
-  }
+  /* Export panel */
+  #exportPanel { position: fixed; top: 0; right: -500px; width: 460px; height: 100vh; background: var(--surface); border-left: 1px solid var(--border); z-index: 150; transition: right .3s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; }
   #exportPanel.open { right: 0; }
-  .export-panel-header {
-    padding: 24px 28px;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .export-panel-header h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px; letter-spacing: 1.5px;
-  }
-  .export-panel-body { padding: 24px 28px; flex: 1; overflow-y: auto; }
-  .export-file-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px;
-    margin-bottom: 14px;
-  }
-  .export-file-card h3 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    color: var(--accent);
-    margin-bottom: 6px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .export-file-card p {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-bottom: 14px;
-  }
-  .export-file-card .entry-count {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-bottom: 12px;
-  }
-  .dl-btn {
-    background: linear-gradient(135deg, var(--accent3), #3ab5ad);
-    border: none;
-    color: #000;
-    padding: 9px 16px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex; align-items: center; gap: 7px;
-    transition: all .15s;
-  }
+  .export-panel-header { padding: 24px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .export-panel-header h2 { font-family: 'Bebas Neue',sans-serif; font-size: 26px; letter-spacing: 1.5px; }
+  .export-panel-body { padding: 20px 28px; flex: 1; overflow-y: auto; }
+  .export-file-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+  .export-file-card h3 { font-family: 'JetBrains Mono',monospace; font-size: 13px; color: var(--accent); margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; }
+  .export-file-card p { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+  .dl-btn { background: linear-gradient(135deg,var(--accent3),#3ab5ad); border: none; color: #000; padding: 9px 16px; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans',sans-serif; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 7px; transition: all .15s; }
   .dl-btn:hover { opacity: .85; }
   .dl-btn:disabled { opacity: .35; cursor: not-allowed; }
 
-  /* SECTION DIVIDER */
-  .section-divider {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-dim);
-    margin: 18px 0 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-  }
+  /* Modloader warning banner */
+  .modloader-banner { background: linear-gradient(135deg,rgba(232,69,106,.18),rgba(232,69,106,.08)); border: 2px solid var(--accent2); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px; }
+  .modloader-banner h3 { font-family: 'Bebas Neue',sans-serif; font-size: 20px; letter-spacing: 1px; color: var(--accent2); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .modloader-banner p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .modloader-banner a { color: var(--accent); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(245,166,35,.4); }
+  .modloader-banner a:hover { border-bottom-color: var(--accent); }
 
-  @media (max-width: 700px) {
+  /* Toast */
+  #toast { position: fixed; bottom: 30px; right: 30px; background: var(--surface2); border: 1px solid var(--green); color: var(--green); padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; z-index: 300; opacity: 0; pointer-events: none; transition: opacity .3s; display: flex; align-items: center; gap: 8px; }
+  #toast.show { opacity: 1; }
+
+  @media (max-width:700px) {
     .sidebar { width: 56px; }
     .tab-btn span, .tab-count, .sidebar-label { display: none; }
     .tab-btn { justify-content: center; padding: 12px; }
@@ -631,14 +177,14 @@
   <div class="logo">
     <div class="logo-icon">📺</div>
     <div>
-      <h1>Mad TV Tycoon</h1>
+      <h1>Mad Television Tycoon</h1>
       <p>Mod Creator Tool</p>
     </div>
   </div>
   <div class="header-actions">
     <div class="mod-name-area">
       <label>Mod Name:</label>
-      <input type="text" id="modNameInput" placeholder="mymods" maxlength="32" title="This becomes the prefix in your filenames, e.g. mymods_items.json">
+      <input type="text" id="modNameInput" placeholder="mymods" maxlength="32" title="This becomes the prefix in your filenames">
     </div>
     <button id="guideBtn">📖 How to Install</button>
   </div>
@@ -648,35 +194,29 @@
   <nav class="sidebar">
     <div class="sidebar-label">Content</div>
     <button class="tab-btn active" onclick="switchTab('movies')" id="tab-movies">
-      <span class="tab-icon">🎬</span>
-      <span>Movies</span>
+      <span class="tab-icon">🎬</span><span>Movies</span>
       <span class="tab-count" id="count-movies">0</span>
     </button>
     <button class="tab-btn" onclick="switchTab('series')" id="tab-series">
-      <span class="tab-icon">📡</span>
-      <span>TV Series</span>
+      <span class="tab-icon">📡</span><span>TV Series</span>
       <span class="tab-count" id="count-series">0</span>
     </button>
     <button class="tab-btn" onclick="switchTab('shows')" id="tab-shows">
-      <span class="tab-icon">🎭</span>
-      <span>TV Shows</span>
+      <span class="tab-icon">🎭</span><span>Shows</span>
       <span class="tab-count" id="count-shows">0</span>
     </button>
     <div class="sidebar-label">People</div>
     <button class="tab-btn" onclick="switchTab('cast')" id="tab-cast">
-      <span class="tab-icon">🎭</span>
-      <span>Cast</span>
+      <span class="tab-icon">🧑‍🎤</span><span>Cast</span>
       <span class="tab-count" id="count-cast">0</span>
     </button>
     <div class="sidebar-label">Database</div>
     <button class="tab-btn" onclick="switchTab('names')" id="tab-names">
-      <span class="tab-icon">📝</span>
-      <span>Names</span>
+      <span class="tab-icon">📝</span><span>Names</span>
       <span class="tab-count" id="count-names">0</span>
     </button>
     <button class="tab-btn" onclick="switchTab('reviews')" id="tab-reviews">
-      <span class="tab-icon">⭐</span>
-      <span>Reviews</span>
+      <span class="tab-icon">⭐</span><span>Reviews</span>
       <span class="tab-count" id="count-reviews">0</span>
     </button>
     <div class="sidebar-export">
@@ -686,124 +226,56 @@
 
   <main class="content">
 
-    <!-- MOVIES PANEL -->
     <div class="panel active" id="panel-movies">
       <div class="panel-header">
-        <div class="panel-title">
-          <div>
-            <h2>🎬 Movies</h2>
-            <p>Add films to the game's broadcast library</p>
-          </div>
-        </div>
-        <button class="add-btn" onclick="addMovie()">＋ Add Movie</button>
+        <div class="panel-title"><div><h2>🎬 Movies</h2><p>Add films to the game's broadcast library</p></div></div>
+        <button class="add-btn" onclick="addEntry('movies')">＋ Add Movie</button>
       </div>
-      <div class="entries-list" id="movies-list">
-        <div class="empty-state">
-          <div class="big-icon">🎬</div>
-          <h3>No movies yet</h3>
-          <p>Click "Add Movie" to add your first film to the game.</p>
-        </div>
-      </div>
+      <div class="entries-list" id="movies-list"><div class="empty-state"><div class="big-icon">🎬</div><h3>No movies yet</h3><p>Click "Add Movie" to add your first film.</p></div></div>
     </div>
 
-    <!-- SERIES PANEL -->
     <div class="panel" id="panel-series">
       <div class="panel-header">
-        <div class="panel-title">
-          <div>
-            <h2>📡 TV Series</h2>
-            <p>Add multi-episode TV series</p>
-          </div>
-        </div>
-        <button class="add-btn" onclick="addSeries()">＋ Add Series</button>
+        <div class="panel-title"><div><h2>📡 TV Series</h2><p>Add multi-episode TV series</p></div></div>
+        <button class="add-btn" onclick="addEntry('series')">＋ Add Series</button>
       </div>
-      <div class="entries-list" id="series-list">
-        <div class="empty-state">
-          <div class="big-icon">📡</div>
-          <h3>No series yet</h3>
-          <p>Click "Add Series" to create a TV show with multiple episodes.</p>
-        </div>
-      </div>
+      <div class="entries-list" id="series-list"><div class="empty-state"><div class="big-icon">📡</div><h3>No series yet</h3><p>Click "Add Series" to create a TV show with multiple episodes.</p></div></div>
     </div>
 
-    <!-- SHOWS PANEL -->
     <div class="panel" id="panel-shows">
       <div class="panel-header">
-        <div class="panel-title">
-          <div>
-            <h2>🎭 TV Shows</h2>
-            <p>Add quiz shows, reality TV, talk shows, etc.</p>
-          </div>
-        </div>
-        <button class="add-btn" onclick="addShow()">＋ Add Show</button>
+        <div class="panel-title"><div><h2>🎭 Shows</h2><p>Quiz shows, reality TV, talk shows, game shows and more</p></div></div>
+        <button class="add-btn" onclick="addEntry('shows')">＋ Add Show</button>
       </div>
-      <div class="entries-list" id="shows-list">
-        <div class="empty-state">
-          <div class="big-icon">🎭</div>
-          <h3>No shows yet</h3>
-          <p>Click "Add Show" for quiz shows, game shows, talk shows, cooking shows, etc.</p>
-        </div>
-      </div>
+      <div class="entries-list" id="shows-list"><div class="empty-state"><div class="big-icon">🎭</div><h3>No shows yet</h3><p>Click "Add Show" for quiz shows, game shows, talk shows, cooking shows, etc.</p></div></div>
     </div>
 
-    <!-- CAST PANEL -->
     <div class="panel" id="panel-cast">
       <div class="panel-header">
-        <div class="panel-title">
-          <div>
-            <h2>🎭 Cast Members</h2>
-            <p>Add directors, actors, writers, presenters & moderators</p>
-          </div>
-        </div>
-        <button class="add-btn" onclick="addCast()">＋ Add Person</button>
+        <div class="panel-title"><div><h2>🧑‍🎤 Cast Members</h2><p>Add directors, actors, writers, presenters & moderators</p></div></div>
+        <button class="add-btn" onclick="addEntry('cast')">＋ Add Person</button>
       </div>
-      <div class="entries-list" id="cast-list">
-        <div class="empty-state">
-          <div class="big-icon">🧑‍🎤</div>
-          <h3>No cast members yet</h3>
-          <p>Add directors, actors, or other crew here. You can then reference them in movies and shows.</p>
-        </div>
-      </div>
+      <div class="entries-list" id="cast-list"><div class="empty-state"><div class="big-icon">🧑‍🎤</div><h3>No cast members yet</h3><p>Add directors, actors or other crew here. You can then credit them in movies and series.</p></div></div>
     </div>
 
-    <!-- NAMES PANEL -->
     <div class="panel" id="panel-names">
       <div class="panel-header">
-        <div class="panel-title">
-          <div>
-            <h2>📝 Random Names</h2>
-            <p>Add names that can appear in randomly generated content</p>
-          </div>
-        </div>
-        <button class="add-btn" onclick="addNameEntry()">＋ Add Name Entry</button>
+        <div class="panel-title"><div><h2>📝 Name Lists</h2><p>Expand the game's title generator with more names</p></div></div>
+        <button class="add-btn" onclick="addEntry('names')">＋ Add Name List</button>
       </div>
-      <div class="entries-list" id="names-list">
-        <div class="empty-state">
-          <div class="big-icon">📝</div>
-          <h3>No name entries yet</h3>
-          <p>Add names for a genre/category (e.g. Action: "Storm Zone, Dark Rider, ...")</p>
-        </div>
+      <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
+        <strong style="color:var(--accent3);display:block;margin-bottom:6px">🎲 What does this do?</strong>
+        Mad Television Tycoon can <strong style="color:var(--text)">randomly generate</strong> new fictional movies and shows in-game over time. To come up with names for them, it pulls from these name lists — one list per genre. If you add names here for a genre (e.g. "Action"), the game may use them when generating new content of that type. Think of it as feeding the game more creative fuel. If you don't care about randomly generated content, you can safely skip this section.
       </div>
+      <div class="entries-list" id="names-list"><div class="empty-state"><div class="big-icon">📝</div><h3>No name lists yet</h3><p>Add lists of titles for each genre the game can use when generating new content.</p></div></div>
     </div>
 
-    <!-- REVIEWS PANEL -->
     <div class="panel" id="panel-reviews">
       <div class="panel-header">
-        <div class="panel-title">
-          <div>
-            <h2>⭐ Review Texts</h2>
-            <p>Add custom review blurbs shown in-game for ratings</p>
-          </div>
-        </div>
-        <button class="add-btn" onclick="addReview()">＋ Add Review</button>
+        <div class="panel-title"><div><h2>⭐ Review Texts</h2><p>Add custom review blurbs shown in-game when content is rated</p></div></div>
+        <button class="add-btn" onclick="addEntry('reviews')">＋ Add Review</button>
       </div>
-      <div class="entries-list" id="reviews-list">
-        <div class="empty-state">
-          <div class="big-icon">⭐</div>
-          <h3>No reviews yet</h3>
-          <p>Add review texts in English and/or German for movies, series, or shows.</p>
-        </div>
-      </div>
+      <div class="entries-list" id="reviews-list"><div class="empty-state"><div class="big-icon">⭐</div><h3>No reviews yet</h3><p>Add review texts in English and/or German for movies, series, or shows.</p></div></div>
     </div>
 
   </main>
@@ -817,69 +289,71 @@
       <button class="modal-close" onclick="closeGuide()">✕</button>
     </div>
     <div class="modal-body">
-
       <div class="guide-step">
         <div class="step-num">1</div>
         <div>
-          <h3>Install the Modloader</h3>
-          <p>The Modloader is a small program that lets Mad TV Tycoon read your custom files. Without it, the game ignores everything in the Mods folder.<br><br>
-          <strong style="color:var(--accent)">⬇ Download the Modloader</strong> — link coming soon! Check the game's official community page for the latest version.</p>
+          <h3>Install the Modloader — this is required!</h3>
+          <p>The Modloader is a small program that makes Mad Television Tycoon able to read your custom files. Without it, the game completely ignores the Mods folder and nothing you add will show up.</p>
+          <div class="guide-note" style="background:rgba(232,69,106,.08);border-color:rgba(232,69,106,.3);margin-top:10px">
+            <strong style="color:var(--accent2)">⚠ Your mod will NOT work without the Modloader.</strong><br>
+            <a href="https://www.moddb.com/mods/modloader" target="_blank" style="color:var(--accent);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(245,166,35,.5)">⬇ Download Modloader from ModDB →</a>
+          </div>
         </div>
       </div>
-
       <div class="guide-step">
         <div class="step-num">2</div>
         <div>
-          <h3>Create your content in this tool</h3>
-          <p>Use the tabs on the left to add movies, TV shows, cast members, and more. Don't worry about IDs or technical stuff — this tool handles all of that for you.</p>
-          <div class="guide-note">
-            <strong>Tip:</strong> Set a unique <strong>Mod Name</strong> in the top bar (e.g. your username or mod title). This is used in your filenames to make sure your mod doesn't clash with other mods.
-          </div>
+          <h3>Set your Mod Name</h3>
+          <p>In the top bar of this tool, type a unique name into the <strong>Mod Name</strong> field — something like your username or the name of your mod. This gets used as a prefix in your filenames to prevent clashes with other mods. Letters and numbers only, no spaces.</p>
         </div>
       </div>
-
       <div class="guide-step">
         <div class="step-num">3</div>
         <div>
-          <h3>Export your mod files</h3>
-          <p>Click <strong style="color:var(--accent)">Export Mod</strong> in the bottom-left. Each file type gets its own download button. Only download the files for content you actually added.</p>
-          <table class="guide-table" style="margin-top:12px">
-            <tr><th>You added...</th><th>File to download</th><th>Example filename</th></tr>
-            <tr><td>Movies / TV Series / Shows</td><td class="file-name">_items.json</td><td class="file-name">mymods_items.json</td></tr>
-            <tr><td>Cast members</td><td class="file-name">_cast.json</td><td class="file-name">mymods_cast.json</td></tr>
-            <tr><td>Random name lists</td><td class="file-name">_names.json</td><td class="file-name">mymods_names.json</td></tr>
-            <tr><td>Review texts</td><td class="file-name">_reviews.json</td><td class="file-name">mymods_reviews.json</td></tr>
-          </table>
+          <h3>Create your content here</h3>
+          <p>Use the tabs on the left to add movies, TV series, shows, cast members, and more. No JSON knowledge needed — just fill out the forms and click Save on each entry.</p>
         </div>
       </div>
-
       <div class="guide-step">
         <div class="step-num">4</div>
         <div>
-          <h3>Drop the files into the Mods folder</h3>
-          <p>Open your Mad TV Tycoon installation folder. Inside it, there should be a folder called <span class="code-tag">Mods</span>. Simply drag and drop your downloaded JSON files into that folder.</p>
-          <div class="guide-note">
-            <strong>Where is the installation folder?</strong><br>
-            On Steam: right-click the game → <em>Manage → Browse local files</em><br>
-            You'll see a <span class="code-tag">Mods</span> folder inside.
-          </div>
+          <h3>Export your mod files</h3>
+          <p>Click <strong style="color:var(--accent)">Export Mod</strong> in the bottom-left. Download only the files for content you actually added. Each file type maps to a different part of the game:</p>
+          <table class="guide-table" style="margin-top:10px">
+            <tr><th>You added...</th><th>Download this file</th></tr>
+            <tr><td>Movies, TV Series, Shows</td><td class="file-name">yourname_items.json</td></tr>
+            <tr><td>Cast members</td><td class="file-name">yourname_cast.json</td></tr>
+            <tr><td>Name lists (for random generation)</td><td class="file-name">yourname_names.json</td></tr>
+            <tr><td>Review texts</td><td class="file-name">yourname_reviews.json</td></tr>
+          </table>
         </div>
       </div>
-
       <div class="guide-step">
         <div class="step-num">5</div>
         <div>
-          <h3>Start the game and enjoy!</h3>
-          <p>Launch Mad TV Tycoon normally. If the Modloader is installed and your files are in the Mods folder with the right names, your new content will appear in the game automatically.</p>
+          <h3>Drop the files into the Mods folder</h3>
+          <p>Open your Mad Television Tycoon installation folder. Drag and drop your downloaded JSON files into the <span class="code-tag">Mods</span> folder inside it.</p>
           <div class="guide-note">
-            <strong>Something not working?</strong> Make sure:<br>
-            ✅ The Modloader is installed<br>
-            ✅ Your filename follows the pattern: <span class="code-tag">yourname_items.json</span> (the part after the underscore must be exactly <em>items</em>, <em>cast</em>, <em>names</em>, or <em>reviews</em>)<br>
-            ✅ You only have one file per type with the same prefix name
+            <strong>Finding the folder on Steam:</strong><br>
+            Right-click Mad Television Tycoon in your Steam library → <em>Manage → Browse local files</em>.<br>
+            You'll see the <span class="code-tag">Mods</span> folder right there.
           </div>
         </div>
       </div>
-
+      <div class="guide-step">
+        <div class="step-num">6</div>
+        <div>
+          <h3>Launch the game and enjoy!</h3>
+          <p>Start Mad Television Tycoon normally. If the Modloader is installed and your files are named correctly, your content appears in the game automatically.</p>
+          <div class="guide-note">
+            <strong>Checklist if something isn't working:</strong><br>
+            ✅ Modloader is installed<br>
+            ✅ Filename uses this pattern: <span class="code-tag">yourname_items.json</span><br>
+            ✅ The part after the underscore is exactly: <span class="code-tag">items</span>, <span class="code-tag">cast</span>, <span class="code-tag">names</span>, or <span class="code-tag">reviews</span><br>
+            ✅ No two mods share the same filename prefix (the "yourname" part)
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -890,223 +364,246 @@
     <h2>⬇ Export Mod</h2>
     <button class="modal-close" onclick="closeExport()">✕</button>
   </div>
-  <div class="export-panel-body" id="exportBody">
-  </div>
+  <div class="export-panel-body" id="exportBody"></div>
 </div>
 
-<!-- TOAST -->
 <div id="toast">✅ <span id="toastMsg">Done!</span></div>
 
 <script>
-// ============================================================
-// DATA STORE
-// ============================================================
-const store = {
-  movies: [],
-  series: [],
-  shows: [],
-  cast: [],
-  names: [],
-  reviews: []
-};
+// ============ VANILLA DATA ============
+const VANILLA_CAST_RAW = [[1,"Robert Rodriguez",0],[2,"Ridley Scott",0],[3,"Alfred Hitchcock",0],[4,"Stanley Kubrick",0],[5,"John Carpenter",0],[6,"Roman Polanski",0],[7,"Quentin Tarantino",0],[8,"David Fincher",0],[9,"Christopher Nolan",0],[10,"Luc Besson",0],[11,"Michael Curtiz",0],[12,"John McTiernan",0],[13,"Lana Wachowski",0],[14,"James Cameron",0],[15,"Steven Spielberg",0],[16,"Irvin Kershner",0],[17,"George Lucas",0],[18,"Robert Zemeckis",0],[19,"Richard Marquand",0],[20,"Peter Jackson",0],[21,"Francis Ford Coppola",0],[22,"Sidney Lumet",0],[23,"Sergio Leone",0],[24,"Martin Scorsese",0],[25,"Jonathan Demme",0],[26,"Ted Kotcheff",0],[27,"Sam Mendes",0],[28,"Frank Miller",0],[29,"Hayao Miyazaki",0],[30,"Andrew Stanton",0],[31,"Terry Jones",0],[32,"Terry Gilliam",0],[33,"George Miller",0],[34,"Rob Reiner",0],[35,"Fritz Lang",0],[36,"Danny Boyle",0],[37,"John G. Avildsen",0],[38,"Corey Yuen",0],[39,"Steve Barron",0],[40,"Michael Pressman",0],[41,"Stuart Gillard",0],[42,"Roland Emmerich",0],[43,"Mike Hodges",0],[44,"Gary Goddard",0],[45,"Ron Underwood",0],[46,"S.S. Wilson",0],[47,"Stephen Herek",0],[48,"Mick Garris",0],[49,"Kristine Peterson",0],[50,"Rupert Harvey",0],[51,"John De Bello",0],[52,"Emile Ardolino",0],[53,"Jerry Zucker",0],[54,"Garry Marshall",0],[55,"Stewart Raffill",0],[56,"Charles Band",0],[57,"Howard R. Cohen",0],[58,"Albert Pyun",0],[59,"Luca Bercovici",0],[60,"Albert Band",0],[61,"John Carl Buechler",0],[62,"Jim Wynorski",0],[63,"Mic Rodgers",0],[64,"Willard Huyck",0],[65,"John Milius",0],[66,"Richard Fleischer",0],[67,"Rod Daniel",0],[68,"Christopher Leitch",0],[69,"Russell Mulcahy",0],[70,"Andrew Morahan",0],[71,"Ron Howard",0],[72,"Daniel Petrie",0],[73,"Joe Dante",0],[74,"Steven Lisberger",0],[75,"Paul Verhoeven",0],[76,"John Irvin",0],[77,"Peter Hyams",0],[78,"Ivan Reitman",0],[79,"Don Michael Paul",0],[80,"Joseph Zito",0],[81,"Alan J. Levi",0],[82,"Nicholas Meyer",0],[83,"Christian Duguay",0],[84,"Sheldon Wilson",0],[85,"Brett Leonard",0],[86,"John Badham",0],[87,"Alex Proyas",0],[88,"David Cronenberg",0],[89,"Chris Walas",0],[90,"Harry Hook",0],[91,"Mike Marvin",0],[92,"Mark L. Lester",0],[93,"Neil Jordan",0],[94,"Stuart Gordon",0],[95,"Ian Barry",0],[96,"Tobe Hooper",0],[97,"Brian Gibson",0],[98,"Jean-Pierre Jeunet",0],[99,"Paul W.S. Anderson",0],[100,"Greg Strause",0],[101,"Arthur Allan Seidelman",0],[102,"Hal Needham",0],[103,"Larry Cohen",0],[104,"Sidney J. Furie",0],[105,"David Winters",0],[106,"Rick Sloane",0],[107,"Joe D'Amato",0],[108,"Franz Josef Gottlieb",0],[109,"Theo Maria Werner",0],[110,"Harry Hope",0],[111,"William Girdler",0],[112,"Andr\u00e9 Sz\u00f6ts",0],[113,"Cullen Blaine",0],[114,"Alfonso Brescia",0],[115,"Stephen Hopkins",0],[116,"Nimr\u00f3d Antal",0],[117,"Shane Black",0],[118,"Dan Trachtenberg",0],[119,"John Landis",0],[120,"Wes Craven",0],[121,"Michael Ritchie",0],[122,"Betty Thomas",0],[123,"Steve Carr",0],[124,"Rich Thorne",0],[125,"Alex Zamm",0],[126,"Thomas Carter",0],[127,"Tom Shadyac",0],[128,"Martin Brest",0],[129,"Tony Scott",0],[130,"Adrian Lyne",0],[131,"Gary Sherman",0],[132,"Paul Michael Glaser",0],[133,"Fred Dekker",0],[134,"Danny Cannon",0],[135,"Marco Brambilla",0],[136,"Stephen Norrington",0],[137,"Guillermo del Toro",0],[138,"David S. Goyer",0],[139,"Michele Lupo",0],[140,"Stefano Vanzina",0],[141,"Enzo Barboni",0],[142,"Joe Johnston",0],[143,"Colin Trevorrow",0],[144,"J.A. Bayona",0],[145,"Robert Wise",0],[146,"Leonard Nimoy",0],[147,"William Shatner",0],[148,"David Carson",0],[149,"Jonathan Frakes",0],[150,"Stuart Baird",0],[151,"J.J. Abrams",0],[152,"Justin Lin",0],[153,"Donald G. Jackson",0],[154,"Robert F. Slatzer",0],[155,"Michael Bay",0],[156,"Norman Jewison",0],[157,"Wolfgang Petersen",0],[158,"Richard LaGravenese",0],[159,"Lasse Hallstr\u00f6m",0],[160,"Roger Michell",0],[161,"P.J. Hogan",0],[162,"Nora Ephron",0],[163,"Penny Marshall",0],[164,"Gabriele Muccino",0],[165,"Alejandro G. I\u00f1\u00e1rritu",0],[166,"Oliver Stone",0],[167,"Zack Snyder",0],[168,"Noam Murro",0],[169,"Tim Burton",0],[170,"Claudio F\u00e4h",0],[171,"Luis Llosa",0],[172,"Frank Marshall",0],[173,"Jack Sholder",0],[174,"Uwe Boll",0],[175,"David Hogan",0],[176,"John R. Leonetti",0],[177,"William Malone",0],[178,"Roger Christian",0],[179,"Edward D. Wood Jr.",0],[180,"Tony Giglio",0],[181,"Sam Taylor-Johnson",0],[182,"James Foley",0],[183,"Robert Clouse",0],[184,"Bruce Lee",0],[185,"Wei Lo",0],[186,"Woo-Ping Yuen",0],[187,"Jackie Chan",0],[188,"James Mangold",0],[189,"Chuck Russell",0],[190,"Steve Oedekerk",0],[191,"Chad Stahelski",0],[192,"Joseph Kosinski",0],[193,"Rudolf Zehetgruber",0],[194,"Robert Stevenson",0],[195,"Angela Robinson",0],[196,"Adam Shankman",0],[197,"Bob Spiers",0],[198,"Tony Leondis",0],[199,"Tom McGrath",0],[200,"Chris Renaud",0],[201,"Genndy Tartakovsky",0],[202,"Carlos Saldanha",0],[203,"Chris Wedge",0],[204,"Mark Osborne",0],[205,"John Lasseter",0],[206,"Byron Haskin",0],[207,"Merian C. Cooper",0],[208,"Amelie Grasser [U]",0],[209,"Alfred de Mageau [U]",0],[210,"Maximilian G\u00e4rtner [U]",0],[211,"Jason Friedberg",0],[212,"Perry Andelin Blake",0],[213,"Alan Metter",0],[214,"Marco Schnabel",0],[215,"Barry Sonnenfeld",0],[216,"F. Gary Gray",0],[217,"Jake Kasdan",0],[218,"Stephen Chiodo",0],[219,"Irvin S. Yeaworth Jr.",0],[220,"Fred M. Wilcox",0],[221,"George Pal",0],[222,"Michael Crichton",0],[223,"Richard T. Heffron",0],[224,"Daniel Lee",0],[225,"Hark Tsui",0],[226,"Don Chaffey",0],[227,"Roger Vadim",0],[228,"Richard Donner",0],[229,"Paul Feig",0],[230,"Jason Reitman",0],[231,"Gil Kenan",0],[232,"George P. Cosmatos",0],[233,"Sylvester Stallone",0],[234,"Adrian Grunberg",0],[235,"Jonathan Mostow",0],[236,"Joseph McGinty Nichol",0],[237,"Alan Taylor",0],[238,"Tim Miller",0],[239,"Roger Allers",0],[240,"Pete Docter",0],[241,"Dan Scanlon",0],[242,"Ron Clements",0],[243,"Gary Trousdale",0],[244,"Clyde Geronimi",0],[245,"Les Clark",0],[246,"Mike Gabriel",0],[247,"Tony Bancroft",0],[248,"William Cottrell",0],[249,"Chris Buck",0],[250,"Wolfgang Reitherman",0],[251,"Norman Ferguson",0],[252,"James Algar",0],[253,"Derek Drymon",0],[254,"Lee Unkrich",0],[255,"Josh Cooley",0],[256,"Steve Martino",0],[257,"Michael Thurmeier",0],[258,"Darrell Rooney",0],[259,"Bradley Raymond",0],[260,"Hugh Wilson",0],[261,"Jerry Paris",0],[262,"Alan Myerson",0],[263,"Peter Bonerz",0],[264,"Sean S. Cunningham",0],[265,"John Bruno",0],[266,"Don Taylor",0],[267,"Jack Smight",0],[268,"Richard Attenborough",0],[269,"Robert Aldrich",0],[270,"John Sturges",0],[271,"Akira Kurosawa",0],[272,"William Wyler",0],[273,"Victor Fleming",0],[274,"William Friedkin",0],[275,"David Lean",0],[276,"Mel Gibson",0],[277,"Orson Welles",0],[278,"Tony Kaye",0],[279,"Olivier Nakache",0],[280,"Park Chan-wook",0],[281,"Alfonso Cuar\u00f3n",0],[282,"James McTeigue",0],[283,"Clint Eastwood",0],[284,"Isao Takahata",0],[285,"Ron Howarushingrd",0],[286,"Henry Selick",0],[287,"Frank Darabont",0],[288,"Steve McQueen",0],[289,"Richard Kelly",0],[290,"Tim Pope",0],[291,"Bharat Nalluri",0],[292,"Dean DeBlois",0],[293,"Sam Raimi",0],[294,"Franklin J. Schaffner",0],[295,"Ted Post",0],[296,"J. Lee Thompson",0],[297,"Peter Faiman",0],[298,"John Cornell",0],[299,"Simon Wincer",0],[300,"Lewis Teague",0],[301,"Danny DeVito",0],[302,"Claude Pinoteau",0],[303,"Jean Girault",0],[304,"Mel Brooks",0],[305,"David Lynch",0],[306,"John Hughes",0],[307,"Randal Kleiser",0],[308,"Dean Cundey",0],[309,"Donald Petrie",0],[310,"Brian Levant",0],[311,"David Mickey Evans",0],[312,"Mark Griffiths",0],[313,"Les Mayfield",0],[314,"Joe Pytka",0],[315,"Malcolm D. Lee",0],[316,"Chris Columbus",0],[317,"Terence Young",0],[318,"Guy Hamilton",0],[319,"Lewis Gilbert",0],[320,"Peter R. Hunt",0],[321,"Denis Villeneuve",0],[322,"Fede Alvarez",0],[323,"Mike Mitchell",0],[324,"Adam Wingard",0],[325,"David Leitch",0],[326,"Arkasha Stevenson",0],[327,"Jon M. Chu",0],[328,"Gerard Johnstone",0],[329,"Steven Caple Jr.",0],[330,"John Francis Daley",0],[331,"Christopher McQuarrie",0],[332,"Jeff Rowe",0],[333,"Baz Luhrmann",0],[334,"Robert Eggers",0],[335,"Simon McQuoid",0],[336,"Darren Aronofsky",0],[337,"Matt Reeves",0],[338,"Cary Joji Fukunaga",0],[339,"Jaume Collet-Serra",0],[340,"Gareth Edwards",0],[341,"Alex Garland",0],[342,"Sean Durkin",0],[343,"Aaron Schneider",0],[344,"William Eubank",0],[345,"Zach Cregger",0],[346,"Len Wiseman",0],[347,"Wes Ball",0],[348,"Johannes Roberts",0],[349,"Joel Crawford",0],[350,"Edward Zwick",0],[351,"Anthony Hemingway",0],[352,"Jeff Fowler",0],[353,"Joachim R\u00f8nning",0],[353,"Akiva Schaffer",0],[354,"Jared Bush",0],[355,"Francis Lawrence",0],[356,"Adil El Arbi",0],[357,"Aaron Nee",0],[358,"Yuji Nunokawa",0],[359,"Peter Jackson",0],[360,"James Cameron",0],[361,"Steven Spielberg",0],[362,"Martin Scorsese",0],[363,"Denis Villeneuve",0],[364,"Jordan Peele",0],[365,"Wes Anderson",0],[366,"Rian Johnson",0],[367,"Sam Raimi",0],[368,"Bong Joon-ho",0],[369,"Darren Aronofsky",0],[370,"Zack Snyder",0],[371,"Todd Phillips",0],[372,"Sam Mendes",0],[373,"George Miller",0],[374,"Chad Stahelski",0],[375,"Lana Wachowski",0],[376,"Daniel Kwan",0],[377,"Greta Gerwig",0],[378,"Alex Garland",0],[10000,"Arnold Schwarzenegger",1],[10001,"Linda Hamilton",1],[10002,"Harvey Keitel",1],[10003,"George Clooney",1],[10004,"Juliette Lewis",1],[10005,"Sigourney Weaver",1],[10006,"Tom Skerritt",1],[10007,"John Hurt",1],[10008,"Anthony Perkins",1],[10009,"Janet Leigh",1],[10010,"Vera Miles",1],[10011,"Jack Nicholson",1],[10012,"Shelley Duvall",1],[10013,"Danny Lloyd",1],[10014,"Kurt Russell",1],[10015,"Wilford Brimley",1],[10016,"Keith David",1],[10017,"Mia Farrow",1],[10018,"John Cassavetes",1],[10019,"Ruth Gordon",1],[10020,"Rod Taylor",1],[10021,"Tippi Hedren",1],[10022,"Jessica Tandy",1],[10023,"John Travolta",1],[10024,"Uma Thurman",1],[10025,"Samuel L. Jackson",1],[10026,"Brad Pitt",1],[10027,"Edward Norton",1],[10028,"Meat Loaf",1],[10029,"Morgan Freeman",1],[10030,"Kevin Spacey",1],[10031,"Leonardo DiCaprio",1],[10032,"Joseph Gordon-Levitt",1],[10033,"Elliot Page",1],[10034,"Jean Reno",1],[10035,"Gary Oldman",1],[10036,"Natalie Portman",1],[10037,"Humphrey Bogart",1],[10038,"Ingrid Bergman",1],[10039,"Paul Henreid",1],[10040,"Christian Bale",1],[10041,"Heath Ledger",1],[10042,"Aaron Eckhart",1],[10043,"Bruce Willis",1],[10044,"Alan Rickman",1],[10045,"Bonnie Bedelia",1],[10046,"Keanu Reeves",1],[10047,"Laurence Fishburne",1],[10048,"Carrie-Anne Moss",1],[10049,"Edward Furlong",1],[10050,"David Carradine",1],[10051,"Daryl Hannah",1],[10052,"Harrison Ford",1],[10053,"Karen Allen",1],[10054,"Paul Freeman",1],[10055,"Rutger Hauer",1],[10056,"Sean Young",1],[10057,"Mark Hamill",1],[10058,"Carrie Fisher",1],[10059,"Malcolm McDowell",1],[10060,"Patrick Magee",1],[10061,"Michael Bates",1],[10062,"Michael J. Fox",1],[10063,"Christopher Lloyd",1],[10064,"Lea Thompson",1],[10065,"Elijah Wood",1],[10066,"Viggo Mortensen",1],[10067,"Ian McKellen",1],[10068,"Marlon Brando",1],[10069,"Al Pacino",1],[10070,"James Caan",1],[10071,"Henry Fonda",1],[10072,"Lee J. Cobb",1],[10073,"Martin Balsam",1],[10074,"Robert De Niro",1],[10075,"Robert Duvall",1],[10076,"Martin Sheen",1],[10077,"Charles Bronson",1],[10078,"Claudia Cardinale",1],[10079,"Jodie Foster",1],[10080,"Cybill Shepherd",1],[10081,"Orlando Bloom",1],[10082,"Anthony Hopkins",1],[10083,"Scott Glenn",1],[10084,"James Stewart",1],[10085,"Grace Kelly",1],[10086,"Wendell Corey",1],[10087,"Matthew Modine",1],[10088,"R. Lee Ermey",1],[10089,"Vincent D'Onofrio",1],[10090,"Tom Hanks",1],[10091,"Robin Wright",1],[10092,"Gary Sinise",1],[10093,"Michael Biehn",1],[10094,"Carrie Henn",1],[10095,"Sylvester Stallone",1],[10096,"Brian Dennehy",1],[10097,"Richard Crenna",1],[10098,"Sean Connery",1],[10099,"Alison Doody",1],[10100,"Annette Bening",1],[10101,"Thora Birch",1],[10102,"Mickey Rourke",1],[10103,"Clive Owen",1],[10104,"Miyu Irino",1],[10105,"Rumi Hiiragi",1],[10106,"Mari Natsuki",1],[10107,"Keir Dullea",1],[10108,"Gary Lockwood",1],[10109,"William Sylvester",1],[10110,"Ben Burtt",1],[10111,"Elissa Knight",1],[10112,"Jeff Garlin",1],[10113,"Liam Neeson",1],[10114,"Ralph Fiennes",1],[10115,"Ben Kingsley",1],[10116,"Graham Chapman",1],[10117,"John Cleese",1],[10118,"Michael Palin",1],[10119,"Madeleine Stowe",1],[10120,"Tom Hardy",1],[10121,"Charlize Theron",1],[10122,"Nicholas Hoult",1],[10123,"Wil Wheaton",1],[10124,"River Phoenix",1],[10125,"Corey Feldman",1],[10126,"Faye Dunaway",1],[10127,"John Huston",1],[10128,"Brigitte Helm",1],[10129,"Alfred Abel",1],[10130,"Gustav Fr\u00f6hlich",1],[10131,"Ewan McGregor",1],[10132,"Ewen Bremner",1],[10133,"Jonny Lee Miller",1],[10134,"Ralph Macchio",1],[10135,"Pat Morita",1],[10136,"Elisabeth Shue",1],[10137,"Pat E. Johnson",1],[10138,"Robyn Lively",1],[10139,"David Worth",1],[10140,"Kurt McKinney",1],[10141,"Jean-Claude Van Damme",1],[10142,"Judith Hoag",1],[10143,"Elias Koteas",1],[10144,"Josh Pais",1],[10145,"Paige Turco",1],[10146,"David Warner",1],[10147,"Michelan Sisti",1],[10148,"Stuart Wilson",1],[10149,"Dan O'Bannon",1],[10150,"Dre Pahich",1],[10151,"Brian Narelle",1],[10152,"Adrienne Barbeau",1],[10153,"Jamie Lee Curtis",1],[10154,"Lee Van Cleef",1],[10155,"Ernest Borgnine",1],[10156,"Steve Buscemi",1],[10157,"Stacy Keach",1],[10158,"James Spader",1],[10159,"Jaye Davidson",1],[10160,"Sam J. Jones",1],[10161,"Melody Anderson",1],[10162,"Max von Sydow",1],[10163,"Dolph Lundgren",1],[10164,"Frank Langella",1],[10165,"Meg Foster",1],[10166,"Kevin Bacon",1],[10167,"Fred Ward",1],[10168,"Finn Carter",1],[10169,"Chris Gartin",1],[10170,"Helen Shaver",1],[10171,"Dee Wallace",1],[10172,"M. Emmet Walsh",1],[10173,"Billy Green Bush",1],[10174,"Scott Grimes",1],[10175,"Liane Curtis",1],[10176,"Terrence Mann",1],[10177,"John Calvin",1],[10178,"Aimee Brooks",1],[10179,"Christian Cousins",1],[10180,"Don Keith Opper",1],[10181,"Paul Whitthorne",1],[10182,"Cindy Charles",1],[10183,"Joe Price",1],[10184,"Gordon Ross",1],[10185,"Anthony Starke",1],[10186,"Karen M. Waldron",1],[10187,"Patrick Swayze",1],[10188,"Jennifer Grey",1],[10189,"Jerry Orbach",1],[10190,"Demi Moore",1],[10191,"Whoopi Goldberg",1],[10192,"Richard Gere",1],[10193,"Julia Roberts",1],[10194,"Jason Alexander",1],[10195,"Robert Urich",1],[10196,"Mary Crosby",1],[10197,"Michael D. Roberts",1],[10198,"Jeffrey Byron",1],[10199,"Michael Preston",1],[10200,"Tim Thomerson",1],[10201,"Vince Edwards",1],[10202,"David Mendenhall",1],[10203,"Patsy Pease",1],[10204,"Peter Facinelli",1],[10205,"Robin Tunney",1],[10206,"Olivier Gruner",1],[10207,"Cary-Hiroyuki Tagawa",1],[10208,"Sue Price",1],[10209,"Tina Cote",1],[10210,"Norbert Weisser",1],[10211,"Blanka Copikova",1],[10212,"Andrew Divoff",1],[10213,"Michal Guc\u00edk",1],[10214,"Peter Liapis",1],[10215,"Lisa Pelikan",1],[10216,"Michael Des Barres",1],[10217,"Damon Martin",1],[10218,"Royal Dano",1],[10219,"Phil Fondacaro",1],[10220,"Evan MacKenzie",1],[10221,"Kevin McCarthy",1],[10222,"Eva LaRue",1],[10223,"Barbara Alyn Woods",1],[10224,"Stacie Randall",1],[10225,"Natasha Henstridge",1],[10226,"Ice Cube",1],[10227,"Pam Grier",1],[10228,"Ally Walker",1],[10229,"Bill Goldberg",1],[10230,"Heidi Schanz",1],[10231,"Jeffrey Jones",1],[10232,"Tim Robbins",1],[10233,"James Earl Jones",1],[10234,"Grace Jones",1],[10235,"Olivia d'Abo",1],[10236,"Brigitte Nielsen",1],[10237,"Sandahl Bergman",1],[10238,"James Hampton",1],[10239,"Susan Ursitti",1],[10240,"Jason Bateman",1],[10241,"Kim Darby",1],[10242,"John Astin",1],[10243,"Christopher Lambert",1],[10244,"Clancy Brown",1],[10245,"Virginia Madsen",1],[10246,"Mario Van Peebles",1],[10247,"Deborah Kara Unger",1],[10248,"Don Ameche",1],[10249,"Hume Cronyn",1],[10250,"Courteney Cox",1],[10251,"Dennis Quaid",1],[10252,"Martin Short",1],[10253,"Meg Ryan",1],[10254,"Kim Cattrall",1],[10255,"Dennis Dun",1],[10256,"Jeff Bridges",1],[10257,"Bruce Boxleitner",1],[10258,"Sharon Stone",1],[10259,"Michael Ironside",1],[10260,"Kathryn Harrold",1],[10261,"Sam Wanamaker",1],[10262,"Gabriel Byrne",1],[10263,"Penelope Ann Miller",1],[10264,"Pamela Reed",1],[10265,"Darla Taylor",1],[10266,"Bill Bellamy",1],[10267,"Al White",1],[10268,"David Hasselhoff",1],[10269,"Edward Mulharem",1],[10270,"Susan Norman",1],[10271,"Jason Robards",1],[10272,"JoBeth Williams",1],[10273,"Steve Guttenberg",1],[10274,"Peter Weller",1],[10275,"Roy Dupuis",1],[10276,"Jennifer Rubin",1],[10277,"Gina Holden",1],[10278,"Jana Pallaske",1],[10279,"Lance Henriksen",1],[10280,"Jeff Fahey",1],[10281,"Pierce Brosnan",1],[10282,"Jenny Wright",1],[10283,"Matthew Broderick",1],[10284,"Ally Sheedy",1],[10285,"John Wood",1],[10286,"Rufus Sewell",1],[10287,"Kiefer Sutherland",1],[10288,"Jennifer Connelly",1],[10289,"Jeff Goldblum",1],[10290,"Geena Davis",1],[10291,"John Getz",1],[10292,"Eric Stoltz",1],[10293,"Daphne Zuniga",1],[10294,"Lee Richardson",1],[10295,"Balthazar Getty",1],[10296,"Chris Furrh",1],[10297,"Danuel Pipoly",1],[10298,"Charlie Sheen",1],[10299,"Nick Cassavetes",1],[10300,"Sherilyn Fenn",1],[10301,"Rae Dawn Chong",1],[10302,"Dan Hedaya",1],[10303,"Tom Cruise",1],[10304,"Antonio Banderas",1],[10305,"Gary Graham",1],[10306,"Anne-Marie Johnson",1],[10307,"Paul Koslo",1],[10308,"Barbara Crampton",1],[10309,"James Staley",1],[10310,"James Remar",1],[10311,"Kyle Howard",1],[10312,"James Tolkan",1],[10313,"Zach Galligan",1],[10314,"Phoebe Cates",1],[10315,"Hoyt Axton",1],[10316,"Howie Mandel",1],[10317,"Heather O'Rourke",1],[10318,"Craig T. Nelson",1],[10319,"Charles S. Dutton",1],[10320,"Charles Dance",1],[10321,"Winona Ryder",1],[10322,"Dominique Pinon",1],[10323,"Noomi Rapace",1],[10324,"Logan Marshall-Green",1],[10325,"Michael Fassbender",1],[10326,"Katherine Waterston",1],[10327,"Billy Crudup",1],[10328,"Sanaa Lathan",1],[10329,"Raoul Bova",1],[10330,"Reiko Aylesworth",1],[10331,"Steven Pasquale",1],[10332,"Shareeka Epps",1],[10333,"Karen Black",1],[10334,"Hunter Carson",1],[10335,"Timothy Bottoms",1],[10336,"Arnold Stang",1],[10337,"Deborah Loomis",1],[10338,"Barry Bostwick",1],[10339,"Michael Beck",1],[10340,"Persis Khambatta",1],[10341,"Bette Davis",1],[10342,"Barbara Carrera",1],[10343,"Colleen Camp",1],[10344,"Louis Gossett Jr.",1],[10345,"Jason Gedrick",1],[10346,"David Suchet",1],[10347,"Mark Humphrey",1],[10348,"Stuart Margolin",1],[10349,"Dudley Moore",1],[10350,"Eddie Murphy",1],[10351,"Kate Capshaw",1],[10352,"Reb Brown",1],[10353,"John Phillip Law",1],[10354,"James Ryan",1],[10355,"Tom Bartlett",1],[10356,"Paige Sullivan",1],[10357,"Steven Boggs",1],[10358,"Josh Mills",1],[10359,"Josh Green",1],[10360,"Chanel Ryan",1],[10361,"Marcus Vaughter",1],[10362,"Jordana Capra",1],[10363,"Joel Hile",1],[10364,"Miles O'Keeffe",1],[10365,"Sabrina Siani",1],[10366,"Ritza Brown",1],[10367,"Lisa Foster",1],[10368,"David Brandon",1],[10369,"Uschi Glas",1],[10370,"Horst Janson",1],[10371,"Theo Lingen",1],[10372,"Michael Cramer",1],[10373,"Susi Engel",1],[10374,"Bobby Van",1],[10375,"Ruta Lee",1],[10376,"Mala Powers",1],[10377,"Christopher George",1],[10378,"Andrew Prine",1],[10379,"Richard Jaeckel",1],[10380,"Steve Inwood",1],[10381,"Deborah Raffin",1],[10382,"John Rhys-Davies",1],[10383,"Margaret Trigg",1],[10384,"Richard Gesswein",1],[10385,"Jayne Smith",1],[10386,"Yanti Somer",1],[10387,"Gianni Garko",1],[10388,"Malisa Longo",1],[10389,"Antonio Sabato",1],[10390,"Carl Weathers",1],[10391,"Kevin Peter Hall",1],[10392,"Danny Glover",1],[10393,"Gary Busey",1],[10394,"Adrien Brody",1],[10395,"Topher Grace",1],[10396,"Boyd Holbrook",1],[10397,"Trevante Rhodes",1],[10398,"Jacob Tremblay",1],[10399,"Amber Midthunder",1],[10400,"Dakota Beaver",1],[10401,"Dane DiLiegro",1],[10402,"Jay Mohr",1],[10403,"Randy Quaid",1],[10404,"Paul Bates",1],[10405,"Garcelle Beauvais",1],[10406,"Dan Aykroyd",1],[10407,"Ralph Bellamy",1],[10408,"Angela Bassett",1],[10409,"Allen Payne",1],[10410,"J.L. Reate",1],[10411,"Peter Boyle",1],[10412,"Ossie Davis",1],[10413,"Cedric The Entertainer",1],[10414,"Kristen Wilson",1],[10415,"Tara Wilson",1],[10416,"Kyla Pratt",1],[10417,"Peter Coyote",1],[10418,"Malcolm Stewart",1],[10419,"Michael Rapaport",1],[10420,"Carmen Ejogo",1],[10421,"Jada Pinkett Smith",1],[10422,"James Coburn",1],[10423,"Judge Reinhold",1],[10424,"John Ashton",1],[10425,"J\u00fcrgen Prochnow",1],[10426,"Jon Tenney",1],[10427,"Joey Travolta",1],[10428,"Jennifer Beals",1],[10429,"Michael Nouri",1],[10430,"Lilia Skala",1],[10431,"Nancy Allen",1],[10432,"Maria Conchita Alonso",1],[10433,"Yaphet Kotto",1],[10434,"Russell Crowe",1],[10435,"Joaquin Phoenix",1],[10436,"Connie Nielsen",1],[10437,"Dan O'Herlihy",1],[10438,"Belinda Bauer",1],[10439,"Robert John Burke",1],[10440,"Mario Machado",1],[10441,"Armand Assante",1],[10442,"Rob Schneider",1],[10443,"Wesley Snipes",1],[10444,"Sandra Bullock",1],[10445,"Stephen Dorff",1],[10446,"Kris Kristofferson",1],[10447,"Ron Perlman",1],[10448,"Parker Posey",1],[10449,"Bud Spencer",1],[10450,"Raimund Harmstorf",1],[10451,"Ottaviano Dell'Acqua",1],[10452,"Marina Langner",1],[10453,"Mario Scarpetta",1],[10454,"Terence Hill",1],[10455,"David Huddleston",1],[10456,"Sam Neill",1],[10457,"Laura Dern",1],[10458,"Julianne Moore",1],[10459,"Pete Postlethwaite",1],[10460,"William H. Macy",1],[10461,"T\u00e9a Leoni",1],[10462,"Chris Pratt",1],[10463,"Bryce Dallas Howard",1],[10464,"Ty Simpkins",1],[10465,"Rafe Spall",1],[10466,"William Shatner",1],[10467,"Leonard Nimoy",1],[10468,"DeForest Kelley",1],[10469,"Patrick Stewart",1],[10470,"Jonathan Frakes",1],[10471,"Brent Spiner",1],[10472,"Chris Pine",1],[10473,"Zachary Quinto",1],[10474,"Simon Pegg",1],[10475,"Zoe Saldana",1],[10476,"Karl Urban",1],[10477,"Suzanne Solari",1],[10478,"Jeff Hutchinson",1],[10479,"Shaun Michelle",1],[10480,"John Carradine",1],[10481,"Joi Lansing",1],[10482,"Judith Jordan",1],[10483,"Henry Thomas",1],[10484,"Drew Barrymore",1],[10485,"Milla Jovovich",1],[10486,"Kate Winslet",1],[10487,"Billy Zane",1],[10488,"Billy Bob Thornton",1],[10489,"Ben Affleck",1],[10490,"John Houseman",1],[10491,"Maud Adams",1],[10492,"Chris Klein",1],[10493,"LL Cool J",1],[10494,"Christopher Reeve",1],[10495,"Kirstie Alley",1],[10496,"Linda Kozlowski",1],[10497,"Roddy Piper",1],[10498,"James Woods",1],[10499,"Debbie Harry",1],[10500,"Sonja Smits",1],[10501,"Herbert Gr\u00f6nemeyer",1],[10502,"Klaus Wennemann",1],[10503,"Nicolas Cage",1],[10504,"Ed Harris",1],[10505,"Jake Gyllenhaal",1],[10506,"Emmy Rossum",1],[10507,"Nick Nolte",1],[10508,"Susan Sarandon",1],[10509,"Peter Ustinov",1],[10510,"Hilary Swank",1],[10511,"Gerard Butler",1],[10512,"Harry Connick Jr.",1],[10513,"Channing Tatum",1],[10514,"Amanda Seyfried",1],[10515,"Richard Jenkins",1],[10516,"Hugh Grant",1],[10517,"Richard McCabe",1],[10518,"Dermot Mulroney",1],[10519,"Cameron Diaz",1],[10520,"Joan Cusack",1],[10521,"Greg Kinnear",1],[10522,"Ross Malinger",1],[10523,"Elizabeth Perkins",1],[10524,"Robert Loggia",1],[10525,"Helen Hunt",1],[10526,"Paul Sanchez",1],[10527,"Catherine Zeta-Jones",1],[10528,"Chi McBride",1],[10529,"Will Smith",1],[10530,"Thandiwe Newton",1],[10531,"Jaden Smith",1],[10532,"Cate Blanchett",1],[10533,"Tilda Swinton",1],[10534,"Will Poulter",1],[10535,"Jamie Foxx",1],[10536,"Christoph Waltz",1],[10537,"Emily Mortimer",1],[10538,"Mark Ruffalo",1],[10539,"Diane Kruger",1],[10540,"Eli Roth",1],[10541,"Matt Damon",1],[10542,"Tom Sizemore",1],[10543,"Woody Harrelson",1],[10544,"O-Lan Jones",1],[10545,"Jessica Alba",1],[10546,"Josh Brolin",1],[10547,"Jackie Earle Haley",1],[10548,"Patrick Wilson",1],[10549,"Carla Gugino",1],[10550,"Lena Headey",1],[10551,"David Wenham",1],[10552,"Sullivan Stapleton",1],[10553,"Eva Green",1],[10554,"Johnny Depp",1],[10555,"Dianne Wiest",1],[10556,"Mia Sara",1],[10557,"Ron Silver",1],[10558,"Christian Slater",1],[10559,"Laura Regan",1],[10560,"Jon Voight",1],[10561,"Jennifer Lopez",1],[10562,"Jeff Daniels",1],[10563,"Julian Sands",1],[10564,"John Goodman",1],[10565,"Chris Potter",1],[10566,"Alex Reid",1],[10567,"Jos\u00e9 Sancho",1],[10568,"Til Schweiger",1],[10569,"Emmanuelle Vaugier",1],[10570,"Natalia Avelon",1],[10571,"Pamela Anderson",1],[10572,"Amir AboulEla",1],[10573,"Adriana Alexander",1],[10574,"Robin Shou",1],[10575,"Linden Ashby",1],[10576,"Talisa Soto",1],[10577,"Natascha McElhone",1],[10578,"Stephen Rea",1],[10579,"Forest Whitaker",1],[10580,"Barry Pepper",1],[10581,"Gregory Walcott",1],[10582,"Tom Keene",1],[10583,"Mona McKinnon",1],[10584,"Tara Reid",1],[10585,"David Charvet",1],[10586,"Carmen Chaplin",1],[10587,"Amy Manson",1],[10588,"Dominic Mafham",1],[10589,"Luke Allen-Gale",1],[10590,"Dakota Johnson",1],[10591,"Jamie Dornan",1],[10592,"Jennifer Ehle",1],[10593,"Eric Johnson",1],[10594,"Bruce Lee",1],[10595,"John Saxon",1],[10596,"Jim Kelly",1],[10597,"Chuck Norris",1],[10598,"Nora Miao",1],[10599,"James Tien",1],[10600,"Maria Yi",1],[10601,"Jackie Chan",1],[10602,"Siu-Tin Yuen",1],[10603,"Jeong-lee Hwang",1],[10604,"Pai Wei",1],[10605,"Biao Yuen",1],[10606,"Ke Huy Quan",1],[10607,"Shia LaBeouf",1],[10608,"Phoebe Waller-Bridge",1],[10609,"Mary Steenburgen",1],[10610,"Jim Carrey",1],[10611,"Peter Riegert",1],[10612,"Ian McNeice",1],[10613,"Simon Callow",1],[10614,"Maura Tierney",1],[10615,"Amanda Donohoe",1],[10616,"Jennifer Aniston",1],[10617,"Yahya Abdul-Mateen II",1],[10618,"Michael Nyqvist",1],[10619,"Alfie Allen",1],[10620,"Riccardo Scamarcio",1],[10621,"Ian McShane",1],[10622,"Halle Berry",1],[10623,"George Georgiou",1],[10624,"Kelly McGillis",1],[10625,"Miles Teller",1],[10626,"Jon Bernthal",1],[10627,"Kathrin Oginski",1],[10628,"Gerd Duwner",1],[10629,"Joachim Fuchsberger",1],[10630,"Sal Borgese",1],[10631,"Dean Jones",1],[10632,"Michele Lee",1],[10633,"David Tomlinson",1],[10634,"Lindsay Lohan",1],[10635,"Michael Keaton",1],[10636,"Cheryl Hines",1],[10637,"Vin Diesel",1],[10638,"Brittany Snow",1],[10639,"Max Thieriot",1],[10640,"Alexa PenaVega",1],[10641,"Daryl Sabara",1],[10642,"Jeremy Piven",1],[10643,"Joel McHale",1],[10644,"Mel B",1],[10645,"Emma Bunton",1],[10646,"Melanie C",1],[10647,"Shaquille O'Neal",1],[10648,"Francis Capra",1],[10649,"T.J. Miller",1],[10650,"James Corden",1],[10651,"Anna Faris",1],[10652,"Alec Baldwin",1],[10653,"Jimmy Kimmel",1],[10654,"Louis C.K.",1],[10655,"Eric Stonestreet",1],[10656,"Kevin Hart",1],[10657,"Adam Sandler",1],[10658,"Kevin James",1],[10659,"Andy Samberg",1],[10660,"Jesse Eisenberg",1],[10661,"Anne Hathaway",1],[10662,"George Lopez",1],[10663,"Denis Leary",1],[10664,"John Leguizamo",1],[10665,"Ray Romano",1],[10666,"Jack Black",1],[10667,"Angelina Jolie",1],[10668,"Owen Wilson",1],[10669,"Bonnie Hunt",1],[10670,"Paul Newman",1],[10671,"Gene Barry",1],[10672,"Ann Robinson",1],[10673,"Les Tremayne",1],[10674,"Tim Allen",1],[10675,"Don Rickles",1],[10676,"Fay Wray",1],[10677,"Robert Armstrong",1],[10678,"Bruce Cabot",1],[10679,"Marlon Rudnicki [U]",1],[10680,"Ilja Stegmaier [U]",1],[10681,"Victoria Kastner [U]",1],[10682,"Louise Anoulaire [U]",1],[10683,"Louis Hinay [U]",1],[10684,"Gaston Ceconnet [U]",1],[10685,"Ralph Traugott [U]",1],[10686,"Melanie Schneider [U]",1],[10687,"Jens Huber [U]",1],[10688,"Sean Maguire",1],[10689,"Kevin Sorbo",1],[10690,"Carmen Electra",1],[10691,"Dana Carvey",1],[10692,"Jennifer Esposito",1],[10693,"Harold Gould",1],[10694,"G.W. Bailey",1],[10695,"George Gaynes",1],[10696,"Michael Winslow",1],[10697,"Christine Ebersole",1],[10698,"Jonathan Ward",1],[10699,"Tina Caspary",1],[10700,"Mike Myers",1],[10701,"Romany Malco",1],[10702,"Bill Pullman",1],[10703,"Tommy Lee Jones",1],[10704,"Linda Fiorentino",1],[10705,"Rip Torn",1],[10706,"Chris Hemsworth",1],[10707,"Tessa Thompson",1],[10708,"Kumail Nanjiani",1],[10709,"Dwayne Johnson",1],[10710,"Karen Gillan",1],[10711,"Grant Cramer",1],[10712,"Suzanne Snyder",1],[10713,"John Allen Nelson",1],[10714,"Shawnee Smith",1],[10715,"Kevin Dillon",1],[10716,"Donovan Leitch Jr.",1],[10717,"Aneta Corsaut",1],[10718,"Earl Rowe",1],[10719,"Michael Rennie",1],[10720,"Patricia Neal",1],[10721,"Hugh Marlowe",1],[10722,"Walter Pidgeon",1],[10723,"Anne Francis",1],[10724,"Leslie Nielsen",1],[10725,"Alan Young",1],[10726,"Yvette Mimieux",1],[10727,"Yul Brynner",1],[10728,"Richard Benjamin",1],[10729,"James Brolin",1],[10730,"Peter Fonda",1],[10731,"Blythe Danner",1],[10732,"Arthur Hill",1],[10733,"Jet Li",1],[10734,"Ching-Wan Lau",1],[10735,"Karen Mok",1],[10736,"Andy On",1],[10737,"Tobin Bell",1],[10738,"Jon Polito",1],[10739,"Todd Armstrong",1],[10740,"Nancy Kovack",1],[10741,"Gary Raymond",1],[10742,"Jane Fonda",1],[10743,"Anita Pallenberg",1],[10744,"Val Kilmer",1],[10745,"Joanne Whalley",1],[10746,"Warwick Davis",1],[10747,"Michelle Pfeiffer",1],[10748,"Danny DeVito",1],[10749,"Kelly Preston",1],[10750,"Emma Thompson",1],[10751,"Nicole Kidman",1],[10752,"Bill Murray",1],[10753,"Melissa McCarthy",1],[10754,"Kristen Wiig",1],[10755,"Kate McKinnon",1],[10756,"Carrie Coon",1],[10757,"Paul Rudd",1],[10758,"Finn Wolfhard",1],[10759,"David Morrell",1],[10760,"Kevin Jarre",1],[10761,"Julie Benz",1],[10762,"Matthew Marsden",1],[10763,"Paz Vega",1],[10764,"Sergio Peris-Mencheta",1],[10765,"Nick Stahl",1],[10766,"Kristanna Loken",1],[10767,"Sam Worthington",1],[10768,"Anton Yelchin",1],[10769,"Jason Clarke",1],[10770,"Emilia Clarke",1],[10771,"Mackenzie Davis",1],[10772,"Talia Shire",1],[10773,"Burt Young",1],[10774,"Antonio Tarver",1],[10775,"Milo Ventimiglia",1],[10776,"Jeremy Irons",1],[10777,"Jeremy Irons",1],[10778,"Ellen DeGeneres",1],[10779,"Alexander Gould",1],[10780,"Ed O'Neill",1],[10781,"Billy Crystal",1],[10782,"Mary Gibbs",1],[10783,"Jodi Benson",1],[10784,"Samuel E. Wright",1],[10785,"Rene Auberjonois",1],[10786,"Linda Woolverton",1],[10787,"Brenda Chapman",1],[10788,"Chris Sanders",1],[10789,"Scott Weinger",1],[10790,"Robin Williams",1],[10791,"Linda Larkin",1],[10792,"Ilene Woods",1],[10793,"James MacDonald",1],[10794,"Eleanor Audley",1],[10795,"Mary Costa",1],[10796,"Bill Shirley",1],[10797,"Mel Gibson",1],[10798,"Linda Hunt",1],[10799,"Ming-Na Wen",1],[10800,"BD Wong",1],[10801,"Adriana Caselotti",1],[10802,"Harry Stockwell",1],[10803,"Lucille La Verne",1],[10804,"Tony Goldwyn",1],[10805,"Minnie Driver",1],[10806,"Brian Blessed",1],[10807,"Betty Lou Gerson",1],[10808,"J. Pat O'Malley",1],[10809,"Phil Harris",1],[10810,"Sebastian Cabot",1],[10811,"Louis Prima",1],[10812,"Dickie Jones",1],[10813,"Christian Rub",1],[10814,"Mel Blanc",1],[10815,"Patton Oswalt",1],[10816,"Selena Gomez",1],[10817,"Hardie Albright",1],[10818,"Stan Alexander",1],[10819,"Bobette Audrey",1],[10820,"Kathryn Hahn",1],[10821,"Annie Potts",1],[10822,"Neve Campbell",1],[10823,"Andy Dick",1],[10824,"Nathan Lane",1],[10825,"Ernie Sabella",1],[10826,"Julie Kavner",1],[10827,"Tom Berenger",1],[10828,"Willem Dafoe",1],[10829,"Bubba Smith",1],[10830,"David Graf",1],[10831,"Jemaine Clement",1],[10832,"Greg Evigan",1],[10833,"Nancy Everhard",1],[10834,"Taurean Blacque",1],[10835,"Donald Sutherland",1],[10836,"William Baldwin",1],[10837,"Mira Sorvino",1],[10838,"Jeremy Northam",1],[10839,"Alexander Goodwin",1],[10840,"Michael Par\u00e9",1],[10841,"Eric Christmas",1],[10842,"Kirk Douglas",1],[10843,"Katharine Ross",1],[10844,"Charlton Heston",1],[10845,"Ryan O'Neal",1],[10846,"Michael Caine",1],[10847,"Lee Marvin",1],[10848,"Clint Eastwood",1],[10849,"Gian Maria Volont\u00e8",1],[10850,"Marianne Koch",1],[10851,"Toshir\u00f4 Mifune",1],[10852,"Takashi Shimura",1],[10853,"Keiko Tsushima",1],[10854,"James Garner",1],[10855,"Jack Hawkins",1],[10856,"Stephen Boyd",1],[10857,"Clark Gable",1],[10858,"Vivien Leigh",1],[10859,"Thomas Mitchell",1],[10860,"Eric Idle",1],[10861,"Roy Scheider",1],[10862,"Robert Shaw",1],[10863,"Richard Dreyfuss",1],[10864,"Ellen Burstyn",1],[10865,"Linda Blair",1],[10866,"Donald Pleasence",1],[10867,"Tony Moran",1],[10868,"Betsy Palmer",1],[10869,"Adrienne King",1],[10870,"Jeannine Taylor",1],[10871,"Peter O'Toole",1],[10872,"Alec Guinness",1],[10873,"Anthony Quinn",1],[10874,"Sophie Marceau",1],[10875,"Patrick McGoohan",1],[10876,"Joseph Cotten",1],[10877,"Dorothy Comingore",1],[10878,"Peter Sellers",1],[10879,"George C. Scott",1],[10880,"Sterling Hayden",1],[10881,"James Mason",1],[10882,"Shelley Winters",1],[10883,"Sue Lyon",1],[10884,"Kim Novak",1],[10885,"Barbara Bel Geddes",1],[10886,"Cary Grant",1],[10887,"Eva Marie Saint",1],[10888,"William Holden",1],[10889,"Omar Sharif",1],[10890,"Julie Christie",1],[10891,"Geraldine Chaplin",1],[10892,"Beverly D'Angelo",1],[10893,"Fran\u00e7ois Cluzet",1],[10894,"Omar Sy",1],[10895,"Anne Le Ny",1],[10896,"Thomas Kretschmann",1],[10897,"Frank Finlay",1],[10898,"Choi Min-sik",1],[10899,"Yoo Ji-tae",1],[10900,"Kang Hye-jeong",1],[10901,"Hugo Weaving",1],[10902,"Rupert Graves",1],[10903,"Tsutomu Tatsumi",1],[10904,"Ayano Shiraishi",1],[10905,"Akemi Yamaguchi",1],[10906,"Daniel Br\u00fchl",1],[10907,"Olivia Wilde",1],[10908,"Guy Pearce",1],[10909,"Joe Pantoliano",1],[10910,"Jonah Hill",1],[10911,"Margot Robbie",1],[10912,"Danny Elfman",1],[10913,"Chris Sarandon",1],[10914,"Catherine O'Hara",1],[10915,"Dev Patel",1],[10916,"Freida Pinto",1],[10917,"Saurabh Shukla",1],[10918,"Michael Clarke Duncan",1],[10919,"David Morse",1],[10920,"Chiwetel Ejiofor",1],[10921,"Michael Kenneth Williams",1],[10922,"Bee Vang",1],[10923,"Christopher Carley",1],[10924,"Michael Madsen",1],[10925,"Jena Malone",1],[10926,"Mary McDonnell",1],[10927,"Brandon Lee",1],[10928,"Michael Wincott",1],[10929,"Rochelle Davis",1],[10930,"Vincent Perez",1],[10931,"Mia Kirshner",1],[10932,"Richard Brooks",1],[10933,"Kirsten Dunst",1],[10934,"William Atherton",1],[10935,"Debbie Fan",1],[10936,"Jay Baruchel",1],[10937,"Christopher Mintz-Plasse",1],[10938,"America Ferrera",1],[10939,"F. Murray Abraham",1],[10940,"Bruce Campbell",1],[10941,"Embeth Davidtz",1],[10942,"Marcus Gilbert",1],[10943,"Ellen Sandweiss",1],[10944,"Richard DeManincor",1],[10945,"Sarah Jessica Parker",1],[10946,"Roddy McDowall",1],[10947,"Kim Hunter",1],[10948,"James Franciscus",1],[10949,"Maurice Evans",1],[10950,"Bradford Dillman",1],[10951,"Don Murray",1],[10952,"Ricardo Montalban",1],[10953,"Claude Akins",1],[10954,"Natalie Trundy",1],[10955,"Edward G. Robinson",1],[10956,"Leigh Taylor-Young",1],[10957,"Paul Hogan",1],[10958,"John Meillon",1],[10959,"Jere Burns",1],[10960,"Michael Douglas",1],[10961,"Kathleen Turner",1],[10962,"Claude Brasseur",1],[10963,"Brigitte Fossey",1],[10964,"Louis de Fun\u00e8s",1],[10965,"Jean Carmet",1],[10966,"Jacques Villeret",1],[10967,"Bruce Dern",1],[10968,"John Candy",1],[10969,"Rick Moranis",1],[10970,"Kyle MacLachlan",1],[10971,"Francesca Annis",1],[10972,"Alan Ruck",1],[10973,"Sean Astin",1],[10974,"Jeff Cohen",1],[10975,"Matt Frewer",1],[10976,"Marcia Strassman",1],[10977,"Robert Oliveri",1],[10978,"Eve Gordon",1],[10979,"Bug Hall",1],[10980,"Macaulay Culkin",1],[10981,"Edward Herrmann",1],[10982,"John Larroquette",1],[10983,"Charles Grodin",1],[10984,"Nicholle Tom",1],[10985,"Julia Sweeney",1],[10986,"Joe Pichler",1],[10987,"Dave Thomas",1],[10988,"Faith Ford",1],[10989,"Daveigh Chase",1],[10990,"Marcia Gay Harden",1],[10991,"Christopher McDonald",1],[10992,"Michael Jordan",1],[10993,"Wayne Knight",1],[10994,"Theresa Randle",1],[10995,"LeBron James",1],[10996,"Don Cheadle",1],[10997,"Cedric Joe",1],[10998,"Joe Pesci",1],[10999,"Daniel Stern",1],[11000,"Ursula Andress",1],[11001,"Bernard Lee",1],[11002,"Lotte Lenya",1],[11003,"Gert Fr\u00f6be",1],[11004,"Honor Blackman",1],[11005,"Claudine Auger",1],[11006,"Adolfo Celi",1],[11007,"Akiko Wakabayashi",1],[11008,"Mie Hama",1],[11009,"George Lazenby",1],[11010,"Diana Rigg",1],[11011,"Telly Savalas",1],[11012,"Jill St. John",1],[11013,"Charles Gray",1],[11014,"Roger Moore",1],[11015,"Jane Seymour",1],[11016,"Christopher Lee",1],[11017,"Britt Ekland",1],[11018,"Barbara Bach",1],[11019,"Curd J\u00fcrgens",1],[11020,"Curd J\u00fcrgens",1],[11021,"Michael Lonsdale",1],[11022,"Edward Mulhare",1],[11023,"Richard Basehart",1],[11024,"Vic Perrin",1],[11025,"Randi Kiger",1],[11026,"Kazuko Sugiyama",1],[11027,"Dietmar Sch\u00f6nherr",1],[11028,"Eva Pflug",1],[11029,"Wolfgang V\u00f6lz",1],[11030,"Mihaly 'Michu' Meszaros",1],[11031,"Paul Fusco",1],[11032,"Max Wright",1],[11033,"Tom Wopat",1],[11034,"John Schneider",1],[11035,"Catherine Bach",1],[11036,"Yasmine Bleeth",1],[11037,"George Peppard",1],[11038,"Mr. T",1],[11039,"Dwight Schultz",1],[11040,"Richard Dean Anderson",1],[11041,"Dana Elcar",1],[11042,"Bruce McGill",1],[11043,"Angela Lansbury",1],[11044,"William Windom",1],[11045,"Ron Masak",1],[11046,"Larry Hagman",1],[11047,"Ken Kercheval",1],[11048,"Patrick Duffy",1],[11049,"Melissa Gilbert",1],[11050,"Karen Grassle",1],[11051,"Matilde Pertorotti [U]",1],[11052,"Arianna Medillino [U]",1],[11053,"Carlo Stallonero [U]",1],[11054,"Enrique Almendros [U]",1],[11055,"Mois\u00e9s Cacares [U]",1],[11056,"Imelda De Souza [U]",1],[11057,"Anton Wernerson [U]",1],[11058,"Steffen Rigbar [U]",1],[11059,"Suzanne Twin [U]",1],[11060,"Jon Walmsley",1],[11061,"Mary Beth McDonough",1],[11062,"Eric Scott",1],[11063,"Herv\u00e9 Villechaize",1],[11064,"Wendy Schaal",1],[11065,"Barbara Eden",1],[11066,"Bill Daily",1],[11067,"Fred Gwynne",1],[11068,"Al Lewis",1],[11069,"Yvonne De Carlo",1],[11070,"Carolyn Jones",1],[11071,"Jackie Coogan",1],[11072,"George O'Hanlon",1],[11073,"Janet Waldo",1],[11074,"Alan Reed",1],[11075,"Jean Vander Pyl",1],[11076,"Don Messick",1],[11077,"Danny Goldman",1],[11078,"Lucille Bliss",1],[11079,"Russi Taylor",1],[11080,"Terence McGovern",1],[11081,"Kate Jackson",1],[11082,"Farrah Fawcett",1],[11083,"Jaclyn Smith",1],[11084,"Lee Majors",1],[11085,"Richard Anderson",1],[11086,"Martin E. Brooks",1],[11087,"Lindsay Wagner",1],[11088,"Robert Wagner",1],[11089,"Stefanie Powers",1],[11090,"Lionel Stander",1],[11091,"Bill Bixby",1],[11092,"Lou Ferrigno",1],[11093,"Jack Colvin",1],[11094,"Erik Estrada",1],[11095,"Larry Wilcox",1],[11096,"Robert Pine",1],[11097,"David Soul",1],[11098,"Antonio Fargas",1],[11099,"Jan-Michael Vincent",1],[11100,"Alex Cord",1],[11101,"Douglas Barr",1],[11102,"Heather Thomas",1],[11103,"Tom Selleck",1],[11104,"John Hillerman",1],[11105,"Roger E. Mosley",1],[11106,"Don Johnson",1],[11107,"Philip Michael Thomas",1],[11108,"Saundra Santiago",1],[11109,"Gavin MacLeod",1],[11110,"Bernie Kopell",1],[11111,"Ted Lange",1],[11112,"Peter Falk",1],[11113,"Mike Lally",1],[11114,"Dianne Travis",1],[11115,"Lorne Greene",1],[11116,"Dan Blocker",1],[11117,"Radames Pera",1],[11118,"Keye Luke",1],[11119,"James Arness",1],[11120,"Milburn Stone",1],[11121,"Amanda Blake",1],[11122,"Dan Castellaneta",1],[11123,"Nancy Cartwright",1],[11124,"Lisa Kudrow",1],[11125,"Josh Radnor",1],[11126,"Jason Segel",1],[11127,"Cobie Smulders",1],[11128,"Johnny Galecki",1],[11129,"Jim Parsons",1],[11130,"Kaley Cuoco",1],[11131,"Hugh Laurie",1],[11132,"Omar Epps",1],[11133,"Robert Sean Leonard",1],[11134,"Ellen Pompeo",1],[11135,"Chandra Wilson",1],[11136,"James Pickens Jr.",1],[11137,"Andrew Lincoln",1],[11138,"Norman Reedus",1],[11139,"Melissa McBride",1],[11140,"Bryan Cranston",1],[11141,"Aaron Paul",1],[11142,"Anna Gunn",1],[11143,"Jessie Buckley",1],[11144,"Stellan Skarsg\u00e5rd",1],[11145,"Damian Lewis",1],[11146,"Ron Livingston",1],[11147,"Peter Dinklage",1],[11148,"Kit Harington",1],[11149,"Millie Bobby Brown",1],[11150,"Louis Hofmann",1],[11151,"Karoline Eichhorn",1],[11152,"Lisa Vicari",1],[11153,"David Duchovny",1],[11154,"Gillian Anderson",1],[11155,"Mitch Pileggi",1],[11156,"Michael Ontkean",1],[11157,"M\u00e4dchen Amick",1],[11158,"Kate Mulgrew",1],[11159,"Robert Beltran",1],[11160,"Roxann Dawson",1],[11161,"Avery Brooks",1],[11162,"Cirroc Lofton",1],[11163,"Scott Bakula",1],[11164,"John Billingsley",1],[11165,"Jolene Blalock",1],[11166,"Perry King",1],[11167,"Joe Penny",1],[11168,"Thom Bray",1],[11169,"Jack Klugman",1],[11170,"John S. Ragin",1],[11171,"Robert Ito",1],[11172,"Jack Lord",1],[11173,"James MacArthur",1],[11174,"Kam Fong",1],[11175,"Peter Graves",1],[11176,"Barbara Bain",1],[11177,"Greg Morris",1],[11178,"Bob Crane",1],[11179,"Werner Klemperer",1],[11180,"John Banner",1],[11181,"Alan Alda",1],[11182,"Wayne Rogers",1],[11183,"Loretta Swit",1],[11184,"Christina Applegate",1],[11185,"Katey Sagal",1],[11186,"James Avery",1],[11187,"Alfonso Ribeiro",1],[11188,"Jon Cryer",1],[11189,"Ashton Kutcher",1],[11190,"Angus T. Jones",1],[11191,"Zach Braff",1],[11192,"Donald Faison",1],[11193,"Sarah Chalke",1],[11194,"Zooey Deschanel",1],[11195,"Jake Johnson",1],[11196,"Max Greenfield",1],[11197,"Kat Dennings",1],[11198,"Beth Behrs",1],[11199,"Garrett Morris",1],[11200,"Laura Prepon",1],[11201,"Mila Kunis",1],[11202,"Roseanne Barr",1],[11203,"Laurie Metcalf",1],[11204,"Bea Arthur",1],[11205,"Betty White",1],[11206,"Rue McClanahan",1],[11207,"Leah Remini",1],[11208,"Jerry Stiller",1],[11209,"Taylor Spreitler",1],[11210,"Ryan Cartwright",1],[11211,"Camrus Johnson",1],[11212,"Rachel Skarsten",1],[11213,"Meagan Tandy",1],[11214,"Rolf Saxon",1],[11215,"Jessica Smith",1],[11216,"John Simmit",1],[11217,"Bob West",1],[11218,"Julie Johnson",1],[11219,"Patty Wirtz",1],[11220,"Evan Smirnow",1],[11221,"Ellen David",1],[11222,"Daniel Brochu",1],[11223,"Fatima Ptacek",1],[11224,"Regan Mizrahi",1],[11225,"Alexandria Suarez",1],[11226,"Rob Rackstraw",1],[11227,"Kate Harbour",1],[11228,"Neil Morrissey",1],[11229,"Steven Kynman",1],[11230,"Tegwen Tucker",1],[11231,"David Carling",1],[11232,"Michael Angelis",1],[11233,"Keith Wickham",1],[11234,"Michael Brandon",1],[11235,"Louis Hunter",1],[11236,"Christiaan Schoombie",1],[11237,"Bella Dayne",1],[11238,"Stephen Amell",1],[11239,"Katie Cassidy",1],[11240,"David Ramsey",1],[11241,"Eliza Taylor",1],[11242,"Bob Morley",1],[11243,"Marie Avgeropoulos",1],[11244,"Dominic Purcell",1],[11245,"Wentworth Miller",1],[11246,"Amaury Nolasco",1],[11247,"Jorge Garcia",1],[11248,"Josh Holloway",1],[11249,"Yunjin Kim",1],[11250,"Matt Smith",1],[11251,"Emma D'Arcy",1],[11252,"Olivia Cooke",1],[11253,"Jack Quaid",1],[11254,"Antony Starr",1],[11255,"Lee Jung-jae",1],[11256,"Wi Ha-joon",1],[11257,"Jeon Young-soo",1],[11258,"Anya Taylor-Joy",1],[11259,"Chloe Pirrie",1],[11260,"Bill Camp",1],[11261,"Jerry Seinfeld",1],[11262,"Julia Louis-Dreyfus",1],[11263,"Michael Richards",1],[11264,"Heide Keller",1],[11265,"Horst Naumann",1],[11266,"Siegfried Rauch",1],[11267,"Ethan Cutkosky",1],[11268,"Debrah Farentino",1],[11269,"Sullivan Walker",1],[11270,"Morgan Weisser",1],[11271,"Kristen Cloke",1],[11272,"Rodney Rowland",1],[11273,"Sebastian Roch\u00e9",1],[11274,"Christopher Gorham",1],[11275,"Jonathan Brandis",1],[11276,"Don Franklin",1],[11277,"Ted Raimi",1],[11278,"Brian Downey",1],[11279,"Michael McManus",1],[11280,"Mira Furlan",1],[11281,"Richard Biggs",1],[11282,"Stephen Furst",1],[11283,"Michael Shanks",1],[11284,"Amanda Tapping",1],[11285,"Ben Browder",1],[11286,"Claudia Black",1],[11287,"Anthony Simcoe",1],[11288,"Nathan Fillion",1],[11289,"Gina Torres",1],[11290,"Alan Tudyk",1],[11291,"Lisa Ryder",1],[11292,"Laura Bertram",1],[11293,"Joe Flanigan",1],[11294,"Rachel Luttrell",1],[11295,"David Hewlett",1],[11296,"Robert Carlyle",1],[11297,"Louis Ferreira",1],[11298,"Brian J. Smith",1],[11299,"Richard Hatch",1],[11300,"Dirk Benedict",1],[11301,"Edward James Olmos",1],[11302,"Jamie Bamber",1],[11303,"Gil Gerard",1],[11304,"Erin Gray",1],[11305,"Felix Silla",1],[11306,"Michael Hurst",1],[11307,"Kevin Smith",1],[11308,"Lucy Lawless",1],[11309,"Ren\u00e9e O'Connor",1],[11310,"Holly Marie Combs",1],[11311,"Alyssa Milanos",1],[11312,"Brian Krause",1],[11313,"Sarah Michelle Gellar",1],[11314,"Nicholas Brendon",1],[11315,"Alyson Hannigan",1],[11316,"David Boreanaz",1],[11317,"Charisma Carpenter",1],[11318,"Alexis Denisof",1],[11319,"Nina Dobrev",1],[11320,"Paul Wesley",1],[11321,"Ian Somerhalder",1],[11322,"Dean Cain",1],[11323,"Teri Hatcher",1],[11324,"Lane Smith",1],[11325,"Tom Welling",1],[11326,"Michael Rosenbaum",1],[11327,"Allison Mack",1],[11328,"Katherine McNamara",1],[11329,"Dominic Sherwood",1],[11330,"Alberto Rosende",1],[11331,"Sean Murray",1],[11332,"David McCallum",1],[11333,"Mark Harmon",1],[11334,"Kirsten Vangsness",1],[11335,"A.J. Cook",1],[11336,"Matthew Gray Gubler",1],[11337,"Jesse L. Martin",1],[11338,"Dennis Farina",1],[11339,"Anthony Edwards",1],[11340,"Julianna Margulies",1],[11341,"Emily Deschanel",1],[11342,"Michaela Conlin",1],[11343,"Kathy Baker",1],[11344,"Lauren Holly",1],[11345,"Fred Savage",1],[11346,"Dan Lauria",1],[11347,"Alley Mills",1],[11348,"Bill Cosby",1],[11349,"Phylicia Rashad",1],[11350,"Malcolm-Jamal Warner",1],[11351,"Bob Saget",1],[11352,"John Stamos",1],[11353,"Dave Coulier",1],[11354,"Earl Hindman",1],[11355,"Taran Noah Smith",1],[11356,"Reginald VelJohnson",1],[11357,"Jaleel White",1],[11358,"Darius McCrary",1],[11359,"Melissa Joan Hart",1],[11360,"Caroline Rhea",1],[11361,"Beth Broderick",1],[11362,"Elizabeth Montgomery",1],[11363,"Dick York",1],[11364,"Dick Sargent",1],[11365,"Stuart Pankin",1],[11366,"Allan Trautman",1],[11367,"Jessica Walter",1],[11368,"Jason Priestley",1],[11369,"Shannen Doherty",1],[11370,"Luke Perry",1],[11371,"Heather Locklear",1],[11372,"Andrew Shue",1],[11373,"Courtney Thorne-Smith",1],[11374,"James Van Der Beekh",1],[11375,"Katie Holmes",1],[11376,"Michelle Williams",1],[11377,"Lauren Graham",1],[11378,"Alexis Bledel",1],[11379,"Mischa Barton",1],[11380,"Adam Brody",1],[11381,"Peter Gallagher",1],[11382,"Felicity Huffman",1],[11383,"Marcia Cross",1],[11384,"Kristin Davis",1],[11385,"Nicola Coughlan",1],[11386,"Luke Thompson",1],[11387,"Claudia Jessie",1],[11388,"Lily Collins",1],[11389,"Philippine Leroy-Beaulieu",1],[11390,"Ashley Park",1],[11391,"Cillian Murphy",1],[11392,"Paul Anderson",1],[11393,"Sophie Rundle",1],[11394,"Katheryn Winnick",1],[11395,"Gustaf Skarsg\u00e5rd",1],[11396,"Alexander Ludwig",1],[11397,"Freya Allan",1],[11398,"Anya Chalotra",1],[11399,"Henry Cavill",1],[11400,"Tom Hopper",1],[11401,"David Casta\u00f1eda",1],[11402,"Asa Butterfield",1],[11403,"Ncuti Gatwa",1],[11404,"Jessica Barden",1],[11405,"Alex Lawther",1],[11406,"Steve Oram",1],[11407,"Anjana Vasan",1],[11408,"Cristin Milioti",1],[11409,"Jimmi Simpson",1],[11410,"Chris Parnell",1],[11411,"Spencer Grammer",1],[11412,"Matt Stone",1],[11413,"Isaac Hayes",1],[11414,"Rami Malek",1],[11415,"Carly Chaikin",1],[11416,"Michel Gill",1],[11417,"Claire Foy",1],[11418,"Olivia Colman",1],[11419,"Imelda Staunton",1],[11420,"Claire Danes",1],[11421,"Mandy Patinkin",1],[11422,"Mary Lynn Rajskub",1],[11423,"Carlos Bernard",1],[11424,"Megan Boone",1],[11425,"Diego Klattenhoff",1],[11426,"Adam West",1],[11427,"Burt Ward",1],[11428,"Alan Napier",1],[11429,"Lynda Carter",1],[11430,"Lyle Waggoner",1],[11431,"Tom Kratochvil",1],[11432,"Martin Landau",1],[11433,"Nick Tate",1],[11434,"Peter Krause",1],[11435,"Michael C. Hall",1],[11436,"Frances Conroy",1],[11437,"Charlie Hunnam",1],[11438,"Mark Boone Junior",1],[11439,"\u00darsula Corber\u00f3",1],[11440,"\u00c1lvaro Morte",1],[11441,"Itziar Itu\u00f1o",1],[11442,"Tom Ellis",1],[11443,"Lauren German",1],[11444,"Kevin Alejandro",1],[11445,"Pedro Pascal",1],[11446,"Chris Bartlett",1],[11447,"Katee Sackhoff",1],[11448,"Dee Bradley Baker",1],[11449,"Zach Tyler Eisen",1],[11450,"Mae Whitman",1],[11451,"Stephanie Sheh",1],[11452,"Kotono Mitsuishi",1],[11453,"Kate Higgins",1],[11454,"Veronica Taylor",1],[11455,"Rachael Lillis",1],[11456,"Eric Stuart",1],[11457,"Steve Blum",1],[11458,"Mona Marshall",1],[11459,"Tifanie Christun",1],[11460,"Marshall Thompson",1],[11461,"Cheryl Miller",1],[11462,"Yale Summers",1],[11463,"Brian Kelly",1],[11464,"Luke Halpin",1],[11465,"Tommy Norden",1],[11466,"Tommy Rettig",1],[11467,"Jan Clayton",1],[11468,"George Cleveland",1],[11469,"Allan Lane",1],[11470,"Connie Hines",1],[11471,"Rex Smith",1],[11472,"Richard Venture",1],[11473,"Joe Regalbuto",1],[11474,"Joe Nipote",1],[11475,"Heather Medway",1],[11476,"J. Downing",1],[11477,"Lorenzo Lamas",1],[11478,"Branscombe Richmond",1],[11479,"Don LaFontaine",1],[11480,"Clarence Gilyard Jr.",1],[11481,"Sheree J. Wilson",1],[11482,"Alan Fudge",1],[11483,"Belinda Montgomery",1],[11484,"Desi Arnaz Jr.",1],[11485,"Chuck Wagner",1],[11486,"Heather McNair",1],[11487,"Carroll O'Connor",1],[11488,"Alan Autry",1],[11489,"David Hart",1],[11490,"Elizabeth Mitchell",1],[11491,"Morris Chestnut",1],[11492,"Joel Gretsch",1],[11493,"Colin Ferguson",1],[11494,"Salli Richardson-Whitfield",1],[11495,"Erica Cerra",1],[11496,"John Sparkes",1],[11497,"Morwenna Banks",1],[11498,"Oliver May",1],[11499,"Eddie McClintock",1],[11500,"Joanne Kelly",1],[11501,"Saul Rubinek",1],[11502,"Mark Jackson",1],[11503,"Tim Russ",1],[11504,"Amanda Pays",1],[11505,"George Coe",1],[11506,"Lee Pace",1],[11507,"Scoot McNairy",1],[11508,"Thomas Middleditch",1],[11509,"Josh Brener",1],[11510,"Dominic West",1],[11511,"Lance Reddick",1],[11512,"Sonja Sohn",1],[11513,"William Zabka",1],[11514,"Courtney Henggeler",1],[11515,"Kristofor Brown",1],[11516,"Dale Revo",1],[11517,"Michael McClendon",1],[11518,"Georg Stanford Brown",1],[11519,"Dustin Nguyen",1],[11520,"Peter DeLuise",1],[11521,"Doris Jensen",1],[11522,"Kurt Zips",1],[11523,"Arthur Holden",1],[11524,"Cariba Heine",1],[11525,"Phoebe Tonkin",1],[11526,"Angus McLaren",1],[11527,"Enzi Fuchs",1],[11528,"Walther Reyer",1],[11529,"Herbert Fux",1],[11530,"Lisette T. Pagler",1],[11531,"Pia Halvorsen",1],[11532,"Johan Paulsen",1],[11533,"Joel Kinnaman",1],[11534,"Michael Dorman",1],[11535,"Wrenn Schmidt",1],[11536,"Steven Strait",1],[11537,"Dominique Tipper",1],[11538,"Wes Chatham",1],[11539,"Rebecca Ferguson",1],[11540,"Harriet Walter",1],[11541,"Iain Glen",1],[11542,"K\u00f4ichi Yamadera",1],[11543,"Unsh\u00f4 Ishizuka",1],[11544,"Megumi Hayashibara",1],[11545,"Megumi Ogata",1],[11546,"Alan Ritchson",1],[11547,"Maria Sten",1],[11548,"Malcolm Goodwin",1],[11549,"Jenna Ortega",1],[11550,"Emma Myers",1],[11551,"Hunter Doohan",1],[11552,"William Lucas",1],[11553,"Charlotte Mitchell",1],[11554,"Roderick Shaw",1],[11555,"Richard Chamberlain",1],[11556,"Simon Jones",1],[11557,"David Dixon",1],[11558,"Peter Jones",1],[11559,"Stephanie Zimbalist",1],[11560,"Doris Roberts",1],[11561,"Manfred Krug",1],[11562,"R\u00fcdiger Kirschstein",1],[11563,"Nele Mueller-St\u00f6fen",1],[11564,"Andy Griffith",1],[11565,"Linda Purl",1],[11566,"Kene Holiday",1],[11567,"Adrian Zmed",1],[11568,"Nick Mancuso",1],[11569,"James Handy",1],[11570,"Barbara Williams",1],[11571,"Victor French",1],[11572,"James Troesh",1],[11573,"Roy Dotrice",1],[11574,"Jay Acovone",1],[11575,"Eric Pierpoint",1],[11576,"Michele Scarabelli",1],[11577,"Sappho Cola [U]",1],[11578,"Varius Magom [U]",1],[11579,"Lavena Black [U]",1],[11580,"Nathalia Cullen [U]",1],[11581,"Clara Sutherland [U]",1],[11582,"Willibald Brogan [U]",1],[11583,"Valdis Wauters [U]",1],[11584,"Bindy Michalak [U]",1],[11585,"Milko Venner [U]",1],[11586,"Meirion Guzman [U]",1],[11587,"Anya Wilcox [U]",1],[11588,"Vlasta Fonda [U]",1],[11589,"Maalik Nass [U]",1],[11590,"Doriane Sherman [U]",1],[11591,"Karl Wechsler [U]",1],[11592,"Simon Colt [U]",1],[11593,"Arianne Taft [U]",1],[11594,"Prasad Haden [U]",1],[11595,"Timoth\u00e9e Chalamet",1],[11596,"Zendaya",1],[11597,"Emily Blunt",1],[11598,"Cailee Spaeny",1],[11599,"David Jonsson",1],[11600,"Archie Renaux",1],[11601,"Viola Davis",1],[11602,"Rebecca Hall",1],[11603,"Brian Tyree Henry",1],[11604,"Dan Stevens",1],[11605,"Alexander Skarsg\u00e5rd",1],[11606,"Ryan Gosling",1],[11607,"Aaron Taylor-Johnson",1],[11608,"Nell Tiger Free",1],[11609,"Ralph Ineson",1],[11610,"Sonia Braga",1],[11611,"Tom Burke",1],[11612,"Denzel Washington",1],[11613,"Paul Mescal",1],[11614,"Ariana Grande",1],[11615,"Cynthia Erivo",1],[11616,"Allison Williams",1],[11617,"Violet McGraw",1],[11618,"Ronny Chieng",1],[11619,"Michael B. Jordan",1],[11620,"Jonathan Majors",1],[11621,"Michelle Rodriguez",1],[11622,"Reg\u00e9-Jean Page",1],[11623,"Anthony Ramos",1],[11624,"Dominique Fishback",1],[11625,"Luna Lauren Velez",1],[11626,"Hayley Atwell",1],[11627,"Ving Rhames",1],[11628,"Micah Abbey",1],[11629,"Shamon Brown Jr.",1],[11630,"Nicolas Cantu",1],[11631,"Amie Donald",1],[11632,"Austin Butler",1],[11633,"Olivia DeJonge",1],[11634,"Joey King",1],[11635,"Claes Bang",1],[11636,"Lewis Tan",1],[11637,"Jessica McNamee",1],[11638,"Josh Lawson",1],[11639,"Brendan Fraser",1],[11640,"Sadie Sink",1],[11641,"Robert Pattinson",1],[11642,"Zo\u00eb Kravitz",1],[11643,"Jeffrey Wright",1],[11644,"Daniel Craig",1],[11645,"Ana de Armas",1],[11646,"John Bradley",1],[11647,"Edgar Ram\u00edrez",1],[11648,"John David Washington",1],[11649,"Madeleine Yuna Voyles",1],[11650,"Gemma Chan",1],[11651,"Wagner Moura",1],[11652,"Zac Efron",1],[11653,"Jeremy Allen White",1],[11654,"Harris Dickinson",1],[11655,"Stephen Graham",1],[11656,"Elle Fanning",1],[11657,"Dimitrius Schuster-Koloamatangi",1],[11658,"Ravi Narayan",1],[11659,"Kristen Stewart",1],[11660,"Vincent Cassel",1],[11661,"Mamoudou Athie",1],[11662,"Julia Garner",1],[11663,"Alden Ehrenreich",1],[11664,"Owen Teague",1],[11665,"Kevin Durand",1],[11666,"Kaya Scodelario",1],[11667,"Robbie Amell",1],[11668,"Hannah John-Kamen",1],[11669,"Salma Hayek",1],[11670,"Harvey Guill\u00e9n",1],[11671,"Ken Watanabe",1],[11672,"Billy Connolly",1],[11673,"Cuba Gooding Jr.",1],[11674,"Gerald McRaney",1],[11675,"David Oyelowo",1],[11676,"Ben Schwartz",1],[11677,"James Marsden",1],[11678,"Idris Elba",1],[11679,"Jared Leto",1],[11680,"Garrett Hedlund",1],[11681,"Ginnifer Goodwin",1],[11682,"Cooper Hoffman",1],[11683,"Martin Lawrence",1],[11684,"Vanessa Hudgens",1],[11685,"Lisa Boyle",1],[11686,"Gabrielle Union",1],[11687,"Daniel Radcliffe",1],[11688,"Kurumi Kobato",1],[11689,"Katsuji Mori",1],[11690,"Reiko Mut\u00f4",1],[11691,"Mayumi Tanaka",1],[11692,"Ikue \u00d4tani",1],[11693,"H\u00f4ch\u00fb \u00d4tsuka",1],[11694,"Adrian Hoven",1],[11695,"Harald Baerow",1],[11696,"Wolf Ackva",1],[11697,"Sergey Obraztsov",1],[11698,"Paul Robeson",1],[11699,"Josef Skupa",1],[11700,"Seth MacFarlane",1],[11701,"Adrianne Palicki",1],[11702,"Penny Johnson Jerald",1],[11703,"Christian Guzek",1],[11704,"Kath Soucie",1],[11705,"Orlando Bloom",1],[11706,"Ian McKellen",1],[11707,"Viggo Mortensen",1],[11708,"Cate Blanchett",1],[11709,"Kate Winslet",1],[11710,"Leonardo DiCaprio",1],[11711,"Jodie Foster",1],[11712,"Anthony Hopkins",1],[11713,"Russell Crowe",1],[11714,"Joaquin Phoenix",1],[11715,"Matt Damon",1],[11716,"Robert De Niro",1],[11717,"Ray Liotta",1],[11718,"Joe Pesci",1],[11719,"Timoth\u00e9e Chalamet",1],[11720,"Zendaya",1],[11721,"Tom Holland",1],[11722,"Robert Downey Jr.",1],[11723,"Scarlett Johansson",1],[11724,"Chris Evans",1],[11725,"Keanu Reeves",1],[11726,"Charlize Theron",1],[11727,"Bryan Cranston",1],[11728,"Aaron Paul",1],[11729,"Peter Dinklage",1],[11730,"Emilia Clarke",1],[11731,"James Gandolfini",1],[11732,"Bob Odenkirk",1],[11733,"Millie Bobby Brown",1],[11734,"Song Kang-ho",1],[11735,"Pedro Pascal",1],[11736,"Bella Ramsey",1],[11737,"Jeremy Allen White",1],[11738,"Kieran Culkin",1],[11739,"Mel Gibson",1],[11740,"Sophie Turner",1],[11741,"Winona Ryder",1],[11742,"Emma Stone",1],[11743,"Ryan Gosling",1],[11744,"Margot Robbie",1],[11745,"Paul Giamatti",1],[11746,"Oscar Isaac",1],[11747,"Alicia Vikander",1],[11748,"Florence Pugh",1],[11749,"Lupita Nyong'o",1],[11750,"Daniel Kaluuya",1],[11751,"Tom Hardy",1],[11752,"Christian Bale",1],[11753,"Heath Ledger",1],[11754,"Jared Leto",1],[11755,"Cillian Murphy",1],[11756,"Mark Ruffalo",1],[11757,"Mahershala Ali",1],[11758,"Josh Brolin",1],[11759,"Idris Elba",1],[11760,"Rami Malek",1],[11761,"Warwick Davis",1],[11762,"Saoirse Ronan",1],[11763,"Jesse Plemons",1],[11764,"Benedict Cumberbatch",1],[11765,"Martin Freeman",1],[11766,"Olivia Colman",1],[11767,"Jonathan Pryce",1],[11768,"Taron Egerton",1],[11769,"Sydney Sweeney",1],[11770,"Jung Ho-yeon",1],[11771,"Lee Jung-jae",1],[11772,"Adam Driver",1],[11773,"Laura Dern",1],[11774,"Jared Harris",1],[11775,"Stellan Skarsg\u00e5rd",1],[11776,"Millie Gibson",1],[11777,"Barry Keoghan",1],[11778,"Austin Butler",1],[11779,"Caleb Landry Jones",1],[11780,"Brandon Lee",1],[100000,"Glen A. Larson",2],[100001,"Sean Jara",2],[100002,"Theo Mezger",2],[100003,"Tom Patchett",2],[100004,"Gy Waldron",2],[100005,"Michael Berk",2],[100006,"Stephen J. Cannell",2],[100007,"Lee David Zlotoff",2],[100008,"Gene Roddenberry",2],[100009,"Peter S. Fischer",2],[100010,"David Jacobs",2],[100011,"Blanche Hanalis",2],[100012,"Vanessa Guidobianchi [U]",2],[100013,"Mirella Montano [U]",2],[100014,"Estefan Antonio [U]",2],[100015,"Earl Hamner Jr.",2],[100016,"Gene Levitt",2],[100017,"Sidney Sheldon",2],[100018,"Ed Haas",2],[100019,"David Levy",2],[100020,"Joseph Barbera",2],[100021,"Pierre Culliford",2],[100022,"Jymn Magon",2],[100023,"Ivan Goff",2],[100024,"Richard Irving",2],[100025,"Kenneth Johnson",2],[100026,"Paul Playdon",2],[100027,"William Blinn",2],[100028,"Donald P. Bellisario",2],[100029,"Anthony Yerkovich",2],[100030,"Wilford Lloyd Baumes",2],[100031,"Richard Levinson",2],[100032,"David Dortort",2],[100033,"Ed Spielman",2],[100034,"Charles Marquis Warren",2],[100035,"James L. Brooks",2],[100036,"David Crane",2],[100037,"Carter Bays",2],[100038,"Chuck Lorre",2],[100039,"David Shore",2],[100040,"Shonda Rhimes",2],[100041,"Vince Gilligan",2],[100042,"Craig Mazin",2],[100043,"Mary Richards",2],[100044,"David Benioff",2],[100045,"Matt Duffer",2],[100046,"Baran bo Odar",2],[100047,"Chris Carter",2],[100048,"Mark Frost",2],[100049,"Rick Berman",2],[100050,"Leonard Freeman",2],[100051,"Bruce Geller",2],[100052,"Bernard Fein",2],[100053,"Larry Gelbart",2],[100054,"Ron Leavitt",2],[100055,"Andy Borowitz",2],[100056,"Lee Aronsohn",2],[100057,"Bill Lawrence",2],[100058,"Elizabeth Meriwether",2],[100059,"Whitney Cummings",2],[100060,"Mark Brazill",2],[100061,"Roseanne Barr",2],[100062,"Susan Harris",2],[100063,"David Litt",2],[100064,"Bruce Helford",2],[100065,"Caroline Dries",2],[100066,"Andrew Davenport",2],[100067,"Dennis DeShazer",2],[100068,"H\u00e9l\u00e8ne Desputeaux",2],[100069,"Chris Gifford",2],[100070,"Keith Chapman",2],[100071,"Dave Jones",2],[100072,"Britt Allcroft",2],[100073,"David Farr",2],[100074,"Greg Berlanti",2],[100075,"Jason Rothenberg",2],[100076,"Paul T. Scheuring",2],[100077,"Ryan J. Condal",2],[100078,"Eric Kripke",2],[100079,"Hwang Dong-hyuk",2],[100080,"Scott Frank",2],[100081,"Larry David",2],[100082,"Wolfgang Rademann",2],[100083,"Paul Abbott",2],[100084,"Michael Duggan",2],[100085,"Glen Morgan",2],[100086,"Manny Coto",2],[100087,"Rockne S. O'Bannon",2],[100088,"Jeffrey Hirschfield",2],[100089,"J. Michael Straczynski",2],[100090,"Jonathan Glassner",2],[100091,"Joss Whedon",2],[100092,"Robert C. Cooper",2],[100093,"Christian Williams",2],[100094,"Constance M. Burge",2],[100095,"David Greenwalt",2],[100096,"Julie Plec",2],[100097,"Deborah Joy LeVine",2],[100098,"Alfred Gough",2],[100099,"Ed Decter",2],[100100,"Jeff Davis",2],[100101,"Dick Wolf",2],[100102,"Hart Hanson",2],[100103,"David E. Kelley",2],[100104,"Carol Black",2],[100105,"Michael Leeson",2],[100106,"Jeff Franklin",2],[100107,"Carmen Finestra",2],[100108,"William Bickley",2],[100109,"Jonathan Schmock",2],[100110,"Sol Saks",2],[100111,"Michael Jacobs",2],[100112,"Darren Star",2],[100113,"Kevin Williamson",2],[100114,"Amy Sherman-Palladino",2],[100115,"Josh Schwartz",2],[100116,"Marc Cherry",2],[100117,"Chris Van Dusen",2],[100118,"Steven Knight",2],[100119,"Michael Hirst",2],[100120,"Lauren Schmidt Hissrich",2],[100121,"Steve Blackman",2],[100122,"Laurie Nunn",2],[100123,"Jonathan Entwistle",2],[100124,"Charlie Brooker",2],[100125,"Dan Harmon",2],[100126,"Trey Parker",2],[100127,"Sam Esmail",2],[100128,"Beau Willimon",2],[100129,"Peter Morgan",2],[100130,"Alex Gansa",2],[100131,"Robert Cochran",2],[100132,"Jon Bokenkamp",2],[100133,"Bill Finger",2],[100134,"William Moulton Marston",2],[100135,"Gerry Anderson",2],[100136,"Alan Ball",2],[100137,"Kurt Sutter",2],[100138,"\u00c1lex Pina",2],[100139,"Tom Kapinos",2],[100140,"Jon Favreau",2],[100141,"Michael Dante DiMartino",2],[100142,"Naoko Takeuchi",2],[100143,"Satoshi Tajiri",2],[100144,"Akiyoshi Hong\u014d",2],[100145,"Art Arthur",2],[100146,"Ricou Browning",2],[100147,"Robert Maxwell",2],[100148,"Sonia Chernus",2],[100149,"Paul M. Belous",2],[100150,"Danny Bilson",2],[100151,"Albert S. Ruddy",2],[100152,"Mayo Simon",2],[100153,"James Lee Barrett",2],[100154,"Andrew Cosby",2],[100155,"Mark Baker",2],[100156,"D. Brent Mote",2],[100157,"Andrew Rosenbaum",2],[100158,"Saul Banks",2],[100159,"Christopher Cantwell",2],[100160,"Mike Judge",2],[100161,"David Simon",2],[100162,"Josh Heald",2],[100163,"Douglas Heyes",2],[100164,"Patrick Hasburgh",2],[100165,"Hiroshi Sait\u014d",2],[100166,"Jonathan M. Shiff",2],[100167,"Margot K\u00f6hler",2],[100168,"Lars Lundstr\u00f6m",2],[100169,"Ronald D. Moore",2],[100170,"Mark Fergus",2],[100171,"Graham Yost",2],[100172,"Shin'ichir\u00f4 Watanabe",2],[100173,"Hideaki Anno",2],[100174,"Nick Santora",2],[100175,"Miles Millar",2],[100176,"Ted Willis",2],[100177,"Jerry London",2],[100178,"John Lloyd",2],[100179,"Michael Gleason",2],[100180,"Georg Feil",2],[100181,"Dean Hargrove",2],[100182,"Rick Husky",2],[100183,"Michael Landon",2],[100184,"Ron Koslow",2],[100185,"Cordeilla Paquet [U]",2],[100186,"Addy Zee [U]",2],[100187,"Jenny Kr\u00fcger [U]",2],[100188,"Janel Groen [U]",2],[100189,"Dessie Flower [U]",2],[100190,"Marta Brown [U]",2],[100191,"John Whittington",2],[100192,"Hans Christian Andersen",2],[1000000,"Lukas Weber",3],[1000001,"Sophie Keller",3],[1000002,"Jonas Schmidt",3],[1000003,"Laura Fischer",3],[1000004,"Felix Wagner",3],[1000005,"Hannah Becker",3],[1000006,"Maximilian Hoffmann",3],[1000007,"Nina Schwarz",3],[1000008,"Paul Neumann",3],[1000009,"Emma Kr\u00fcger",3],[1000010,"Olivia Parker",3],[1000011,"Emily Johnson",3],[1000012,"Sophie Bennett",3],[1000013,"Charlotte Wilson",3],[1000014,"Amelia Thompson",3],[1000015,"Grace Harrison",3],[1000016,"Jessica Collins",3],[1000017,"Hannah Foster",3],[1000018,"Megan Clarke",3],[1000019,"Lucy Anderson",3],[1000020,"James Miller",3],[1000021,"William Carter",3],[1000022,"Oliver Hughes",3],[1000023,"Thomas Walker",3],[1000024,"Henry Bennett",3],[1000025,"Daniel Roberts",3],[1000026,"Jack Thompson",3],[1000027,"Ethan Collins",3],[1000028,"George Harrison",3],[1000029,"Samuel Wright",3],[1000030,"Stefano Lombardi",3],[1000031,"Davide Costa",3],[1000032,"Giovanni Greco",3],[1000033,"Andrea Gallo",3],[1000034,"Lorenzo Moretti",3],[1000035,"Francesco Ricci",3],[1000036,"Alessandro Conti",3],[1000037,"Matteo Bianchi",3],[1000038,"Marco Romano",3],[1000039,"Luca Rossi",3],[1000040,"Giulia Romano",3],[1000041,"Sofia Bianchi",3],[1000042,"Martina Conti",3],[1000043,"Chiara Ricci",3],[1000044,"Francesca Moretti",3],[1000045,"Alessia Gallo",3],[1000046,"Elisa Greco",3],[1000047,"Valentina Costa",3],[1000048,"Sara Lombardi",3],[1000049,"Aurora Ferrari",3],[1000050,"Camille Martin",3],[1000051,"L\u00e9a Dubois",3],[1000052,"Chlo\u00e9 Moreau",3],[1000053,"Manon Laurent",3],[1000054,"Juliette Bernard",3],[1000055,"In\u00e8s Rousseau",3],[1000056,"Clara Lef\u00e8vre",3],[1000057,"Zo\u00e9 Fournier",3],[1000058,"Alice Girard",3],[1000059,"\u00c9lise Petit",3],[1000060,"Lucas Martin",3],[1000061,"Thomas Dubois",3],[1000062,"Hugo Moreau",3],[1000063,"Gabriel Laurent",3],[1000064,"Louis Bernard",3],[1000065,"Nathan Rousseau",3],[1000066,"Julien Lef\u00e8vre",3],[1000067,"Arthur Fournier",3],[1000068,"Maxime Girard",3],[1000069,"Antoine Petit",3],[10000000,"Lukas Schneider",4],[10000001,"Matteo Rossi",4],[10000002,"Jean Dupont",4],[10000003,"Alejandro Garc\u00eda",4],[10000004,"Liam O\u2019Connor",4],[10000005,"Anders Johansson",4],[10000006,"Nils Andersen",4],[10000007,"Jan Kowalski",4],[10000008,"Petr Nov\u00e1k",4],[10000009,"Istv\u00e1n Nagy",4],[10000010,"Jo\u00e3o Silva",4],[10000011,"Dimitris Papadopoulos",4],[10000012,"Nikola Jovanovi\u0107",4],[10000013,"Marko Kova\u010d",4],[10000014,"Ivan Horvat",4],[10000015,"Stefan M\u00fcller",4],[10000016,"Thomas Weber",4],[10000017,"Maxime Laurent",4],[10000018,"Pierre Moreau",4],[10000019,"Marco Bianchi",4],[10000020,"Antonio Conti",4],[10000021,"Javier Fern\u00e1ndez",4],[10000022,"Daniel Mart\u00ednez",4],[10000023,"\u00c1lvaro Romero",4],[10000024,"Rui Pereira",4],[10000025,"Tiago Carvalho",4],[10000026,"Se\u00e1n Murphy",4],[10000027,"Patrick Sullivan",4],[10000028,"Erik Svensson",4],[10000029,"Johan Lindberg",4],[10000030,"Ole Hansen",4],[10000031,"Mikkel Nielsen",4],[10000032,"Sander de Vries",4],[10000033,"Pieter van Dijk",4],[10000034,"Bram Jansen",4],[10000035,"Arnaud Lef\u00e8vre",4],[10000036,"Victor Bernard",4],[10000037,"Nicolae Popescu",4],[10000038,"Andrei Ionescu",4],[10000039,"Boris Dimitrov",4],[10000040,"Georgi Ivanov",4],[10000041,"Serhii Shevchenko",4],[10000042,"Oleksandr Kovalenko",4],[10000043,"Marek Nowicki",4],[10000044,"Piotr Zieli\u0144ski",4],[10000045,"Tom\u00e1\u0161 Svoboda",4],[10000046,"Martin Kov\u00e1\u0159",4],[10000047,"J\u00e1n \u0160imek",4],[10000048,"Ville Korhonen",4],[10000049,"Antti Lahtinen",4],[10000050,"Anna Nowak",4],[10000051,"Marie Dubois",4],[10000052,"Sofia Rossi",4],[10000053,"Elena Popescu",4],[10000054,"Laura Garc\u00eda",4],[10000055,"Isabelle Martin",4],[10000056,"Katarzyna Kowalska",4],[10000057,"Giulia Bianchi",4],[10000058,"In\u00eas Ferreira",4],[10000059,"Aoife Murphy",4],[10000060,"Freja Nielsen",4],[10000061,"Maja Jovanovi\u0107",4],[10000062,"Zuzana Nov\u00e1kov\u00e1",4],[10000063,"Eva Svensson",4],[10000064,"Nora Hansen Ellwood",4],[10000065,"Helena Schmidt Hartmann",4],[10000066,"Klara Fischer",4],[10000067,"Lucia Conti Virelli",4],[10000068,"Carmen Ruiz Langston",4],[10000069,"Elara Vesperine Morland",4],[10000070,"Marta S\u00e1nchez",4],[10000071,"Pauline Laurent",4],[10000072,"Camille Renata Marceau",4],[10000073,"Aino Virtanen",4],[10000074,"Sigrid Johansen",4],[10000075,"L\u00edvia Horv\u00e1th",4],[10000076,"Niamh O\u2019Connor",4],[10000077,"Alina Ionescu",4],[10000078,"Irina Dumitrescu",4],[10000079,"Petra Kova\u010di\u0107",4],[10000080,"Tereza Dvo\u0159\u00e1kov\u00e1",4],[10000081,"Jana Kr\u00e1lov\u00e1",4],[10000082,"Ewa Wi\u015bniewska",4],[10000083,"Agnieszka Zieli\u0144ska",4],[10000084,"Valentina Marino Beckett",4],[10000085,"Alessia Romano Thalberg",4],[10000086,"Sara Costa Kavanagh",4],[10000087,"Beatriz Almeida",4],[10000088,"Clara Silva Renard",4],[10000089,"Josepha von Siebold",4],[10000090,"Christiane Erxleben",4],[10000091,"Mildred Schul",4],[10000092,"Gerty Wild",4],[10000093,"Rahel Kneel",4],[10000094,"Ingeborg Miller",4],[10000095,"Rosa De Luca",4],[10000096,"Hermine Carlson",4],[10000097,"Franziska Sing",4],[10000098,"Sanne de Vries",4],[10000099,"Alena Gnarf",4]];
+// Build lookup: array of {id, name, job}
+const VANILLA_CAST = VANILLA_CAST_RAW.map(([id,name,job])=>({id,name,job}));
 
-let idCounters = {
-  movies: 90000,
-  series: 91000,
-  shows: 92000,
-  cast: 99000
-};
+const VANILLA_ITEM_IDS = new Set([1,2,3,4,5,6,7,8,9,10,11,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,365,366,367,368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,419,420,421,422,423,424,425,426,427,428,429,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,466,467,468,469,470,471,472,473,474,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,497,498,499,500,501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530,531,532,533,534,535,536,537,538,539,540,541,542,543,544,545,546,547,548,549,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567,568,569,570,571,572,573,574,575,576,577,578,579,580,581,582,583,584,585,586,587,588,589,590,591,592,593,594,595,596,597,598,599,600,601,602,603,604,605,606,607,608,609,610,611,612,613,614,615,616,617,618,619,620,621,622,623,624,625,626,627,628,629,630,631,632,633,634,635,636,637,638,639,640,641,642,643,644,645,646,647,648,649,650,651,652,653,654,655,656,657,658,659,660,661,662,663,664,665,666,667,668,669,670,671,672,673,674,675,676,677,678,679,680,681,682,683,684,685,686,687,688,689,690,691,692,693,694,695,696,697,698,699,700,701,702,703,10001,10002,10003,10004,10005,10006,10007,10008,10009,10010,10011,10012,10013,10014,10015,10016,10017,10018,10019,10020,10021,10022,10023,10024,10025,10026,10027,10028,10029,10030,10031,10032,10033,10034,10035,10036,10037,10038,10039,10040,10041,10042,10043,10044,10045,10046,10047,10048,10049,10050,10051,10052,10053,10054,10055,10056,10057,10058,10059,10060,10061,10062,10063,10064,10065,10066,10067,10068,10069,10070,10071,10072,10073,10074,10075,10076,10077,10078,10079,10080,10081,10082,10083,10084,10085,10086,10087,10088,10089,10090,10091,10092,10093,10094,10095,10096,10097,10098,10099,10100,10101,10102,10103,10104,10105,10106,10107,10108,10109,10110,10111,10112,10113,10114,10115,10116,10117,10118,10119,10120,10121,10122,10123,10124,10125,10126,10127,10128,10129,10130,10131,10132,10133,10134,10135,10136,10137,10138,10139,10140,10141,10142,10143,10144,10145,10146,10147,10148,10149,10150,10151,10152,10153,10154,10155,10156,10157,10158,10159,10160,10161,10162,10163,10164,10165,10166,10167,10168,10169,10170,10171,10172,10173,10174,10175,10176,10177,10178,10179,10180,10181,10182,10183,10184,10185,10186,10187,10188,10189,10190,10191,10192,10193,10194,10195,10196,10197,10198,10199,10200,10201,10202,10203,10204,10205,10206,10207,10208,10209,10210,10211,10212,10213,10214,10215,10216,10217,10218,10219,10220,10221,10222,10223,10224,10225,10226,10227,10228,10229,10230,10231,10232,10233,10234,10235,10236,10237,10238,10239,10240,10241,10242,10243,10244,10245,10246,10247,10248,10249,10250,10251,10252,10253,10254,10255,10256,100001,100002,100003,100004,100005,100006,100007,100008,100009,100010,100011,100012,100013,100014,100015,100016,100017,100018,100019,100020,100021,100022,100023,100024,100025,100026,100027,100028,100029,100030,100031,100032,100033,100034,100035,100036,100037,100038,100039,100040,100041,100042,100043,100044,100045,100046,100047,100048,100049,100050,100051,100052,100053,100054,100055,1000001,1000002,1000003,1000004,1000005,1000006,1000007,1000008,1000009,1000010,1000011,1000012,1000013,1000014,1000015,1000016,1000017,1000018,1000019,1000020,10000001,10000002,10000003,10000004,10000005,10000006,10000007,10000008,10000009,10000010,10000011,10000012,10000013,10000014,10000015,10000016,10000017,10000018,10000019,10000020,10000021,10000022,10000023,10000024,10000025,10000026,10000027,10000028,10000029,10000030,10000031,10000032,10000033,10000034,10000035,10000036,10000037,10000038,10000039,10000040,10000041,10000042,10000043,10000044,10000045,10000046,10000047,10000048,10000049,100000001,100000002,100000003,100000004,100000005,100000006,100000007,100000008,100000009,100000010,100000011,100000012,100000013,100000014,100000015,100000016,100000017,100000018,100000019,100000020,100000021,100000022,100000023,100000024,100000025,100000026,100000027,100000028,100000029,100000030,100000031,100000032,100000033,100000034,100000035,100000036,100000037,100000038,100000039,100000040,100000041,100000042,100000043,100000044,100000045,100000046,100000047,100000048,100000049,100000050,100000051,100000052,100000053,100000054,100000055,100000056,1000000001,1000000002,1000000003,1000000004,1000000005,1000000006,1000000007,1000000008,1000000009,1000000010,1000000011,1000000012,1000000013,1000000014,1000000015,1000000016,1000000017,1000000018,1000000019,1000000020,1000000021,1000000022,1000000023,1000000024,1000000025,1000000026,1000000027,1000000028,1000000029,1000000030,1000000031,1000000032,1000000033,1000000034,1000000035,1000000036,1000000037,1000000038,1000000039,1000000040,1000000041,1000000042,1000000043,1000000044,1000000045,1000000046,1000000047,1000000048,1000000049,1000000050,1000000051,1000000052,1000000053,1000000054,1000000055,1000000056,1000000057,1000000058,1000000059,1000000060,1000000061,1000000062,1000000063,1000000064,1000000065,1000000066,1000000067,1000000068,1000000069,1000000070,1000000071,1000000072,1000000073,1000000074,1000000075,1000000076,1000000077,1000000078,1000000079,1000000080,1000000081,1000000082,1000000083,1000000084,1000000085,1000000086,1000000087,1000000088,1000000089,1000000090,1000000091,1000000092,1000000093,1000000094,1000000095,1000000096,1000000097,1000000098,1000000099,1000000100,1000000101,1000000102,1000000103,1000000104,1000000105,1000000106,1000000107,1000000108,1000000109,1000000110,1000000111,1000000112,1000000113,1000000114,1000000115,1000000116,1000000117,1000000118,1000000119,1000000120,1000000121,1000000122,1000000123,1000000124,1000000125,1000000126,1000000127,1000000128,1000000129,1000000130,1000000131,1000000132,1000000133,1000000134,1000000135,1000000136,1000000137,1000000138,1000000139,1000000140,1000000141,1000000142,1000000143,1000000144,1000000145,1000000146,1000000147,1000000148,1000000149,1000000150,1000000151,1000000152,1000000153,1000000154,1000000155,1000000156,1000000157,1000000158,1000000159,1000000160,1000000161,1000000162,1000000163,1000000164,1000000165,1000000166,1000000167,1000000168,1000000169,1000000170,1000000171,1000000172,1000000173,1000000174,1000000175,1000000176,1000000177,1000000178,1000000179,1000000180,1000000181,1000000182,1000000183,1000000184,1000000185,1000000186,1000000187,1000000188,1000000189,1000000190,1000000191,1000000192,1000000193,1000000194,1000000195,1000000196,1000000197,1000000198,1000000199,1000000200,1000010000,1000010001,1000010002,1000010003,1000010004,1000010005,1000010006,1000010007,1000010008,1000010009,1000010010,1000010011,1000010012,1000010013,1000010014,1000010015,1000010016,1000010017,1000010018,1000010019,1000010020,1000010021,1000010022,1000010023,1000010024,1000010025,1000010026,1000010027,1000010028,1000010029,1000010030,1000010031,1000010032,1000010033,1000010034,1000010035,1000010036,1000010037,1000010038,1000010039,1000010040,1000010041,1000010042,1000010043,1000010044,1000010045,1000010046,1000010047,1000010048,1000010049,1000010050,1000010051,1000010052,1000010053,1000010054,1000010055,1000010056,1000010057,1000010058,1000010059,1000010060,1000010061,1000010062,1000010063,1000010064,1000010065,1000010066,1000010067,1000010068,1000010069,1000010070,1000010071,1000010072,1000010073,1000010074,1000010075,1000010076,1000010077,1000010078,1000010079,1000010080,1000010081,1000010082,1000010083,1000010084,1000010085,1000010086,1000010087,1000010088,1000010089,1000010090,1000010091,1000010092,1000010093,1000010094,1000010095,1000010096,1000010097,1000010098,1000010099,1000010100,1000020000,1000020001,1000020002,1000020003,1000020004,1000020005,1000020006,1000020007,1000020008,1000020009,1000020010,1000020011,1000020012,1000020013,1000020014,1000020015,1000020016,1000020017,1000020018,1000020019,1000020020,1000020021,1000020022,1000020023,1000020024,1000020025,1000020026,1000020027,1000020028,1000020029,1000020030,1000020031,1000020032,1000020033,1000020034,1000020035,1000020036,1000020037,1000020038,1000020039,1000020040,1000020041,1000020042,1000020043,1000020044,1000020045,1000020046,1000020047,1000020048,1000020049,1000020050,1000020051,1000020052,1000020053,1000020054,1000020055,1000020056,1000020057,1000020058,1000020059,1000020060,1000020061,1000020062,1000020063,1000020064,1000020065,1000020066,1000020067,1000020068,1000020069,1000020070,1000020071,1000020072,1000020073,1000020074,1000020075,1000020076,1000020077,1000020078,1000020079,1000020080,1000020081,1000020082,1000020083,1000020084,1000020085,1000020086,1000020087,1000020088,1000020089,1000020090,1000020091,1000020092,1000020093,1000020094,1000020095,1000020096,1000020097,1000020098,1000020099,1000020100,1000020101,1000020102,1000020103]);
 
-// ============================================================
-// CONSTANTS / LOOKUPS
-// ============================================================
-const GENRES = [
-  [0,'Action'],[1,'SciFi'],[2,'SciFi'],[3,'Romance'],[4,'Adventure'],
-  [5,'Documentary'],[6,'Thriller'],[7,'Horror'],[8,'Mystery'],
-  [9,'Antiwar'],[10,'Fantasy'],[11,'Family'],[12,'Crime'],[13,'Drama'],
-  [14,'Comedy'],[15,'Western'],[16,'Quiz Show'],[17,'Reality Show'],
-  [18,'Dating Show'],[19,'Cooking Show'],[20,'Game Show'],[21,'Talk Show'],
-  [22,'Music Show'],[23,'Talent Show'],[24,'News'],[25,'Misc']
-];
+// ============ STORE ============
+const store = { movies:[], series:[], shows:[], cast:[], names:[], reviews:[] };
 
+// ============ CONSTANTS ============
+const GENRES = [[0,'Action'],[1,'SciFi'],[2,'SciFi (Horror)'],[3,'Romance'],[4,'Adventure'],[5,'Documentary'],[6,'Thriller'],[7,'Horror'],[8,'Mystery'],[9,'Antiwar'],[10,'Fantasy'],[11,'Family'],[12,'Crime'],[13,'Drama'],[14,'Comedy'],[15,'Western'],[16,'Quiz Show'],[17,'Reality Show'],[18,'Dating Show'],[19,'Cooking Show'],[20,'Game Show'],[21,'Talk Show'],[22,'Music Show'],[23,'Talent Show'],[24,'News'],[25,'Misc']];
 const GENRE_OPTS = GENRES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
-
-const AGE_RATES = [
-  [0,'All ages'],[6,'Age 6+'],[12,'Age 12+'],[16,'Age 16+'],[18,'Age 18+']
-];
-const AGE_OPTS = AGE_RATES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
-
-const COUNTRIES = [
-  [0,'USA'],[1,'UK'],[2,'Germany'],[3,'France'],[4,'Japan'],[5,'Other']
-];
-const COUNTRY_OPTS = COUNTRIES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
-
-const JOB_TYPES = [
-  [0,'Director'],[1,'Actor/Actress'],[2,'Producer'],[3,'Presenter'],[4,'Moderator']
-];
-const JOB_OPTS = JOB_TYPES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
-
-const SHOW_TYPES = [
-  [16,'Quiz Show'],[17,'Reality Show'],[18,'Dating Show'],[19,'Cooking Show'],
-  [20,'Game Show'],[21,'Talk Show'],[22,'Music Show'],[23,'Talent Show'],[24,'News']
-];
+const AGE_OPTS = [[0,'All ages'],[6,'Age 6+'],[12,'Age 12+'],[16,'Age 16+'],[18,'Age 18+']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+const COUNTRY_OPTS = [[0,'USA'],[1,'UK'],[2,'Germany'],[3,'France'],[4,'Japan'],[5,'Other']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+const JOB_LABELS = ['Director','Actor/Actress','Producer','Presenter','Moderator'];
+const JOB_OPTS = JOB_LABELS.map((l,v)=>`<option value="${v}">${l}</option>`).join('');
+const SHOW_TYPES = [[16,'Quiz Show'],[17,'Reality Show'],[18,'Dating Show'],[19,'Cooking Show'],[20,'Game Show'],[21,'Talk Show'],[22,'Music Show'],[23,'Talent Show'],[24,'News']];
 const SHOW_TYPE_OPTS = SHOW_TYPES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+const NAME_CATEGORIES = ['Action','Drama','SciFi','Romantic','Fantasy','Crime','Thriller','Horror','Mystery','Adventure','Family','Docu','Antiwar','Western','Comedy','QuizShow','RealityShow','DatingShow','CookingShow','GameShow','TalkShow','MusicShow','TalentShow'];
 
-const NAME_CATEGORIES = [
-  'Action','Drama','SciFi','Romantic','Fantasy','Crime','Thriller','Horror',
-  'Mystery','Adventure','Family','Docu','Antiwar','Western','Comedy',
-  'QuizShow','RealityShow','DatingShow','CookingShow','GameShow','TalkShow','MusicShow','TalentShow'
-];
+// ============ SAFE ID GENERATION ============
+// All mod IDs will be in 9000000-9999999 (not used by any vanilla content)
+function getUsedIds(type) {
+  if(type === 'cast') return new Set(store.cast.map(c=>c._id));
+  return new Set([...store.movies,...store.series,...store.shows].map(x=>x._id));
+}
 
-const REVIEW_CATEGORIES = [
-  'Movie','Series','Show'
-];
+function generateSafeId(type) {
+  const MIN = 9000000, MAX = 9999999;
+  const used = getUsedIds(type);
+  // Also exclude vanilla IDs for items
+  let id;
+  let attempts = 0;
+  do {
+    id = Math.floor(Math.random() * (MAX - MIN + 1)) + MIN;
+    attempts++;
+    if(attempts > 10000) { id = Date.now() % 9000000 + 9000000; break; }
+  } while(used.has(id) || (type !== 'cast' && VANILLA_ITEM_IDS.has(id)));
+  return id;
+}
 
-// ============================================================
-// TAB SWITCHING
-// ============================================================
+// ============ TAB SWITCHING ============
 function switchTab(name) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
 }
 
-// ============================================================
-// HELPERS
-// ============================================================
-function updateCount(type) {
-  document.getElementById('count-' + type).textContent = store[type].length;
-}
-
-function range(id, min, max, val, step=1) {
-  return `<div class="range-row">
-    <input type="range" id="${id}" min="${min}" max="${max}" value="${val}" step="${step}"
-      oninput="document.getElementById('${id}_v').textContent=this.value">
-    <span class="range-val" id="${id}_v">${val}</span>
-  </div>`;
-}
-
-function v(id) { return document.getElementById(id); }
-function vv(id) { const e=v(id); return e ? e.value : ''; }
-function vc(id) { const e=v(id); return e ? e.checked : false; }
-function vn(id) { return parseInt(vv(id))||0; }
-function vf(id) { return parseFloat(vv(id))||0; }
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2500);
-}
-
-// ============================================================
-// MOVIES
-// ============================================================
-function addMovie() {
-  const id = idCounters.movies++;
-  store.movies.push({ _id: id });
-  renderMovies();
-  updateCount('movies');
-  // auto-open last
+// ============ GENERIC ENTRY ADD ============
+function addEntry(type) {
+  const id = generateSafeId(type);
+  store[type].push({ _id: id });
+  renderType(type);
+  updateCount(type);
   setTimeout(()=>{
-    const cards = document.querySelectorAll('#movies-list .entry-card');
+    const cards = document.querySelectorAll(`#${type}-list .entry-card`);
     if(cards.length) toggleCard(cards[cards.length-1]);
   },50);
 }
 
+function updateCount(type) {
+  document.getElementById('count-'+type).textContent = store[type].length;
+}
+
+function renderType(type) {
+  const map = { movies:renderMovies, series:renderSeries, shows:renderShows, cast:renderCast, names:renderNames, reviews:renderReviews };
+  map[type]();
+}
+
+function deleteEntry(type, i) {
+  if(!confirm('Delete this entry? This cannot be undone.')) return;
+  store[type].splice(i,1);
+  renderType(type);
+  updateCount(type);
+}
+
+function toggleCard(card) { card.classList.toggle('open'); }
+function updatePreview(id, val, fallback) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(val) { el.textContent = val; el.classList.remove('empty'); }
+  else { el.textContent = fallback; el.classList.add('empty'); }
+}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function vv(id) { const e=document.getElementById(id); return e?e.value:''; }
+function vc(id) { const e=document.getElementById(id); return e?e.checked:false; }
+function vn(id) { return parseInt(vv(id))||0; }
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ============ CREDITS WIDGET ============
+// Returns all cast for dropdown: vanilla + mod's own cast
+function getAllCast() {
+  const own = store.cast.filter(c=>c.name).map(c=>({id:c._id,name:c.name,job:c.job||0,isOwn:true}));
+  return [...VANILLA_CAST, ...own];
+}
+
+function buildCreditsWidget(uid, selectedIds) {
+  const all = getAllCast();
+  const selSet = new Set(selectedIds||[]);
+  return `
+    <div class="credits-wrapper" id="cw_${uid}">
+      <div class="credits-search"><input type="text" placeholder="🔍 Search by name or ID..." oninput="filterCredits('${uid}',this.value)" id="csearch_${uid}"></div>
+      <div class="credits-list" id="clist_${uid}">
+        ${all.map((c,idx)=>`
+          <label class="credits-item ${selSet.has(c.id)?'selected':''}" id="ci_${uid}_${c.id}">
+            <input type="checkbox" value="${c.id}" ${selSet.has(c.id)?'checked':''}
+              onchange="toggleCredit('${uid}',${c.id},this.checked)">
+            <span class="ci-job job-${c.job}">${JOB_LABELS[c.job]||'?'}</span>
+            <span>${esc(c.name)}${c.isOwn?' <span style=\'color:var(--accent3);font-size:10px\'>(your mod)</span>':''}</span>
+            <span class="ci-id">#${c.id}</span>
+          </label>
+        `).join('')}
+      </div>
+      <div class="credits-selected-preview" id="cprev_${uid}">${buildCreditsPreview(selSet)}</div>
+    </div>`;
+}
+
+function filterCredits(uid, q) {
+  q = q.toLowerCase();
+  const list = document.getElementById('clist_'+uid);
+  list.querySelectorAll('.credits-item').forEach(item=>{
+    const text = item.textContent.toLowerCase();
+    item.style.display = (!q || text.includes(q)) ? '' : 'none';
+  });
+}
+
+function toggleCredit(uid, id, checked) {
+  const item = document.getElementById(`ci_${uid}_${id}`);
+  if(item) item.classList.toggle('selected', checked);
+  updateCreditsPreview(uid);
+}
+
+function getSelectedCredits(uid) {
+  const clist = document.getElementById('clist_'+uid);
+  if(!clist) return [];
+  return Array.from(clist.querySelectorAll('input[type=checkbox]:checked')).map(x=>parseInt(x.value));
+}
+
+function buildCreditsPreview(selSet) {
+  if(!selSet.size) return '<span style="color:var(--text-dim)">No credits selected yet</span>';
+  const all = getAllCast();
+  const selected = all.filter(c=>selSet.has(c.id));
+  return selected.map(c=>`<span style="color:var(--accent)">#${c.id}</span> ${esc(c.name)}`).join(' · ');
+}
+
+function updateCreditsPreview(uid) {
+  const ids = getSelectedCredits(uid);
+  document.getElementById('cprev_'+uid).innerHTML = buildCreditsPreview(new Set(ids));
+}
+
+// ============ RANGE HELPER ============
+function range(id, min, max, val, step=1) {
+  return `<div class="range-row"><input type="range" id="${id}" min="${min}" max="${max}" value="${val}" step="${step}" oninput="document.getElementById('${id}_v').textContent=this.value"><span class="range-val" id="${id}_v">${val}</span></div>`;
+}
+
+// ============ ID FIELD ============
+function idField(uid, id, type) {
+  return `<div class="field">
+    <label>Entry ID <span class="tip">(unique — change if it conflicts with another mod)</span></label>
+    <div class="id-row">
+      <input type="number" id="${uid}_id" value="${id}" min="1" max="9999999" style="font-family:'JetBrains Mono',monospace;color:var(--accent3)">
+      <button class="id-regen-btn" onclick="regenId('${uid}','${type}')" title="Generate a new random ID">🎲 New ID</button>
+    </div>
+  </div>`;
+}
+
+function regenId(uid, type) {
+  const newId = generateSafeId(type);
+  document.getElementById(uid+'_id').value = newId;
+  showToast('New ID: ' + newId);
+}
+
+// ============ MOVIES ============
 function renderMovies() {
   const list = document.getElementById('movies-list');
-  if(!store.movies.length) {
-    list.innerHTML = `<div class="empty-state"><div class="big-icon">🎬</div><h3>No movies yet</h3><p>Click "Add Movie" to add your first film to the game.</p></div>`;
-    return;
-  }
+  if(!store.movies.length) { list.innerHTML = `<div class="empty-state"><div class="big-icon">🎬</div><h3>No movies yet</h3><p>Click "Add Movie" to add your first film to the game.</p></div>`; return; }
   list.innerHTML = store.movies.map((m,i)=>movieCard(m,i)).join('');
 }
 
-function movieCard(m, i) {
-  const uid = 'mov_' + m._id;
-  const nameVal = m.name || '';
+function movieCard(m,i) {
+  const uid='mov_'+m._id; const nameVal=m.name||'';
+  const selIds = m.credits_ids||[];
   return `<div class="entry-card" id="card_${uid}">
     <div class="entry-header" onclick="toggleCard(document.getElementById('card_${uid}'))">
       <span class="entry-num">#${i+1}</span>
+      <span class="entry-id-badge">ID:${m._id}</span>
       <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Untitled Movie'}</span>
       <span class="entry-chevron">▶</span>
-      <button class="entry-del" onclick="event.stopPropagation();deleteEntry('movies',${i})" title="Delete">🗑</button>
+      <button class="entry-del" onclick="event.stopPropagation();deleteEntry('movies',${i})">🗑</button>
     </div>
     <div class="entry-body">
       <div class="form-grid">
-        <div class="field form-full">
+        ${idField(uid, m._id, 'items')}
+        <div class="field">
           <label>Movie Title (English)<span class="req">*</span></label>
-          <input type="text" id="${uid}_name" value="${esc(m.name||'')}" placeholder="e.g. The Dark Alley"
+          <input type="text" id="${uid}_name" value="${esc(m.name)}" placeholder="e.g. The Dark Alley"
             oninput="store.movies[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Untitled Movie')">
         </div>
         <div class="field form-full">
           <label>Title in German <span class="tip">(optional — same as English if blank)</span></label>
-          <input type="text" id="${uid}_name_de" value="${esc(m.name_de||'')}" placeholder="German title">
+          <input type="text" id="${uid}_name_de" value="${esc(m.name_de)}" placeholder="German title">
         </div>
         <div class="field form-full">
-          <label>Description / Plot Summary (English)<span class="req">*</span></label>
-          <textarea id="${uid}_desc" placeholder="Brief plot summary...">${esc(m.desc||'')}</textarea>
+          <label>Description / Plot (English)<span class="req">*</span></label>
+          <textarea id="${uid}_desc" placeholder="Brief plot summary...">${esc(m.desc)}</textarea>
         </div>
         <div class="field form-full">
           <label>Description (German) <span class="tip">(optional)</span></label>
-          <textarea id="${uid}_desc_de" placeholder="German description...">${esc(m.desc_de||'')}</textarea>
+          <textarea id="${uid}_desc_de">${esc(m.desc_de)}</textarea>
         </div>
       </div>
-
       <div class="section-divider">Details</div>
       <div class="form-grid cols-3">
-        <div class="field">
-          <label>Genre</label>
-          <select id="${uid}_genre">${GENRE_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Age Rating</label>
-          <select id="${uid}_age">${AGE_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Country of Origin</label>
-          <select id="${uid}_country">${COUNTRY_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Release Year <span class="tip">(0 = unknown)</span></label>
-          <input type="number" id="${uid}_year" value="${m.year||0}" min="0" max="2099" placeholder="1990">
-        </div>
-        <div class="field">
-          <label>Duration (Blocks) <span class="tip">1 block ≈ 1hr</span></label>
-          <select id="${uid}_blocks">
-            <option value="1">1 Block (1hr)</option>
-            <option value="2" selected>2 Blocks (2hr)</option>
-            <option value="3">3 Blocks (3hr)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Price</label>
-          <input type="number" id="${uid}_price" value="${m.price||0}" min="0" placeholder="0">
-        </div>
+        <div class="field"><label>Genre</label><select id="${uid}_genre">${GENRE_OPTS}</select></div>
+        <div class="field"><label>Age Rating</label><select id="${uid}_age">${AGE_OPTS}</select></div>
+        <div class="field"><label>Country</label><select id="${uid}_country">${COUNTRY_OPTS}</select></div>
+        <div class="field"><label>Release Year <span class="tip">(0 = unknown)</span></label><input type="number" id="${uid}_year" value="${m.year||0}" min="0" max="2099"></div>
+        <div class="field"><label>Duration (Blocks) <span class="tip">1 block ≈ 1hr</span></label><select id="${uid}_blocks"><option value="1">1 Block</option><option value="2" selected>2 Blocks</option><option value="3">3 Blocks</option></select></div>
+        <div class="field"><label>Price</label><input type="number" id="${uid}_price" value="${m.price||0}" min="0"></div>
       </div>
-
       <div class="section-divider">Ratings & Performance</div>
       <div class="form-grid">
-        <div class="field">
-          <label>Quality Rating <span class="tip">(0–100, higher = better reviews)</span></label>
-          ${range(uid+'_rating', 0, 100, m.rating||60)}
-        </div>
-        <div class="field">
-          <label>Audience Potential <span class="tip">(how popular it can get, 0–100)</span></label>
-          ${range(uid+'_potential', 0, 100, m.potential||50)}
-        </div>
-        <div class="field">
-          <label>Chance to Appear <span class="tip">(% in random broadcast pool)</span></label>
-          ${range(uid+'_chance', 0, 100, m.chance||10)}
-        </div>
-        <div class="field">
-          <label>Approval <span class="tip">(255 = fully approved/available)</span></label>
-          ${range(uid+'_approval', 0, 255, m.approval||255)}
-        </div>
+        <div class="field"><label>Quality Rating <span class="tip">(0–100)</span></label>${range(uid+'_rating',0,100,m.rating||60)}</div>
+        <div class="field"><label>Audience Potential <span class="tip">(0–100)</span></label>${range(uid+'_potential',0,100,m.potential||50)}</div>
+        <div class="field"><label>Chance to Appear <span class="tip">(% in broadcast pool)</span></label>${range(uid+'_chance',0,100,m.chance||10)}</div>
+        <div class="field"><label>Approval <span class="tip">(255 = available)</span></label>${range(uid+'_approval',0,255,m.approval!=null?m.approval:255)}</div>
       </div>
-
       <div class="section-divider">Special Flags</div>
       <div class="toggle-row">
         <label class="toggle-item"><input type="checkbox" id="${uid}_cult" ${m.cult?'checked':''}> Cult Classic</label>
@@ -1115,13 +612,8 @@ function movieCard(m, i) {
         <label class="toggle-item"><input type="checkbox" id="${uid}_premium" ${m.premium?'checked':''}> Premium</label>
         <label class="toggle-item"><input type="checkbox" id="${uid}_pirated" ${m.pirated?'checked':''}> Pirated Copy</label>
       </div>
-
-      <div class="section-divider">Credits <span style="font-weight:400;color:var(--text-dim);font-size:11px;text-transform:none">(optional — paste the Credit line as it appears in other entries)</span></div>
-      <div class="field">
-        <label>Credits String <span class="tip">e.g. "2, 10005, 10006" — director ID first, then actor IDs</span></label>
-        <input type="text" id="${uid}_credits" value="${esc(m.credits||'')}" placeholder="e.g. 1, 10000, 10001">
-      </div>
-
+      <div class="section-divider">Credits <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">— pick director(s) first, then actors</span></div>
+      ${buildCreditsWidget(uid, selIds)}
       <div style="margin-top:18px;display:flex;justify-content:flex-end">
         <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveMovie(${i})">💾 Save</button>
       </div>
@@ -1130,136 +622,64 @@ function movieCard(m, i) {
 }
 
 function saveMovie(i) {
-  const m = store.movies[i];
-  const uid = 'mov_' + m._id;
-  m.name = vv(uid+'_name');
-  m.name_de = vv(uid+'_name_de');
-  m.desc = vv(uid+'_desc');
-  m.desc_de = vv(uid+'_desc_de');
-  m.genre = vn(uid+'_genre');
-  m.age = vn(uid+'_age');
-  m.country = vn(uid+'_country');
-  m.year = vn(uid+'_year');
-  m.blocks = vn(uid+'_blocks');
-  m.price = vn(uid+'_price');
-  m.rating = vn(uid+'_rating');
-  m.potential = vn(uid+'_potential');
-  m.chance = vn(uid+'_chance');
-  m.approval = vn(uid+'_approval');
-  m.cult = vc(uid+'_cult');
-  m.timeless = vc(uid+'_timeless');
-  m.evergreen = vc(uid+'_evergreen');
-  m.premium = vc(uid+'_premium');
-  m.pirated = vc(uid+'_pirated');
-  m.credits = vv(uid+'_credits');
-  showToast('Movie saved!');
+  const m=store.movies[i]; const uid='mov_'+m._id;
+  m._id=parseInt(document.getElementById(uid+'_id').value)||m._id;
+  m.name=vv(uid+'_name'); m.name_de=vv(uid+'_name_de');
+  m.desc=vv(uid+'_desc'); m.desc_de=vv(uid+'_desc_de');
+  m.genre=vn(uid+'_genre'); m.age=vn(uid+'_age'); m.country=vn(uid+'_country');
+  m.year=vn(uid+'_year'); m.blocks=vn(uid+'_blocks'); m.price=vn(uid+'_price');
+  m.rating=vn(uid+'_rating'); m.potential=vn(uid+'_potential');
+  m.chance=vn(uid+'_chance'); m.approval=vn(uid+'_approval');
+  m.cult=vc(uid+'_cult'); m.timeless=vc(uid+'_timeless');
+  m.evergreen=vc(uid+'_evergreen'); m.premium=vc(uid+'_premium'); m.pirated=vc(uid+'_pirated');
+  m.credits_ids=getSelectedCredits(uid);
+  showToast('Movie saved!'); renderMovies();
 }
 
-// ============================================================
-// SERIES
-// ============================================================
-function addSeries() {
-  const id = idCounters.series++;
-  store.series.push({ _id: id });
-  renderSeries();
-  updateCount('series');
-  setTimeout(()=>{
-    const cards = document.querySelectorAll('#series-list .entry-card');
-    if(cards.length) toggleCard(cards[cards.length-1]);
-  },50);
-}
-
+// ============ SERIES ============
 function renderSeries() {
-  const list = document.getElementById('series-list');
-  if(!store.series.length) {
-    list.innerHTML = `<div class="empty-state"><div class="big-icon">📡</div><h3>No series yet</h3><p>Click "Add Series" to create a TV show with multiple episodes.</p></div>`;
-    return;
-  }
-  list.innerHTML = store.series.map((s,i)=>seriesCard(s,i)).join('');
+  const list=document.getElementById('series-list');
+  if(!store.series.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">📡</div><h3>No series yet</h3><p>Click "Add Series" to create a TV series with multiple episodes.</p></div>`; return; }
+  list.innerHTML=store.series.map((s,i)=>seriesCard(s,i)).join('');
 }
 
-function seriesCard(s, i) {
-  const uid = 'ser_' + s._id;
-  const nameVal = s.name || '';
+function seriesCard(s,i) {
+  const uid='ser_'+s._id; const nameVal=s.name||'';
   return `<div class="entry-card" id="card_${uid}">
     <div class="entry-header" onclick="toggleCard(document.getElementById('card_${uid}'))">
       <span class="entry-num">#${i+1}</span>
+      <span class="entry-id-badge">ID:${s._id}</span>
       <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Untitled Series'}</span>
       <span class="entry-chevron">▶</span>
-      <button class="entry-del" onclick="event.stopPropagation();deleteEntry('series',${i})" title="Delete">🗑</button>
+      <button class="entry-del" onclick="event.stopPropagation();deleteEntry('series',${i})">🗑</button>
     </div>
     <div class="entry-body">
       <div class="form-grid">
-        <div class="field form-full">
-          <label>Series Title (English)<span class="req">*</span></label>
-          <input type="text" id="${uid}_name" value="${esc(s.name||'')}" placeholder="e.g. Night Watch"
+        ${idField(uid, s._id, 'items')}
+        <div class="field"><label>Series Title (English)<span class="req">*</span></label>
+          <input type="text" id="${uid}_name" value="${esc(s.name)}" placeholder="e.g. Night Watch"
             oninput="store.series[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Untitled Series')">
         </div>
-        <div class="field form-full">
-          <label>Title in German <span class="tip">(optional)</span></label>
-          <input type="text" id="${uid}_name_de" value="${esc(s.name_de||'')}" placeholder="German title">
-        </div>
-        <div class="field form-full">
-          <label>Description (English)<span class="req">*</span></label>
-          <textarea id="${uid}_desc" placeholder="What is this series about?">${esc(s.desc||'')}</textarea>
-        </div>
-        <div class="field form-full">
-          <label>Description (German) <span class="tip">(optional)</span></label>
-          <textarea id="${uid}_desc_de">${esc(s.desc_de||'')}</textarea>
-        </div>
+        <div class="field form-full"><label>Title in German <span class="tip">(optional)</span></label><input type="text" id="${uid}_name_de" value="${esc(s.name_de)}" placeholder="German title"></div>
+        <div class="field form-full"><label>Description (English)<span class="req">*</span></label><textarea id="${uid}_desc" placeholder="What is this series about?">${esc(s.desc)}</textarea></div>
+        <div class="field form-full"><label>Description (German) <span class="tip">(optional)</span></label><textarea id="${uid}_desc_de">${esc(s.desc_de)}</textarea></div>
       </div>
       <div class="section-divider">Details</div>
       <div class="form-grid cols-3">
-        <div class="field">
-          <label>Genre</label>
-          <select id="${uid}_genre">${GENRE_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Age Rating</label>
-          <select id="${uid}_age">${AGE_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Country</label>
-          <select id="${uid}_country">${COUNTRY_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Release Year</label>
-          <input type="number" id="${uid}_year" value="${s.year||0}" min="0" max="2099">
-        </div>
-        <div class="field">
-          <label>Episodes</label>
-          <input type="number" id="${uid}_episodes" value="${s.episodes||1}" min="1" max="200">
-        </div>
-        <div class="field">
-          <label>Blocks per Episode</label>
-          <select id="${uid}_blocks">
-            <option value="1" selected>1 Block</option>
-            <option value="2">2 Blocks</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Price</label>
-          <input type="number" id="${uid}_price" value="${s.price||0}" min="0">
-        </div>
+        <div class="field"><label>Genre</label><select id="${uid}_genre">${GENRE_OPTS}</select></div>
+        <div class="field"><label>Age Rating</label><select id="${uid}_age">${AGE_OPTS}</select></div>
+        <div class="field"><label>Country</label><select id="${uid}_country">${COUNTRY_OPTS}</select></div>
+        <div class="field"><label>Release Year</label><input type="number" id="${uid}_year" value="${s.year||0}" min="0" max="2099"></div>
+        <div class="field"><label>Episodes</label><input type="number" id="${uid}_episodes" value="${s.episodes||1}" min="1" max="200"></div>
+        <div class="field"><label>Blocks per Episode</label><select id="${uid}_blocks"><option value="1" selected>1 Block</option><option value="2">2 Blocks</option></select></div>
+        <div class="field"><label>Price</label><input type="number" id="${uid}_price" value="${s.price||0}" min="0"></div>
       </div>
       <div class="section-divider">Ratings & Performance</div>
       <div class="form-grid">
-        <div class="field">
-          <label>Quality Rating (0–100)</label>
-          ${range(uid+'_rating', 0, 100, s.rating||65)}
-        </div>
-        <div class="field">
-          <label>Audience Potential (0–100)</label>
-          ${range(uid+'_potential', 0, 100, s.potential||55)}
-        </div>
-        <div class="field">
-          <label>Chance to Appear (%)</label>
-          ${range(uid+'_chance', 0, 100, s.chance||10)}
-        </div>
-        <div class="field">
-          <label>Approval (255 = available)</label>
-          ${range(uid+'_approval', 0, 255, s.approval||255)}
-        </div>
+        <div class="field"><label>Quality Rating (0–100)</label>${range(uid+'_rating',0,100,s.rating||65)}</div>
+        <div class="field"><label>Audience Potential (0–100)</label>${range(uid+'_potential',0,100,s.potential||55)}</div>
+        <div class="field"><label>Chance to Appear (%)</label>${range(uid+'_chance',0,100,s.chance||10)}</div>
+        <div class="field"><label>Approval (255 = available)</label>${range(uid+'_approval',0,255,s.approval!=null?s.approval:255)}</div>
       </div>
       <div class="section-divider">Special Flags</div>
       <div class="toggle-row">
@@ -1269,10 +689,7 @@ function seriesCard(s, i) {
         <label class="toggle-item"><input type="checkbox" id="${uid}_premium" ${s.premium?'checked':''}> Premium</label>
       </div>
       <div class="section-divider">Credits</div>
-      <div class="field">
-        <label>Credits String <span class="tip">director ID, then actor IDs separated by commas</span></label>
-        <input type="text" id="${uid}_credits" value="${esc(s.credits||'')}" placeholder="e.g. 1, 10000, 10001">
-      </div>
+      ${buildCreditsWidget(uid, s.credits_ids||[])}
       <div style="margin-top:18px;display:flex;justify-content:flex-end">
         <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveSeries(${i})">💾 Save</button>
       </div>
@@ -1281,124 +698,61 @@ function seriesCard(s, i) {
 }
 
 function saveSeries(i) {
-  const s = store.series[i];
-  const uid = 'ser_' + s._id;
-  s.name = vv(uid+'_name');
-  s.name_de = vv(uid+'_name_de');
-  s.desc = vv(uid+'_desc');
-  s.desc_de = vv(uid+'_desc_de');
-  s.genre = vn(uid+'_genre');
-  s.age = vn(uid+'_age');
-  s.country = vn(uid+'_country');
-  s.year = vn(uid+'_year');
-  s.episodes = vn(uid+'_episodes');
-  s.blocks = vn(uid+'_blocks');
-  s.price = vn(uid+'_price');
-  s.rating = vn(uid+'_rating');
-  s.potential = vn(uid+'_potential');
-  s.chance = vn(uid+'_chance');
-  s.approval = vn(uid+'_approval');
-  s.cult = vc(uid+'_cult');
-  s.timeless = vc(uid+'_timeless');
-  s.evergreen = vc(uid+'_evergreen');
-  s.premium = vc(uid+'_premium');
-  s.credits = vv(uid+'_credits');
-  showToast('Series saved!');
+  const s=store.series[i]; const uid='ser_'+s._id;
+  s._id=parseInt(document.getElementById(uid+'_id').value)||s._id;
+  s.name=vv(uid+'_name'); s.name_de=vv(uid+'_name_de');
+  s.desc=vv(uid+'_desc'); s.desc_de=vv(uid+'_desc_de');
+  s.genre=vn(uid+'_genre'); s.age=vn(uid+'_age'); s.country=vn(uid+'_country');
+  s.year=vn(uid+'_year'); s.episodes=vn(uid+'_episodes'); s.blocks=vn(uid+'_blocks'); s.price=vn(uid+'_price');
+  s.rating=vn(uid+'_rating'); s.potential=vn(uid+'_potential');
+  s.chance=vn(uid+'_chance'); s.approval=vn(uid+'_approval');
+  s.cult=vc(uid+'_cult'); s.timeless=vc(uid+'_timeless');
+  s.evergreen=vc(uid+'_evergreen'); s.premium=vc(uid+'_premium');
+  s.credits_ids=getSelectedCredits(uid);
+  showToast('Series saved!'); renderSeries();
 }
 
-// ============================================================
-// TV SHOWS
-// ============================================================
-function addShow() {
-  const id = idCounters.shows++;
-  store.shows.push({ _id: id });
-  renderShows();
-  updateCount('shows');
-  setTimeout(()=>{
-    const cards = document.querySelectorAll('#shows-list .entry-card');
-    if(cards.length) toggleCard(cards[cards.length-1]);
-  },50);
-}
-
+// ============ SHOWS ============
 function renderShows() {
-  const list = document.getElementById('shows-list');
-  if(!store.shows.length) {
-    list.innerHTML = `<div class="empty-state"><div class="big-icon">🎭</div><h3>No shows yet</h3><p>Click "Add Show" for quiz shows, game shows, talk shows, cooking shows, etc.</p></div>`;
-    return;
-  }
-  list.innerHTML = store.shows.map((s,i)=>showCard(s,i)).join('');
+  const list=document.getElementById('shows-list');
+  if(!store.shows.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">🎭</div><h3>No shows yet</h3><p>Click "Add Show" for quiz shows, game shows, talk shows, cooking shows, etc.</p></div>`; return; }
+  list.innerHTML=store.shows.map((s,i)=>showCard(s,i)).join('');
 }
 
-function showCard(s, i) {
-  const uid = 'shw_' + s._id;
-  const nameVal = s.name || '';
+function showCard(s,i) {
+  const uid='shw_'+s._id; const nameVal=s.name||'';
   return `<div class="entry-card" id="card_${uid}">
     <div class="entry-header" onclick="toggleCard(document.getElementById('card_${uid}'))">
       <span class="entry-num">#${i+1}</span>
+      <span class="entry-id-badge">ID:${s._id}</span>
       <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Untitled Show'}</span>
       <span class="entry-chevron">▶</span>
-      <button class="entry-del" onclick="event.stopPropagation();deleteEntry('shows',${i})" title="Delete">🗑</button>
+      <button class="entry-del" onclick="event.stopPropagation();deleteEntry('shows',${i})">🗑</button>
     </div>
     <div class="entry-body">
       <div class="form-grid">
-        <div class="field form-full">
-          <label>Show Title (English)<span class="req">*</span></label>
-          <input type="text" id="${uid}_name" value="${esc(s.name||'')}" placeholder="e.g. The Big Quiz Night"
+        ${idField(uid, s._id, 'items')}
+        <div class="field"><label>Show Title (English)<span class="req">*</span></label>
+          <input type="text" id="${uid}_name" value="${esc(s.name)}" placeholder="e.g. The Big Quiz Night"
             oninput="store.shows[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Untitled Show')">
         </div>
-        <div class="field form-full">
-          <label>Title in German <span class="tip">(optional)</span></label>
-          <input type="text" id="${uid}_name_de" value="${esc(s.name_de||'')}" placeholder="German title">
-        </div>
-        <div class="field form-full">
-          <label>Description (English)<span class="req">*</span></label>
-          <textarea id="${uid}_desc" placeholder="What happens in this show?">${esc(s.desc||'')}</textarea>
-        </div>
-        <div class="field form-full">
-          <label>Description (German) <span class="tip">(optional)</span></label>
-          <textarea id="${uid}_desc_de">${esc(s.desc_de||'')}</textarea>
-        </div>
+        <div class="field form-full"><label>Title in German <span class="tip">(optional)</span></label><input type="text" id="${uid}_name_de" value="${esc(s.name_de)}" placeholder="German title"></div>
+        <div class="field form-full"><label>Description (English)<span class="req">*</span></label><textarea id="${uid}_desc" placeholder="What happens in this show?">${esc(s.desc)}</textarea></div>
+        <div class="field form-full"><label>Description (German) <span class="tip">(optional)</span></label><textarea id="${uid}_desc_de">${esc(s.desc_de)}</textarea></div>
       </div>
       <div class="section-divider">Show Type & Details</div>
       <div class="form-grid cols-3">
-        <div class="field">
-          <label>Show Type</label>
-          <select id="${uid}_typ">${SHOW_TYPE_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Age Rating</label>
-          <select id="${uid}_age">${AGE_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Duration (Blocks)</label>
-          <select id="${uid}_blocks">
-            <option value="1" selected>1 Block</option>
-            <option value="2">2 Blocks</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Release Year</label>
-          <input type="number" id="${uid}_year" value="${s.year||0}" min="0" max="2099">
-        </div>
-        <div class="field">
-          <label>Price</label>
-          <input type="number" id="${uid}_price" value="${s.price||0}" min="0">
-        </div>
+        <div class="field"><label>Show Type</label><select id="${uid}_typ">${SHOW_TYPE_OPTS}</select></div>
+        <div class="field"><label>Age Rating</label><select id="${uid}_age">${AGE_OPTS}</select></div>
+        <div class="field"><label>Duration (Blocks)</label><select id="${uid}_blocks"><option value="1" selected>1 Block</option><option value="2">2 Blocks</option></select></div>
+        <div class="field"><label>Release Year</label><input type="number" id="${uid}_year" value="${s.year||0}" min="0" max="2099"></div>
+        <div class="field"><label>Price</label><input type="number" id="${uid}_price" value="${s.price||0}" min="0"></div>
       </div>
       <div class="section-divider">Ratings & Performance</div>
       <div class="form-grid">
-        <div class="field">
-          <label>Quality Rating (0–100)</label>
-          ${range(uid+'_rating', 0, 100, s.rating||60)}
-        </div>
-        <div class="field">
-          <label>Audience Potential (0–100)</label>
-          ${range(uid+'_potential', 0, 100, s.potential||50)}
-        </div>
-        <div class="field">
-          <label>Approval (255 = available)</label>
-          ${range(uid+'_approval', 0, 255, s.approval||255)}
-        </div>
+        <div class="field"><label>Quality Rating (0–100)</label>${range(uid+'_rating',0,100,s.rating||60)}</div>
+        <div class="field"><label>Audience Potential (0–100)</label>${range(uid+'_potential',0,100,s.potential||50)}</div>
+        <div class="field"><label>Approval (255 = available)</label>${range(uid+'_approval',0,255,s.approval!=null?s.approval:255)}</div>
       </div>
       <div style="margin-top:18px;display:flex;justify-content:flex-end">
         <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveShow(${i})">💾 Save</button>
@@ -1408,91 +762,52 @@ function showCard(s, i) {
 }
 
 function saveShow(i) {
-  const s = store.shows[i];
-  const uid = 'shw_' + s._id;
-  s.name = vv(uid+'_name');
-  s.name_de = vv(uid+'_name_de');
-  s.desc = vv(uid+'_desc');
-  s.desc_de = vv(uid+'_desc_de');
-  s.typ = vn(uid+'_typ');
-  s.age = vn(uid+'_age');
-  s.blocks = vn(uid+'_blocks');
-  s.year = vn(uid+'_year');
-  s.price = vn(uid+'_price');
-  s.rating = vn(uid+'_rating');
-  s.potential = vn(uid+'_potential');
-  s.approval = vn(uid+'_approval');
-  showToast('Show saved!');
+  const s=store.shows[i]; const uid='shw_'+s._id;
+  s._id=parseInt(document.getElementById(uid+'_id').value)||s._id;
+  s.name=vv(uid+'_name'); s.name_de=vv(uid+'_name_de');
+  s.desc=vv(uid+'_desc'); s.desc_de=vv(uid+'_desc_de');
+  s.typ=vn(uid+'_typ'); s.age=vn(uid+'_age'); s.blocks=vn(uid+'_blocks');
+  s.year=vn(uid+'_year'); s.price=vn(uid+'_price');
+  s.rating=vn(uid+'_rating'); s.potential=vn(uid+'_potential'); s.approval=vn(uid+'_approval');
+  showToast('Show saved!'); renderShows();
 }
 
-// ============================================================
-// CAST
-// ============================================================
-function addCast() {
-  const id = idCounters.cast++;
-  store.cast.push({ _id: id });
-  renderCast();
-  updateCount('cast');
-  setTimeout(()=>{
-    const cards = document.querySelectorAll('#cast-list .entry-card');
-    if(cards.length) toggleCard(cards[cards.length-1]);
-  },50);
-}
-
+// ============ CAST ============
 function renderCast() {
-  const list = document.getElementById('cast-list');
-  if(!store.cast.length) {
-    list.innerHTML = `<div class="empty-state"><div class="big-icon">🧑‍🎤</div><h3>No cast members yet</h3><p>Add directors, actors, or other crew here.</p></div>`;
-    return;
-  }
-  list.innerHTML = store.cast.map((c,i)=>castCard(c,i)).join('');
+  const list=document.getElementById('cast-list');
+  if(!store.cast.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">🧑‍🎤</div><h3>No cast members yet</h3><p>Add directors, actors or other crew here.</p></div>`; return; }
+  list.innerHTML=store.cast.map((c,i)=>castCard(c,i)).join('');
 }
 
-function castCard(c, i) {
-  const uid = 'cst_' + c._id;
-  const nameVal = c.name || '';
+function castCard(c,i) {
+  const uid='cst_'+c._id; const nameVal=c.name||'';
   return `<div class="entry-card" id="card_${uid}">
     <div class="entry-header" onclick="toggleCard(document.getElementById('card_${uid}'))">
       <span class="entry-num">#${i+1}</span>
+      <span class="entry-id-badge">ID:${c._id}</span>
       <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Unnamed Person'}</span>
       <span class="entry-chevron">▶</span>
-      <button class="entry-del" onclick="event.stopPropagation();deleteEntry('cast',${i})" title="Delete">🗑</button>
+      <button class="entry-del" onclick="event.stopPropagation();deleteEntry('cast',${i})">🗑</button>
     </div>
     <div class="entry-body">
       <div class="form-grid">
         <div class="field">
+          <label>Entry ID <span class="tip">(must be unique across all mods)</span></label>
+          <div class="id-row">
+            <input type="number" id="${uid}_id" value="${c._id}" min="1" max="9999999" style="font-family:'JetBrains Mono',monospace;color:var(--accent3)">
+            <button class="id-regen-btn" onclick="regenId('${uid}','cast')" title="Generate a new random ID">🎲 New ID</button>
+          </div>
+        </div>
+        <div class="field">
           <label>Full Name<span class="req">*</span></label>
-          <input type="text" id="${uid}_name" value="${esc(c.name||'')}" placeholder="e.g. Jane Doe"
+          <input type="text" id="${uid}_name" value="${esc(c.name)}" placeholder="e.g. Jane Doe"
             oninput="store.cast[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Unnamed Person')">
         </div>
-        <div class="field">
-          <label>Job / Role</label>
-          <select id="${uid}_job">${JOB_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Preferred Genre</label>
-          <select id="${uid}_genre">${GENRE_OPTS}</select>
-        </div>
-        <div class="field">
-          <label>Gender</label>
-          <select id="${uid}_gender">
-            <option value="0">Male</option>
-            <option value="1">Female</option>
-          </select>
-        </div>
-        <div class="field form-full">
-          <label>Fame / Skill Rating (0–100) <span class="tip">Higher = better known & more effective</span></label>
-          ${range(uid+'_rating', 0, 100, c.rating||50)}
-        </div>
-        <div class="field">
-          <label>Salary</label>
-          <input type="number" id="${uid}_salary" value="${c.salary||0}" min="0" placeholder="0">
-        </div>
-      </div>
-      <div style="margin-top:18px;padding:12px;background:rgba(78,205,196,.06);border:1px solid rgba(78,205,196,.2);border-radius:8px;font-size:13px;color:var(--text-muted)">
-        <strong style="color:var(--accent3)">📌 Note about this person's ID:</strong>
-        This person will be assigned ID <strong style="color:var(--accent);font-family:'JetBrains Mono',monospace">${c._id}</strong> in the exported file.
-        To reference them in a movie/series credits field, use this number.
+        <div class="field"><label>Job / Role</label><select id="${uid}_job">${JOB_OPTS}</select></div>
+        <div class="field"><label>Preferred Genre</label><select id="${uid}_genre">${GENRE_OPTS}</select></div>
+        <div class="field"><label>Gender</label><select id="${uid}_gender"><option value="0">Male</option><option value="1">Female</option></select></div>
+        <div class="field form-full"><label>Fame / Skill Rating (0–100) <span class="tip">Higher = better known & more impactful</span></label>${range(uid+'_rating',0,100,c.rating||50)}</div>
+        <div class="field"><label>Salary</label><input type="number" id="${uid}_salary" value="${c.salary||0}" min="0"></div>
       </div>
       <div style="margin-top:14px;display:flex;justify-content:flex-end">
         <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveCast(${i})">💾 Save</button>
@@ -1502,34 +817,20 @@ function castCard(c, i) {
 }
 
 function saveCast(i) {
-  const c = store.cast[i];
-  const uid = 'cst_' + c._id;
-  c.name = vv(uid+'_name');
-  c.job = vn(uid+'_job');
-  c.genre = vn(uid+'_genre');
-  c.gender = vn(uid+'_gender');
-  c.rating = vn(uid+'_rating');
-  c.salary = vn(uid+'_salary');
-  showToast('Cast member saved! ID: ' + c._id);
+  const c=store.cast[i]; const uid='cst_'+c._id;
+  c._id=parseInt(document.getElementById(uid+'_id').value)||c._id;
+  c.name=vv(uid+'_name'); c.job=vn(uid+'_job');
+  c.genre=vn(uid+'_genre'); c.gender=vn(uid+'_gender');
+  c.rating=vn(uid+'_rating'); c.salary=vn(uid+'_salary');
+  showToast('Cast member saved! ID: '+c._id); renderCast();
 }
 
-// ============================================================
-// NAMES
-// ============================================================
-function addNameEntry() {
-  store.names.push({ category: 'Action', names: '' });
-  renderNames();
-  updateCount('names');
-}
-
+// ============ NAMES ============
 function renderNames() {
-  const list = document.getElementById('names-list');
-  if(!store.names.length) {
-    list.innerHTML = `<div class="empty-state"><div class="big-icon">📝</div><h3>No name entries yet</h3><p>Add names for a genre/category.</p></div>`;
-    return;
-  }
-  const catOpts = NAME_CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join('');
-  list.innerHTML = store.names.map((n,i)=>`
+  const list=document.getElementById('names-list');
+  if(!store.names.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">📝</div><h3>No name lists yet</h3><p>Add comma-separated title lists per genre.</p></div>`; return; }
+  const catOpts=NAME_CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join('');
+  list.innerHTML=store.names.map((n,i)=>`
     <div class="entry-card" id="ncard_${i}">
       <div class="entry-header" onclick="toggleCard(document.getElementById('ncard_${i}'))">
         <span class="entry-num">#${i+1}</span>
@@ -1539,357 +840,186 @@ function renderNames() {
       </div>
       <div class="entry-body">
         <div class="form-grid">
-          <div class="field">
-            <label>Category / Genre</label>
-            <select id="name_cat_${i}" onchange="store.names[${i}].category=this.value;renderNames()">${catOpts.replace(`value="${n.category}"`,`value="${n.category}" selected`)}</select>
+          <div class="field"><label>Genre Category</label>
+            <select id="name_cat_${i}">${catOpts.replace(`value="${n.category}"`,`value="${n.category}" selected`)}</select>
           </div>
-          <div class="field form-full">
-            <label>Names <span class="tip">Comma-separated list of names/titles for this genre</span></label>
-            <textarea id="name_vals_${i}" style="min-height:100px" placeholder="Name One, Name Two, Name Three, ...">${esc(n.names||'')}</textarea>
+          <div class="field form-full"><label>Names / Titles <span class="tip">comma-separated</span></label>
+            <textarea id="name_vals_${i}" style="min-height:100px" placeholder="Name One, Name Two, Name Three, ...">${esc(n.names)}</textarea>
           </div>
         </div>
         <div style="margin-top:14px;display:flex;justify-content:flex-end">
           <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveNames(${i})">💾 Save</button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function saveNames(i) {
-  store.names[i].names = vv('name_vals_'+i);
-  store.names[i].category = vv('name_cat_'+i);
-  showToast('Name entry saved!');
+  store.names[i].names=vv('name_vals_'+i);
+  store.names[i].category=vv('name_cat_'+i);
+  showToast('Name list saved!');
 }
 
-// ============================================================
-// REVIEWS
-// ============================================================
-function addReview() {
-  store.reviews.push({ category: 'Movie', lang: 'EN', scoreRange: '0-19', text: '' });
-  renderReviews();
-  updateCount('reviews');
-}
-
+// ============ REVIEWS ============
 function renderReviews() {
-  const list = document.getElementById('reviews-list');
-  if(!store.reviews.length) {
-    list.innerHTML = `<div class="empty-state"><div class="big-icon">⭐</div><h3>No reviews yet</h3><p>Add review texts shown in-game.</p></div>`;
-    return;
-  }
-  const scoreRangeOpts = [
-    ['0-19','0–19% (Very Bad)'],['20-39','20–39% (Bad)'],['39-49','39–49% (Below Average)'],
-    ['50-69','50–69% (Average)'],['70-89','70–89% (Good)'],['90-100','90–100% (Excellent)']
-  ].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
-
-  list.innerHTML = store.reviews.map((r,i)=>`
+  const list=document.getElementById('reviews-list');
+  if(!store.reviews.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">⭐</div><h3>No reviews yet</h3><p>Add review texts shown in-game when content is rated.</p></div>`; return; }
+  const scoreOpts=[['0-19','0–19% (Very Bad)'],['20-39','20–39% (Bad)'],['39-49','39–49% (Below Average)'],['50-69','50–69% (Average)'],['70-89','70–89% (Good)'],['90-100','90–100% (Excellent)']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  list.innerHTML=store.reviews.map((r,i)=>`
     <div class="entry-card" id="rcard_${i}">
       <div class="entry-header" onclick="toggleCard(document.getElementById('rcard_${i}'))">
         <span class="entry-num">#${i+1}</span>
-        <span class="entry-name-preview">${r.category} · ${r.scoreRange}% · ${r.lang}</span>
+        <span class="entry-name-preview">${r.category||'?'} · ${r.scoreRange||'?'} · ${r.lang||'EN'}</span>
         <span class="entry-chevron">▶</span>
         <button class="entry-del" onclick="event.stopPropagation();deleteEntry('reviews',${i})">🗑</button>
       </div>
       <div class="entry-body">
         <div class="form-grid cols-3">
-          <div class="field">
-            <label>Content Type</label>
-            <select id="rev_cat_${i}">
-              <option value="Movie" ${r.category=='Movie'?'selected':''}>Movie</option>
-              <option value="Series" ${r.category=='Series'?'selected':''}>Series</option>
-              <option value="Show" ${r.category=='Show'?'selected':''}>Show</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Language</label>
-            <select id="rev_lang_${i}">
-              <option value="EN" ${r.lang=='EN'?'selected':''}>English (EN)</option>
-              <option value="DE" ${r.lang=='DE'?'selected':''}>German (DE)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Score Range</label>
-            <select id="rev_range_${i}">${scoreRangeOpts.replace(`value="${r.scoreRange}"`,`value="${r.scoreRange}" selected`)}</select>
-          </div>
-          <div class="field form-full">
-            <label>Review Text <span class="tip">A short blurb like "A gripping thriller that keeps you hooked."</span></label>
-            <textarea id="rev_text_${i}" placeholder="Write the review text here...">${esc(r.text||'')}</textarea>
+          <div class="field"><label>Content Type</label><select id="rev_cat_${i}">
+            <option value="Movie" ${r.category=='Movie'?'selected':''}>Movie</option>
+            <option value="Series" ${r.category=='Series'?'selected':''}>Series</option>
+            <option value="Show" ${r.category=='Show'?'selected':''}>Show</option>
+          </select></div>
+          <div class="field"><label>Language</label><select id="rev_lang_${i}">
+            <option value="EN" ${r.lang=='EN'?'selected':''}>English (EN)</option>
+            <option value="DE" ${r.lang=='DE'?'selected':''}>German (DE)</option>
+          </select></div>
+          <div class="field"><label>Score Range</label><select id="rev_range_${i}">${scoreOpts.replace(`value="${r.scoreRange}"`,`value="${r.scoreRange}" selected`)}</select></div>
+          <div class="field form-full"><label>Review Text <span class="tip">e.g. "A gripping thriller that keeps you hooked."</span></label>
+            <textarea id="rev_text_${i}" placeholder="Write the review text here...">${esc(r.text)}</textarea>
           </div>
         </div>
         <div style="margin-top:14px;display:flex;justify-content:flex-end">
           <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveReview(${i})">💾 Save</button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function saveReview(i) {
-  store.reviews[i].category = vv('rev_cat_'+i);
-  store.reviews[i].lang = vv('rev_lang_'+i);
-  store.reviews[i].scoreRange = vv('rev_range_'+i);
-  store.reviews[i].text = vv('rev_text_'+i);
-  renderReviews();
-  showToast('Review saved!');
+  store.reviews[i].category=vv('rev_cat_'+i);
+  store.reviews[i].lang=vv('rev_lang_'+i);
+  store.reviews[i].scoreRange=vv('rev_range_'+i);
+  store.reviews[i].text=vv('rev_text_'+i);
+  renderReviews(); showToast('Review saved!');
 }
 
-// ============================================================
-// GENERIC HELPERS
-// ============================================================
-function toggleCard(card) {
-  card.classList.toggle('open');
-}
-
-function updatePreview(id, val, fallback) {
-  const el = document.getElementById(id);
-  if(!el) return;
-  if(val) { el.textContent = val; el.classList.remove('empty'); }
-  else { el.textContent = fallback; el.classList.add('empty'); }
-}
-
-function deleteEntry(type, i) {
-  if(!confirm('Delete this entry? This cannot be undone.')) return;
-  store[type].splice(i,1);
-  const renders = { movies:renderMovies, series:renderSeries, shows:renderShows, cast:renderCast, names:renderNames, reviews:renderReviews };
-  renders[type]();
-  updateCount(type);
-}
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ============================================================
-// GUIDE
-// ============================================================
+// ============ GUIDE ============
 function openGuide() { document.getElementById('guideModal').classList.add('open'); }
 function closeGuide() { document.getElementById('guideModal').classList.remove('open'); }
 document.getElementById('guideBtn').onclick = openGuide;
 document.getElementById('guideModal').onclick = function(e){ if(e.target===this) closeGuide(); };
 
-// ============================================================
-// EXPORT
-// ============================================================
-function openExport() {
-  buildExportPanel();
-  document.getElementById('exportPanel').classList.add('open');
-}
+// ============ EXPORT ============
+function openExport() { buildExportPanel(); document.getElementById('exportPanel').classList.add('open'); }
 function closeExport() { document.getElementById('exportPanel').classList.remove('open'); }
 
 function getModName() {
-  const n = document.getElementById('modNameInput').value.trim().replace(/[^a-z0-9_\-]/gi,'') || 'mymod';
-  return n;
+  return (document.getElementById('modNameInput').value.trim().replace(/[^a-z0-9_\-]/gi,'')||'mymod');
 }
 
 function buildExportPanel() {
-  const modName = getModName();
-  const body = document.getElementById('exportBody');
-  const totalItems = store.movies.length + store.series.length + store.shows.length;
-  const totalCast = store.cast.length;
-  const totalNames = store.names.length;
-  const totalReviews = store.reviews.length;
-
-  body.innerHTML = `
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;line-height:1.6">
-      Download only the files for content you've added. Drop them into your game's <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px">Mods</code> folder.
+  const mn=getModName();
+  const ti=store.movies.length+store.series.length+store.shows.length;
+  const tc=store.cast.length, tn=store.names.length, tr=store.reviews.length;
+  document.getElementById('exportBody').innerHTML=`
+    <div class="modloader-banner">
+      <h3>⚠ Modloader Required</h3>
+      <p>Your mod files won't do anything without the Modloader installed. Make sure to download and install it first before copying files into the Mods folder.</p>
+      <p style="margin-top:8px"><a href="https://www.moddb.com/mods/modloader" target="_blank">⬇ Download Modloader from ModDB →</a></p>
+    </div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6">
+      Download only the files for content you've added. Drop them into the <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px">Mods</code> folder in your game's installation directory.
     </p>
+    ${fileCard(mn+'_items.json','Movies, TV Series & Shows ('+ti+' entries)','Contains all your movies, shows and series.','downloadItems',ti)}
+    ${fileCard(mn+'_cast.json','Cast Members ('+tc+' entries)','Contains all your directors, actors and crew.','downloadCast',tc)}
+    ${fileCard(mn+'_names.json','Name Lists ('+tn+' categories)','Contains your title name lists for random content generation.','downloadNames',tn)}
+    ${fileCard(mn+'_reviews.json','Review Texts ('+tr+' reviews)','Contains your custom in-game review blurbs.','downloadReviews',tr)}
+    <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:14px;font-size:12px;color:var(--text-muted);margin-top:4px;line-height:1.7">
+      <strong style="color:var(--accent)">📁 Mod folder location:</strong><br>
+      Steam → right-click game → <em>Manage → Browse local files</em> → drop files in the <code style="background:var(--surface3);padding:1px 5px;border-radius:3px">Mods</code> folder.
+    </div>`;
+}
 
-    <div class="export-file-card">
-      <h3>${modName}_items.json <span style="color:var(--text-dim);font-size:11px;font-weight:400">${totalItems} entries</span></h3>
-      <p>Contains your movies, TV series, and TV shows.</p>
-      <button class="dl-btn" onclick="downloadItems()" ${totalItems===0?'disabled':''}>
-        ⬇ Download ${modName}_items.json
-      </button>
-      ${totalItems===0?'<p style="margin-top:8px;font-size:12px;color:var(--text-dim)">Nothing to export yet — add some movies, series, or shows first.</p>':''}
-    </div>
-
-    <div class="export-file-card">
-      <h3>${modName}_cast.json <span style="color:var(--text-dim);font-size:11px;font-weight:400">${totalCast} entries</span></h3>
-      <p>Contains your cast members (directors, actors, presenters…).</p>
-      <button class="dl-btn" onclick="downloadCast()" ${totalCast===0?'disabled':''}>
-        ⬇ Download ${modName}_cast.json
-      </button>
-      ${totalCast===0?'<p style="margin-top:8px;font-size:12px;color:var(--text-dim)">Nothing to export yet — add some cast members first.</p>':''}
-    </div>
-
-    <div class="export-file-card">
-      <h3>${modName}_names.json <span style="color:var(--text-dim);font-size:11px;font-weight:400">${totalNames} categories</span></h3>
-      <p>Contains your random name lists for content generation.</p>
-      <button class="dl-btn" onclick="downloadNames()" ${totalNames===0?'disabled':''}>
-        ⬇ Download ${modName}_names.json
-      </button>
-      ${totalNames===0?'<p style="margin-top:8px;font-size:12px;color:var(--text-dim)">Nothing to export yet — add some name entries first.</p>':''}
-    </div>
-
-    <div class="export-file-card">
-      <h3>${modName}_reviews.json <span style="color:var(--text-dim);font-size:11px;font-weight:400">${totalReviews} reviews</span></h3>
-      <p>Contains your custom review texts shown when content is rated in-game.</p>
-      <button class="dl-btn" onclick="downloadReviews()" ${totalReviews===0?'disabled':''}>
-        ⬇ Download ${modName}_reviews.json
-      </button>
-      ${totalReviews===0?'<p style="margin-top:8px;font-size:12px;color:var(--text-dim)">Nothing to export yet — add some reviews first.</p>':''}
-    </div>
-
-    <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:14px;font-size:13px;color:var(--text-muted);margin-top:8px;line-height:1.6">
-      <strong style="color:var(--accent)">📁 Where to put these files:</strong><br>
-      Mad TV Tycoon folder → <code style="background:var(--surface3);padding:1px 5px;border-radius:3px">Mods</code> folder → drop files here.<br>
-      <span style="color:var(--text-dim);font-size:12px;margin-top:4px;display:block">On Steam: right-click game → Manage → Browse local files</span>
-    </div>
-  `;
+function fileCard(fname, title, desc, fn, count) {
+  const disabled = count===0;
+  return `<div class="export-file-card">
+    <h3><span>${fname}</span><span style="color:var(--text-dim);font-size:10px;font-weight:400">${count} entries</span></h3>
+    <p>${desc}</p>
+    <button class="dl-btn" onclick="${fn}()" ${disabled?'disabled':''}>⬇ Download ${fname}</button>
+    ${disabled?'<p style="margin-top:8px;font-size:11px;color:var(--text-dim)">Nothing added yet — nothing to export.</p>':''}
+  </div>`;
 }
 
 function downloadFile(filename, content) {
-  const blob = new Blob([content], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  a.click();
+  const blob=new Blob([content],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=filename; a.click();
   URL.revokeObjectURL(url);
-  showToast('Downloaded: ' + filename);
+  showToast('Downloaded: '+filename);
+}
+
+function creditsStr(ids) {
+  if(!ids||!ids.length) return '';
+  return ids.join(', ');
 }
 
 function downloadItems() {
-  const modName = getModName();
-  const data = [];
-  let idBase = 90000;
-
-  store.movies.forEach((m, i) => {
-    const entry = {
-      _comment: m.name || ('Movie ' + (i+1)),
-      ID: idBase++,
-      ItemTyp: 1,
-      Name: m.name || '',
-      Desc: m.desc || '',
-      Genre: m.genre || 0,
-      Country: m.country || 0,
-      Date: m.year || 0,
-      Rating: m.rating || 60,
-      Blocks: m.blocks || 2,
-      AgeRate: m.age || 0,
-      Texture: 1,
-      Approval: m.approval ?? 255,
-      Potential: m.potential || 50,
-      Chance: (m.chance || 10) * 1.0
-    };
-    if(m.name_de) entry.Name_DE = m.name_de;
-    if(m.desc_de) entry.Desc_DE = m.desc_de;
-    if(m.credits) entry.Credits = m.credits;
-    if(m.price) entry.Price = m.price;
-    if(m.cult) entry.Cult = true;
-    if(m.timeless) entry.Timeless = true;
-    if(m.evergreen) entry.Evergreen = true;
-    if(m.premium) entry.Premium = true;
-    if(m.pirated) entry.Pirated = true;
-    data.push(entry);
+  const mn=getModName(); const data=[];
+  store.movies.forEach((m,i)=>{
+    const e={_comment:m.name||'Movie '+(i+1),ID:m._id,ItemTyp:1,Name:m.name||'',Desc:m.desc||'',Genre:m.genre||0,Country:m.country||0,Date:m.year||0,Rating:m.rating||60,Blocks:m.blocks||2,AgeRate:m.age||0,Texture:1,Approval:m.approval??255,Potential:m.potential||50,Chance:(m.chance||10)*1.0};
+    if(m.name_de) e.Name_DE=m.name_de; if(m.desc_de) e.Desc_DE=m.desc_de;
+    const cr=creditsStr(m.credits_ids); if(cr) e.Credits=cr;
+    if(m.price) e.Price=m.price;
+    if(m.cult) e.Cult=true; if(m.timeless) e.Timeless=true; if(m.evergreen) e.Evergreen=true; if(m.premium) e.Premium=true; if(m.pirated) e.Pirated=true;
+    data.push(e);
   });
-
-  idBase = 91000;
-  store.series.forEach((s, i) => {
-    const entry = {
-      _comment: s.name || ('Series ' + (i+1)),
-      ID: idBase++,
-      ItemTyp: 2,
-      Name: s.name || '',
-      Desc: s.desc || '',
-      Genre: s.genre || 0,
-      Country: s.country || 0,
-      Date: s.year || 0,
-      Rating: s.rating || 65,
-      Blocks: s.blocks || 1,
-      AgeRate: s.age || 0,
-      Episodes: s.episodes || 1,
-      Texture: 1,
-      Approval: s.approval ?? 255,
-      Potential: s.potential || 55,
-      Chance: (s.chance || 10) * 1.0,
-      CurrentEpisode: 1
-    };
-    if(s.name_de) entry.Name_DE = s.name_de;
-    if(s.desc_de) entry.Desc_DE = s.desc_de;
-    if(s.credits) entry.Credits = s.credits;
-    if(s.price) entry.Price = s.price;
-    if(s.cult) entry.Cult = true;
-    if(s.timeless) entry.Timeless = true;
-    if(s.evergreen) entry.Evergreen = true;
-    if(s.premium) entry.Premium = true;
-    data.push(entry);
+  store.series.forEach((s,i)=>{
+    const e={_comment:s.name||'Series '+(i+1),ID:s._id,ItemTyp:2,Name:s.name||'',Desc:s.desc||'',Genre:s.genre||0,Country:s.country||0,Date:s.year||0,Rating:s.rating||65,Blocks:s.blocks||1,AgeRate:s.age||0,Episodes:s.episodes||1,Texture:1,Approval:s.approval??255,Potential:s.potential||55,Chance:(s.chance||10)*1.0,CurrentEpisode:1};
+    if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de;
+    const cr=creditsStr(s.credits_ids); if(cr) e.Credits=cr;
+    if(s.price) e.Price=s.price;
+    if(s.cult) e.Cult=true; if(s.timeless) e.Timeless=true; if(s.evergreen) e.Evergreen=true; if(s.premium) e.Premium=true;
+    data.push(e);
   });
-
-  idBase = 92000;
-  store.shows.forEach((s, i) => {
-    const entry = {
-      _comment: s.name || ('Show ' + (i+1)),
-      ID: idBase++,
-      ItemTyp: s.typ || 16,
-      Name: s.name || '',
-      Desc: s.desc || '',
-      Genre: s.typ || 16,
-      Date: s.year || 0,
-      Rating: s.rating || 60,
-      Blocks: s.blocks || 1,
-      AgeRate: s.age || 0,
-      Texture: 1,
-      Approval: s.approval ?? 255,
-      Potential: s.potential || 50
-    };
-    if(s.name_de) entry.Name_DE = s.name_de;
-    if(s.desc_de) entry.Desc_DE = s.desc_de;
-    if(s.price) entry.Price = s.price;
-    data.push(entry);
+  store.shows.forEach((s,i)=>{
+    const e={_comment:s.name||'Show '+(i+1),ID:s._id,ItemTyp:s.typ||16,Name:s.name||'',Desc:s.desc||'',Genre:s.typ||16,Date:s.year||0,Rating:s.rating||60,Blocks:s.blocks||1,AgeRate:s.age||0,Texture:1,Approval:s.approval??255,Potential:s.potential||50};
+    if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de; if(s.price) e.Price=s.price;
+    data.push(e);
   });
-
-  downloadFile(modName + '_items.json', JSON.stringify({ data }, null, 2));
+  downloadFile(mn+'_items.json', JSON.stringify({data},null,2));
 }
 
 function downloadCast() {
-  const modName = getModName();
-  const data = store.cast.map(c => {
-    const entry = {
-      _comment: c.name || '',
-      ID: c._id,
-      Job: c.job || 0,
-      Genre: c.genre || 0,
-      Rating: c.rating || 50,
-      Name: c.name || ''
-    };
-    if(c.gender) entry.Gender = c.gender;
-    if(c.salary) entry.Salary = c.salary;
-    return entry;
+  const mn=getModName();
+  const data=store.cast.map(c=>{
+    const e={_comment:c.name||'',ID:c._id,Job:c.job||0,Genre:c.genre||0,Rating:c.rating||50,Name:c.name||''};
+    if(c.gender) e.Gender=c.gender; if(c.salary) e.Salary=c.salary;
+    return e;
   });
-  downloadFile(modName + '_cast.json', JSON.stringify({ data }, null, 2));
+  downloadFile(mn+'_cast.json', JSON.stringify({data},null,2));
 }
 
 function downloadNames() {
-  const modName = getModName();
-  const out = {};
-  store.names.forEach(n => {
-    if(n.category && n.names) {
-      out[n.category] = n.names;
-    }
-  });
-  downloadFile(modName + '_names.json', JSON.stringify(out, null, 2));
+  const mn=getModName(); const out={};
+  store.names.forEach(n=>{ if(n.category&&n.names) out[n.category]=n.names; });
+  downloadFile(mn+'_names.json', JSON.stringify(out,null,2));
 }
 
 function downloadReviews() {
-  const modName = getModName();
-  const out = {};
-  // group by category+lang+range
-  const counts = {};
-  store.reviews.forEach(r => {
+  const mn=getModName(); const out={}; const counts={};
+  store.reviews.forEach(r=>{
     if(!r.text) return;
-    const key = `${r.category}_${r.lang}`;
-    counts[key] = (counts[key]||0) + 1;
-    const field = `${r.category}_${counts[key]}_${r.lang}`;
-    out[field] = r.text;
+    const key=r.category+'_'+r.lang;
+    counts[key]=(counts[key]||0)+1;
+    out[`${r.category}_${counts[key]}_${r.lang}`]=r.text;
   });
-  downloadFile(modName + '_reviews.json', JSON.stringify(out, null, 2));
+  downloadFile(mn+'_reviews.json', JSON.stringify(out,null,2));
 }
 
-// ============================================================
-// INIT
-// ============================================================
+// ============ MOD NAME INPUT ============
 document.getElementById('modNameInput').addEventListener('input', function() {
-  this.value = this.value.replace(/[^a-z0-9_\-]/gi,'');
+  this.value=this.value.replace(/[^a-z0-9_\-]/gi,'');
 });
 </script>
 </body>
