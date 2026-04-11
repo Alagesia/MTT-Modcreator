@@ -480,13 +480,13 @@
       </div>
       <div style="background:rgba(232,69,106,.13);border:2px solid var(--accent2);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;font-size:13px;line-height:1.8;color:var(--text-muted)">
         <strong style="color:var(--accent2);font-size:15px;display:block;margin-bottom:6px">🚨 Warning — Editing these values can crash or break your game.</strong>
-        These are core internal game balance variables. Setting incorrect values <strong style="color:var(--text)">will cause crashes, softlocks, or broken saves</strong> that may be difficult to recover from. Only edit values you fully understand. If in doubt, leave the field blank — blank fields are not exported and the game's default is used instead.<br>
+        These settings are largely untested and use at your own risk. Setting incorrect values <strong style="color:var(--text)">will cause crashes, softlocks, or broken saves</strong> that may be difficult to recover from. Only edit values you fully understand. If in doubt, leave the field blank — blank fields are not exported and the game's default is used instead.<br>
         <span style="color:var(--text-dim);font-size:12px;margin-top:4px;display:block">💡 Tip: test changes on a new save before using them on a real playthrough.</span>
       </div>
 
       <div class="section-divider">New Game Limits</div>
       <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.25);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-muted);line-height:1.6">
-        ⚠ <strong style="color:var(--accent)">Max Movies / Series at start are capped at 100.</strong> Values above 100 cause the game to crash on new game creation. Max Real Rating has no known cap but large values may cause display issues.
+        ⚠ <strong style="color:var(--accent)">Max Movies / Series at start are capped at 100.</strong> Game crashes on higher values, highest tested safe value is 10.
       </div>
       <div class="form-grid cols-3" style="margin-bottom:18px">
         <div class="field"><label>Max Movies at start <span class="tip">(default: 3, max: 100)</span></label><input type="number" id="bv_newGameMaxMovies" placeholder="3" min="0" max="100" oninput="bvCapCheck(this,100)"></div>
