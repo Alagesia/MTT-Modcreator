@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mad Television Tycoon — Mod-Ersteller</title>
+<title>Mad Television Tycoon — Mod Creator</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -176,7 +176,18 @@
   .cl-list li { font-size: 13px; color: var(--text-muted); line-height: 1.5; padding-left: 4px; border-left: 2px solid var(--border); }
   .cl-list code { font-family: 'JetBrains Mono',monospace; background: var(--surface3); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: var(--accent3); }
 
+  /* Settings hour grid */
+  .settings-hour-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .hour-cell { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 10px 8px; display: flex; flex-direction: column; gap: 6px; transition: border-color .15s; }
+  .hour-cell:focus-within { border-color: var(--accent); }
+  .hour-cell .hour-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; }
+  .hour-cell .hour-label .htime { color: var(--accent3); font-family: 'JetBrains Mono',monospace; font-weight: 600; }
+  .hour-cell input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+  .hour-cell .hour-val { font-family: 'JetBrains Mono',monospace; font-size: 12px; color: var(--accent); font-weight: 600; text-align: center; background: var(--surface3); border-radius: 3px; padding: 2px 0; }
+  .hour-cell.modified { border-color: rgba(245,166,35,.5); background: rgba(245,166,35,.04); }
+
   @media (max-width:700px) {
+    .settings-hour-grid { grid-template-columns: repeat(4, 1fr); }
     .sidebar { width: 56px; }
     .tab-btn span, .tab-count, .sidebar-label { display: none; }
     .tab-btn { justify-content: center; padding: 12px; }
@@ -194,17 +205,17 @@
     <div class="logo-icon">📺</div>
     <div>
       <h1>Mad Television Tycoon</h1>
-      <p>Mod-Ersteller</p>
+      <p>Mod Creator Tool</p>
     </div>
   </div>
   <div class="header-actions">
     <div class="mod-name-area">
-      <label>Mod-Name:</label>
-      <input type="text" id="modNameInput" placeholder="meinmod" maxlength="32" title="Dies wird das Präfix in deinen Dateinamen">
+      <label>Mod Name:</label>
+      <input type="text" id="modNameInput" placeholder="mymods" maxlength="32" title="This becomes the prefix in your filenames">
     </div>
-    <button id="guideBtn" class="hdr-btn">📖 Installationsanleitung</button>
-    <button id="changelogBtn" class="hdr-btn changelog">📋 Änderungsprotokoll</button>
-    <a href="https://github.com/Alagesia/MTT-Modcreator/issues" target="_blank" class="hdr-btn bug">🐛 Fehler melden</a>
+    <button id="guideBtn" class="hdr-btn">📖 How to Install</button>
+    <button id="changelogBtn" class="hdr-btn changelog">📋 Changelog</button>
+    <a href="https://github.com/Alagesia/MTT-Modcreator/issues" target="_blank" class="hdr-btn bug">🐛 Report Bug</a>
   </div>
 </header>
 
@@ -212,7 +223,7 @@
 <div class="modal-overlay" id="changelogModal">
   <div class="modal" style="max-width:580px">
     <div class="modal-header">
-      <h2>📋 Änderungsprotokoll</h2>
+      <h2>📋 Changelog</h2>
       <button class="modal-close" onclick="document.getElementById('changelogModal').classList.remove('open')">✕</button>
     </div>
     <div class="modal-body" id="changelogBody">
@@ -223,19 +234,43 @@
 
       <div class="cl-version">
         <div class="cl-version-header">
-          <span class="cl-tag">v1.0.0</span>
-          <span class="cl-date">11. April 2025</span>
-          <span class="cl-badge new">Aktuell</span>
+          <span class="cl-tag">v1.0.2</span>
+          <span class="cl-date">April 11, 2025</span>
+          <span class="cl-badge new">Latest</span>
         </div>
         <ul class="cl-list">
-          <li>🎉 <strong>Erstveröffentlichung</strong> des Mad Television Tycoon Mod-Erstellers (deutsche Version, entspricht v1.0.2 der englischen Version).</li>
-          <li>✨ Füge Filme, Serien, Shows, Besetzungsmitglieder, Namenslisten und Kritiktexte über eine visuelle Oberfläche hinzu — keine JSON-Kenntnisse erforderlich.</li>
-          <li>✨ Exportiere modfertige JSON-Dateien, die für den Modloader korrekt benannt sind (<code>deinname_items.json</code>, <code>_cast</code>, <code>_names</code>, <code>_reviews</code>).</li>
-          <li>✨ Integrierte Installationsanleitung mit Schritt-für-Schritt-Anweisungen.</li>
-          <li>✨ Modloader-Downloadlink und Installationshinweis sind durchgehend enthalten.</li>
-          <li>✨ Durchsuchbares Besetzungs-Dropdown mit über 2.500 Vanilla-Besetzungsmitgliedern.</li>
-          <li>✨ Eintrags-IDs sind bearbeitbar und werden in einem sicheren Bereich (9.000.000–9.999.999) generiert.</li>
-          <li>✨ Änderungsprotokoll und Fehlermeldungsschaltfläche im Header.</li>
+          <li>🔧 <strong>Fix:</strong> Sidebar was permanently collapsed to 56px wide on all screen sizes due to a CSS media query losing its opening bracket during a previous edit.</li>
+        </ul>
+      </div>
+
+      <div class="cl-version">
+        <div class="cl-version-header">
+          <span class="cl-tag">v1.0.1</span>
+          <span class="cl-date">April 11, 2025</span>
+        </div>
+        <ul class="cl-list">
+          <li>🔧 <strong>Fix:</strong> Credits were not being written to exported JSON files — this is now resolved.</li>
+          <li>✨ <strong>New:</strong> Shows now have a Credits field, same as Movies and TV Series.</li>
+          <li>✨ <strong>New:</strong> Changelog button added to the header (you're reading it!).</li>
+          <li>✨ <strong>New:</strong> Report Bug button added, linking to the GitHub issue tracker.</li>
+          <li>✨ <strong>New:</strong> All content tabs renamed for clarity — "TV Shows" is now "Shows".</li>
+          <li>✨ <strong>New:</strong> Name Lists section now includes a plain-English explanation of what it does in-game.</li>
+          <li>✨ <strong>New:</strong> Credits field replaced with a searchable dropdown containing all 2,500+ vanilla cast members plus any cast you've added in your current mod session.</li>
+          <li>✨ <strong>New:</strong> Entry IDs are now editable and generated in a safe range (9,000,000–9,999,999) that does not overlap with any vanilla content, reducing mod conflicts across multiple sessions.</li>
+        </ul>
+      </div>
+
+      <div class="cl-version">
+        <div class="cl-version-header">
+          <span class="cl-tag">v1.0.0</span>
+          <span class="cl-date">April 10, 2025</span>
+        </div>
+        <ul class="cl-list">
+          <li>🎉 <strong>Initial release</strong> of the Mad Television Tycoon Mod Creator.</li>
+          <li>✨ Add Movies, TV Series, Shows, Cast Members, Name Lists, and Review Texts through a visual interface — no JSON knowledge required.</li>
+          <li>✨ Export mod-ready JSON files named correctly for the Modloader (<code>yourname_items.json</code>, <code>_cast</code>, <code>_names</code>, <code>_reviews</code>).</li>
+          <li>✨ Built-in How to Install guide with step-by-step instructions.</li>
+          <li>✨ Modloader download link and installation warning included throughout.</li>
         </ul>
       </div>
 
@@ -245,35 +280,52 @@
 
 <div class="main-layout">
   <nav class="sidebar">
-    <div class="sidebar-label">Inhalte</div>
+    <div class="sidebar-label">Content</div>
     <button class="tab-btn active" onclick="switchTab('movies')" id="tab-movies">
-      <span class="tab-icon">🎬</span><span>Filme</span>
+      <span class="tab-icon">🎬</span><span>Movies</span>
       <span class="tab-count" id="count-movies">0</span>
     </button>
     <button class="tab-btn" onclick="switchTab('series')" id="tab-series">
-      <span class="tab-icon">📡</span><span>Serien</span>
+      <span class="tab-icon">📡</span><span>TV Series</span>
       <span class="tab-count" id="count-series">0</span>
     </button>
     <button class="tab-btn" onclick="switchTab('shows')" id="tab-shows">
       <span class="tab-icon">🎭</span><span>Shows</span>
       <span class="tab-count" id="count-shows">0</span>
     </button>
-    <div class="sidebar-label">Personen</div>
+    <div class="sidebar-label">People</div>
     <button class="tab-btn" onclick="switchTab('cast')" id="tab-cast">
-      <span class="tab-icon">🧑‍🎤</span><span>Besetzung</span>
+      <span class="tab-icon">🧑‍🎤</span><span>Cast</span>
       <span class="tab-count" id="count-cast">0</span>
     </button>
-    <div class="sidebar-label">Datenbank</div>
+    <div class="sidebar-label">Database</div>
     <button class="tab-btn" onclick="switchTab('names')" id="tab-names">
-      <span class="tab-icon">📝</span><span>Namen</span>
+      <span class="tab-icon">📝</span><span>Names</span>
       <span class="tab-count" id="count-names">0</span>
     </button>
     <button class="tab-btn" onclick="switchTab('reviews')" id="tab-reviews">
-      <span class="tab-icon">⭐</span><span>Kritiken</span>
+      <span class="tab-icon">⭐</span><span>Reviews</span>
       <span class="tab-count" id="count-reviews">0</span>
     </button>
+    <div class="sidebar-label">Game Settings</div>
+    <button class="tab-btn" onclick="switchTab('viewhour')" id="tab-viewhour">
+      <span class="tab-icon">📺</span><span>Viewer Hours</span>
+      <span class="tab-count" id="count-viewhour" style="display:none"></span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('typhour')" id="tab-typhour">
+      <span class="tab-icon">🎞️</span><span>Type Hours</span>
+      <span class="tab-count" id="count-typhour" style="display:none"></span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('genrehour')" id="tab-genrehour">
+      <span class="tab-icon">🎨</span><span>Genre Hours</span>
+      <span class="tab-count" id="count-genrehour" style="display:none"></span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('basevars')" id="tab-basevars">
+      <span class="tab-icon">⚙️</span><span>Base Vars</span>
+      <span class="tab-count" id="count-basevars" style="display:none"></span>
+    </button>
     <div class="sidebar-export">
-      <button class="export-btn" onclick="openExport()">⬇ Mod exportieren</button>
+      <button class="export-btn" onclick="openExport()">⬇ Export Mod</button>
     </div>
   </nav>
 
@@ -281,54 +333,231 @@
 
     <div class="panel active" id="panel-movies">
       <div class="panel-header">
-        <div class="panel-title"><div><h2>🎬 Filme</h2><p>Füge Filme zur Sendebibliothek des Spiels hinzu</p></div></div>
-        <button class="add-btn" onclick="addEntry('movies')">＋ Film hinzufügen</button>
+        <div class="panel-title"><div><h2>🎬 Movies</h2><p>Add films to the game's broadcast library</p></div></div>
+        <button class="add-btn" onclick="addEntry('movies')">＋ Add Movie</button>
       </div>
-      <div class="entries-list" id="movies-list"><div class="empty-state"><div class="big-icon">🎬</div><h3>Noch keine Filme</h3><p>Klicke auf "Film hinzufügen", um deinen ersten Film hinzuzufügen.</p></div></div>
+      <div class="entries-list" id="movies-list"><div class="empty-state"><div class="big-icon">🎬</div><h3>No movies yet</h3><p>Click "Add Movie" to add your first film.</p></div></div>
     </div>
 
     <div class="panel" id="panel-series">
       <div class="panel-header">
-        <div class="panel-title"><div><h2>📡 Serien</h2><p>Füge mehrteilige Fernsehserien hinzu</p></div></div>
-        <button class="add-btn" onclick="addEntry('series')">＋ Serie hinzufügen</button>
+        <div class="panel-title"><div><h2>📡 TV Series</h2><p>Add multi-episode TV series</p></div></div>
+        <button class="add-btn" onclick="addEntry('series')">＋ Add Series</button>
       </div>
-      <div class="entries-list" id="series-list"><div class="empty-state"><div class="big-icon">📡</div><h3>Noch keine Serien</h3><p>Klicke auf "Serie hinzufügen", um eine Fernsehserie zu erstellen.</p></div></div>
+      <div class="entries-list" id="series-list"><div class="empty-state"><div class="big-icon">📡</div><h3>No series yet</h3><p>Click "Add Series" to create a TV show with multiple episodes.</p></div></div>
     </div>
 
     <div class="panel" id="panel-shows">
       <div class="panel-header">
-        <div class="panel-title"><div><h2>🎭 Shows</h2><p>Quizshows, Reality-TV, Talkshows, Spielshows und mehr</p></div></div>
-        <button class="add-btn" onclick="addEntry('shows')">＋ Show hinzufügen</button>
+        <div class="panel-title"><div><h2>🎭 Shows</h2><p>Quiz shows, reality TV, talk shows, game shows and more</p></div></div>
+        <button class="add-btn" onclick="addEntry('shows')">＋ Add Show</button>
       </div>
-      <div class="entries-list" id="shows-list"><div class="empty-state"><div class="big-icon">🎭</div><h3>Noch keine Shows</h3><p>Klicke auf "Show hinzufügen" für Quizshows, Spielshows, Talkshows, Kochshows usw.</p></div></div>
+      <div class="entries-list" id="shows-list"><div class="empty-state"><div class="big-icon">🎭</div><h3>No shows yet</h3><p>Click "Add Show" for quiz shows, game shows, talk shows, cooking shows, etc.</p></div></div>
     </div>
 
     <div class="panel" id="panel-cast">
       <div class="panel-header">
-        <div class="panel-title"><div><h2>🧑‍🎤 Besetzung</h2><p>Füge Regisseure, Schauspieler, Autoren und Moderatoren hinzu</p></div></div>
-        <button class="add-btn" onclick="addEntry('cast')">＋ Person hinzufügen</button>
+        <div class="panel-title"><div><h2>🧑‍🎤 Cast Members</h2><p>Add directors, actors, writers, presenters & moderators</p></div></div>
+        <button class="add-btn" onclick="addEntry('cast')">＋ Add Person</button>
       </div>
-      <div class="entries-list" id="cast-list"><div class="empty-state"><div class="big-icon">🧑‍🎤</div><h3>Noch keine Besetzungsmitglieder</h3><p>Füge hier Regisseure, Schauspieler oder andere Crew-Mitglieder hinzu. Du kannst sie dann in Filmen und Serien als Mitwirkende angeben.</p></div></div>
+      <div class="entries-list" id="cast-list"><div class="empty-state"><div class="big-icon">🧑‍🎤</div><h3>No cast members yet</h3><p>Add directors, actors or other crew here. You can then credit them in movies and series.</p></div></div>
     </div>
 
     <div class="panel" id="panel-names">
       <div class="panel-header">
-        <div class="panel-title"><div><h2>📝 Namenslisten</h2><p>Erweitere den Titelgenerator des Spiels mit weiteren Namen</p></div></div>
-        <button class="add-btn" onclick="addEntry('names')">＋ Namensliste hinzufügen</button>
+        <div class="panel-title"><div><h2>📝 Name Lists</h2><p>Expand the game's title generator with more names</p></div></div>
+        <button class="add-btn" onclick="addEntry('names')">＋ Add Name List</button>
       </div>
       <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
-        <strong style="color:var(--accent3);display:block;margin-bottom:6px">🎲 Was bewirkt das?</strong>
-        Mad Television Tycoon kann im Spielverlauf <strong style="color:var(--text)">zufällig neue</strong> fiktive Filme und Shows generieren. Für die Namensgebung greift das Spiel auf diese Namenslisten zurück – eine Liste pro Genre. Wenn du hier Namen für ein Genre (z.B. "Action") hinzufügst, kann das Spiel sie beim Generieren neuer Inhalte verwenden. Stell es dir als zusätzlichen kreativen Treibstoff vor. Wenn dich zufällig generierte Inhalte nicht interessieren, kannst du diesen Abschnitt überspringen.
+        <strong style="color:var(--accent3);display:block;margin-bottom:6px">🎲 What does this do?</strong>
+        Mad Television Tycoon can <strong style="color:var(--text)">randomly generate</strong> new fictional movies and shows in-game over time. To come up with names for them, it pulls from these name lists — one list per genre. If you add names here for a genre (e.g. "Action"), the game may use them when generating new content of that type. Think of it as feeding the game more creative fuel. If you don't care about randomly generated content, you can safely skip this section.
       </div>
-      <div class="entries-list" id="names-list"><div class="empty-state"><div class="big-icon">📝</div><h3>Noch keine Namenslisten</h3><p>Füge Titellisten für jedes Genre hinzu, die das Spiel beim Generieren neuer Inhalte verwenden kann.</p></div></div>
+      <div class="entries-list" id="names-list"><div class="empty-state"><div class="big-icon">📝</div><h3>No name lists yet</h3><p>Add lists of titles for each genre the game can use when generating new content.</p></div></div>
     </div>
 
     <div class="panel" id="panel-reviews">
       <div class="panel-header">
-        <div class="panel-title"><div><h2>⭐ Kritiktexte</h2><p>Füge eigene Kritiktexte hinzu, die im Spiel bei Bewertungen angezeigt werden</p></div></div>
-        <button class="add-btn" onclick="addEntry('reviews')">＋ Kritik hinzufügen</button>
+        <div class="panel-title"><div><h2>⭐ Review Texts</h2><p>Add custom review blurbs shown in-game when content is rated</p></div></div>
+        <button class="add-btn" onclick="addEntry('reviews')">＋ Add Review</button>
       </div>
-      <div class="entries-list" id="reviews-list"><div class="empty-state"><div class="big-icon">⭐</div><h3>Noch keine Kritiken</h3><p>Füge Kritiktexte auf Englisch und/oder Deutsch für Filme, Serien oder Shows hinzu.</p></div></div>
+      <div class="entries-list" id="reviews-list"><div class="empty-state"><div class="big-icon">⭐</div><h3>No reviews yet</h3><p>Add review texts in English and/or German for movies, series, or shows.</p></div></div>
+    </div>
+
+    <!-- ===== VIEWER HOURS PANEL ===== -->
+    <div class="panel" id="panel-viewhour">
+      <div class="panel-header">
+        <div class="panel-title"><div><h2>📺 Viewer Hours</h2><p>Overall TV audience multiplier per hour of the day (0 = nobody watching, 1 = peak audience)</p></div></div>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveViewHour()">💾 Save Changes</button>
+      </div>
+      <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
+        <strong style="color:var(--accent3)">📖 What is this?</strong> This multiplier scales the total number of viewers available at each hour. Hour 0 = midnight, hour 19 = 7 PM prime time. Values range from 0.0 (no viewers) to 1.0 (maximum). Only changed values will be written to the exported file.
+      </div>
+      <div id="viewhour-grid" class="settings-hour-grid"></div>
+    </div>
+
+    <!-- ===== TYPE HOURS PANEL ===== -->
+    <div class="panel" id="panel-typhour">
+      <div class="panel-header">
+        <div class="panel-title"><div><h2>🎞️ Type Hours</h2><p>Per content-type audience multiplier per hour (how well each content type performs at each hour)</p></div></div>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveTypHour()">💾 Save Changes</button>
+      </div>
+      <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
+        <strong style="color:var(--accent3)">📖 What is this?</strong> Each content type (Movies, Series, Shows, etc.) has its own multiplier per hour. For example, Movies peak late evening while News peaks at breakfast/lunch/evening. Select a type below to edit its 24-hour curve.
+      </div>
+      <div class="field" style="margin-bottom:18px;max-width:260px">
+        <label>Content Type</label>
+        <select id="typhour-type-select" onchange="renderTypHourGrid()">
+          <option value="movie">Movie</option>
+          <option value="series">Series</option>
+          <option value="show">Show</option>
+          <option value="live">Live</option>
+          <option value="teleshop">Teleshop</option>
+          <option value="news">News</option>
+        </select>
+      </div>
+      <div id="typhour-grid" class="settings-hour-grid"></div>
+    </div>
+
+    <!-- ===== GENRE HOURS PANEL ===== -->
+    <div class="panel" id="panel-genrehour">
+      <div class="panel-header">
+        <div class="panel-title"><div><h2>🎨 Genre Hours</h2><p>Per genre audience multiplier per hour (how well each genre performs at each hour)</p></div></div>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveGenreHour()">💾 Save Changes</button>
+      </div>
+      <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
+        <strong style="color:var(--accent3)">📖 What is this?</strong> Each genre has a performance curve across the day. Horror peaks at night, Family peaks during the day. Select a genre below to edit its 24-hour multiplier curve.
+      </div>
+      <div class="field" style="margin-bottom:18px;max-width:260px">
+        <label>Genre</label>
+        <select id="genrehour-genre-select" onchange="renderGenreHourGrid()">
+          <option value="action">Action</option>
+          <option value="drama">Drama</option>
+          <option value="scifi">SciFi</option>
+          <option value="romantic">Romantic</option>
+          <option value="fantasy">Fantasy</option>
+          <option value="crime">Crime</option>
+          <option value="thriller">Thriller</option>
+          <option value="horror">Horror</option>
+          <option value="mystery">Mystery</option>
+          <option value="adventure">Adventure</option>
+          <option value="family">Family</option>
+          <option value="docu">Documentary</option>
+          <option value="quiz">Quiz Show</option>
+          <option value="reality">Reality Show</option>
+          <option value="antiwar">Antiwar</option>
+          <option value="western">Western</option>
+          <option value="comedy">Comedy</option>
+          <option value="infomercial">Infomercial</option>
+          <option value="dating">Dating Show</option>
+          <option value="cooking">Cooking Show</option>
+          <option value="gameShow">Game Show</option>
+          <option value="sport">Sport</option>
+          <option value="education">Education</option>
+          <option value="talk">Talk Show</option>
+          <option value="information">Information</option>
+          <option value="musicShow">Music Show</option>
+          <option value="talentShow">Talent Show</option>
+        </select>
+      </div>
+      <div id="genrehour-grid" class="settings-hour-grid"></div>
+    </div>
+
+    <!-- ===== BASE VARS PANEL ===== -->
+    <div class="panel" id="panel-basevars">
+      <div class="panel-header">
+        <div class="panel-title"><div><h2>⚙️ Base Variables</h2><p>Core game balance values — viewers, pricing, penalties and debug flags</p></div></div>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveBaseVars()">💾 Save Changes</button>
+      </div>
+      <div style="background:rgba(232,69,106,.08);border:1px solid rgba(232,69,106,.25);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
+        <strong style="color:var(--accent2)">⚠ Advanced:</strong> These values control core game balance. Only change values you understand. Leaving a field unchanged means it will <strong style="color:var(--text)">not</strong> be written to the exported file — the game's defaults will be used instead.
+      </div>
+
+      <div class="section-divider">New Game Limits</div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Max Movies at start <span class="tip">(default: 3)</span></label><input type="number" id="bv_newGameMaxMovies" placeholder="3" min="0"></div>
+        <div class="field"><label>Max Series at start <span class="tip">(default: 3)</span></label><input type="number" id="bv_newGameMaxSeries" placeholder="3" min="0"></div>
+        <div class="field"><label>Max real rating <span class="tip">(default: 30.0)</span></label><input type="number" id="bv_newGameMaxRealRating" placeholder="30.0" step="0.1" min="0"></div>
+      </div>
+
+      <div class="section-divider">Difficulty Multipliers <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">(difficulty0 = Easy, 1 = Normal, 2 = Hard)</span></div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Easy (difficulty0) <span class="tip">(default: 0.2)</span></label><input type="number" id="bv_difficulty0" placeholder="0.2" step="0.05" min="0"></div>
+        <div class="field"><label>Normal (difficulty1) <span class="tip">(default: 0.1)</span></label><input type="number" id="bv_difficulty1" placeholder="0.1" step="0.05" min="0"></div>
+        <div class="field"><label>Hard (difficulty2) <span class="tip">(default: 0.0)</span></label><input type="number" id="bv_difficulty2" placeholder="0.0" step="0.05" min="0"></div>
+      </div>
+
+      <div class="section-divider">Base Viewer Multipliers</div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Base <span class="tip">(default: 0.3)</span></label><input type="number" id="bv_viewsBase" placeholder="0.3" step="0.01" min="0"></div>
+        <div class="field"><label>Movies <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_viewsMovies" placeholder="0.5" step="0.01" min="0"></div>
+        <div class="field"><label>Series <span class="tip">(default: 0.4)</span></label><input type="number" id="bv_viewsSeries" placeholder="0.4" step="0.01" min="0"></div>
+        <div class="field"><label>Live <span class="tip">(default: 1.0)</span></label><input type="number" id="bv_viewsLive" placeholder="1.0" step="0.01" min="0"></div>
+        <div class="field"><label>Teleshop <span class="tip">(default: 0.02)</span></label><input type="number" id="bv_viewsTeleshop" placeholder="0.02" step="0.01" min="0"></div>
+        <div class="field"><label>Shows <span class="tip">(default: 0.6)</span></label><input type="number" id="bv_viewsShows" placeholder="0.6" step="0.01" min="0"></div>
+        <div class="field"><label>News <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_viewsNews" placeholder="0.5" step="0.01" min="0"></div>
+      </div>
+
+      <div class="section-divider">Viewer Bonuses & Penalties</div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Malus <span class="tip">(default: 0.2)</span></label><input type="number" id="bv_viewsMalus" placeholder="0.2" step="0.01" min="0"></div>
+        <div class="field"><label>Bonus <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_viewsBonus" placeholder="0.5" step="0.01" min="0"></div>
+        <div class="field"><label>Cult Movie bonus <span class="tip">(default: 0.05)</span></label><input type="number" id="bv_viewsCultMovie" placeholder="0.05" step="0.01" min="0"></div>
+        <div class="field"><label>Unhappy viewers <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_viewsUnhappy" placeholder="0.5" step="0.01" min="0"></div>
+        <div class="field"><label>Trailer boost <span class="tip">(default: 0.10)</span></label><input type="number" id="bv_viewsTrailer" placeholder="0.10" step="0.01" min="0"></div>
+      </div>
+
+      <div class="section-divider">Era Multipliers <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">(audience modifier based on content release decade)</span></div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>1950s <span class="tip">(default: 0.35)</span></label><input type="number" id="bv_views1950" placeholder="0.35" step="0.05" min="0"></div>
+        <div class="field"><label>1960s <span class="tip">(default: 0.4)</span></label><input type="number" id="bv_views1960" placeholder="0.4" step="0.05" min="0"></div>
+        <div class="field"><label>1970s <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_views1970" placeholder="0.5" step="0.05" min="0"></div>
+        <div class="field"><label>1980s <span class="tip">(default: 0.6)</span></label><input type="number" id="bv_views1980" placeholder="0.6" step="0.05" min="0"></div>
+        <div class="field"><label>1990s <span class="tip">(default: 0.7)</span></label><input type="number" id="bv_views1990" placeholder="0.7" step="0.05" min="0"></div>
+        <div class="field"><label>2000s <span class="tip">(default: 0.8)</span></label><input type="number" id="bv_views2000" placeholder="0.8" step="0.05" min="0"></div>
+        <div class="field"><label>2010s <span class="tip">(default: 0.9)</span></label><input type="number" id="bv_views2010" placeholder="0.9" step="0.05" min="0"></div>
+        <div class="field"><label>2020s <span class="tip">(default: 1.0)</span></label><input type="number" id="bv_views2020" placeholder="1.0" step="0.05" min="0"></div>
+      </div>
+
+      <div class="section-divider">Overheat / Recovery</div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Misc recover <span class="tip">(default: 50.0)</span></label><input type="number" id="bv_miscRecover" placeholder="50.0" step="1" min="0"></div>
+        <div class="field"><label>Movie overheat <span class="tip">(default: 20.0)</span></label><input type="number" id="bv_overheatMovie" placeholder="20.0" step="1" min="0"></div>
+        <div class="field"><label>Series overheat <span class="tip">(default: 5.0)</span></label><input type="number" id="bv_overheatSeries" placeholder="5.0" step="1" min="0"></div>
+        <div class="field"><label>Live overheat <span class="tip">(default: 5.0)</span></label><input type="number" id="bv_overheatLive" placeholder="5.0" step="1" min="0"></div>
+        <div class="field"><label>Teleshop overheat <span class="tip">(default: 50.0)</span></label><input type="number" id="bv_overheatTeleshop" placeholder="50.0" step="1" min="0"></div>
+        <div class="field"><label>Show overheat <span class="tip">(default: 10.0)</span></label><input type="number" id="bv_overheatShow" placeholder="10.0" step="1" min="0"></div>
+        <div class="field"><label>News overheat <span class="tip">(default: 90.0)</span></label><input type="number" id="bv_overheatNews" placeholder="90.0" step="1" min="0"></div>
+      </div>
+
+      <div class="section-divider">Pricing</div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Movie price Easy <span class="tip">(default: 1.5)</span></label><input type="number" id="bv_moviePriceD0" placeholder="1.5" step="0.25" min="0"></div>
+        <div class="field"><label>Movie price Normal <span class="tip">(default: 1.75)</span></label><input type="number" id="bv_moviePriceD1" placeholder="1.75" step="0.25" min="0"></div>
+        <div class="field"><label>Movie price Hard <span class="tip">(default: 2.0)</span></label><input type="number" id="bv_moviePriceD2" placeholder="2.0" step="0.25" min="0"></div>
+        <div class="field"><label>Movie rent price <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_movieRentPrice" placeholder="0.5" step="0.1" min="0"></div>
+        <div class="field"><label>Piracy price <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_moviePiracyPrice" placeholder="0.5" step="0.1" min="0"></div>
+        <div class="field"><label>News price min <span class="tip">(default: 3)</span></label><input type="number" id="bv_newsPriceMin" placeholder="3" min="0"></div>
+        <div class="field"><label>News price max <span class="tip">(default: 10)</span></label><input type="number" id="bv_newsPriceMax" placeholder="10" min="0"></div>
+      </div>
+
+      <div class="section-divider">Penalties</div>
+      <div class="form-grid" style="margin-bottom:18px">
+        <div class="field"><label>Piracy penalty <span class="tip">(default: 250000)</span></label><input type="number" id="bv_penaltyPiracy" placeholder="250000" min="0"></div>
+        <div class="field"><label>Age rating violation penalty <span class="tip">(default: 2500)</span></label><input type="number" id="bv_penaltyAge" placeholder="2500" min="0"></div>
+      </div>
+
+      <div class="section-divider">Debug Flags</div>
+      <div class="toggle-row" style="margin-bottom:18px">
+        <label class="toggle-item" id="bv_debugKeys_toggle">
+          <input type="checkbox" id="bv_debugKeys" onchange="bvDebugChanged('debugKeys')"> Debug Keys enabled
+        </label>
+        <label class="toggle-item" id="bv_debugShowTypHelp_toggle">
+          <input type="checkbox" id="bv_debugShowTypHelp" onchange="bvDebugChanged('debugShowTypHelp')"> Show Type Help overlay
+        </label>
+        <label class="toggle-item" id="bv_debugShowGenreHelp_toggle">
+          <input type="checkbox" id="bv_debugShowGenreHelp" onchange="bvDebugChanged('debugShowGenreHelp')"> Show Genre Help overlay
+        </label>
+      </div>
     </div>
 
   </main>
@@ -338,72 +567,72 @@
 <div class="modal-overlay" id="guideModal">
   <div class="modal">
     <div class="modal-header">
-      <h2>📖 Mod-Installationsanleitung</h2>
+      <h2>📖 How to Install Your Mod</h2>
       <button class="modal-close" onclick="closeGuide()">✕</button>
     </div>
     <div class="modal-body">
       <div class="guide-step">
         <div class="step-num">1</div>
         <div>
-          <h3>Installiere den Modloader — das ist erforderlich!</h3>
-          <p>Der Modloader ist ein kleines Programm, das Mad Television Tycoon ermöglicht, deine eigenen Dateien zu lesen. Ohne ihn ignoriert das Spiel den Mods-Ordner vollständig und nichts, was du hinzufügst, wird angezeigt.</p>
+          <h3>Install the Modloader — this is required!</h3>
+          <p>The Modloader is a small program that makes Mad Television Tycoon able to read your custom files. Without it, the game completely ignores the Mods folder and nothing you add will show up.</p>
           <div class="guide-note" style="background:rgba(232,69,106,.08);border-color:rgba(232,69,106,.3);margin-top:10px">
-            <strong style="color:var(--accent2)">⚠ Dein Mod funktioniert NICHT ohne den Modloader.</strong><br>
-            <a href="https://www.moddb.com/mods/modloader" target="_blank" style="color:var(--accent);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(245,166,35,.5)">⬇ Modloader von ModDB herunterladen →</a>
+            <strong style="color:var(--accent2)">⚠ Your mod will NOT work without the Modloader.</strong><br>
+            <a href="https://www.moddb.com/mods/modloader" target="_blank" style="color:var(--accent);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(245,166,35,.5)">⬇ Download Modloader from ModDB →</a>
           </div>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">2</div>
         <div>
-          <h3>Lege deinen Mod-Namen fest</h3>
-          <p>Gib in der oberen Leiste dieses Tools einen eindeutigen Namen in das Feld <strong>Mod-Name</strong> ein – zum Beispiel deinen Benutzernamen oder den Namen deines Mods. Dieser wird als Präfix in deinen Dateinamen verwendet, um Konflikte mit anderen Mods zu vermeiden. Nur Buchstaben und Zahlen, keine Leerzeichen.</p>
+          <h3>Set your Mod Name</h3>
+          <p>In the top bar of this tool, type a unique name into the <strong>Mod Name</strong> field — something like your username or the name of your mod. This gets used as a prefix in your filenames to prevent clashes with other mods. Letters and numbers only, no spaces.</p>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">3</div>
         <div>
-          <h3>Erstelle deinen Inhalt hier</h3>
-          <p>Nutze die Tabs auf der linken Seite, um Filme, Serien, Shows, Besetzungsmitglieder und mehr hinzuzufügen. Keine JSON-Kenntnisse erforderlich – fülle einfach die Formulare aus und klicke bei jedem Eintrag auf Speichern.</p>
+          <h3>Create your content here</h3>
+          <p>Use the tabs on the left to add movies, TV series, shows, cast members, and more. No JSON knowledge needed — just fill out the forms and click Save on each entry.</p>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">4</div>
         <div>
-          <h3>Exportiere deine Mod-Dateien</h3>
-          <p>Klicke unten links auf <strong style="color:var(--accent)">Mod exportieren</strong>. Lade nur die Dateien herunter, für die du tatsächlich Inhalte erstellt hast. Jeder Dateityp gehört zu einem anderen Spielbereich:</p>
+          <h3>Export your mod files</h3>
+          <p>Click <strong style="color:var(--accent)">Export Mod</strong> in the bottom-left. Download only the files for content you actually added. Each file type maps to a different part of the game:</p>
           <table class="guide-table" style="margin-top:10px">
-            <tr><th>Du hast hinzugefügt...</th><th>Diese Datei herunterladen</th></tr>
-            <tr><td>Filme, Serien, Shows</td><td class="file-name">deinname_items.json</td></tr>
-            <tr><td>Besetzungsmitglieder</td><td class="file-name">deinname_cast.json</td></tr>
-            <tr><td>Namenslisten (für Zufallsgenerierung)</td><td class="file-name">deinname_names.json</td></tr>
-            <tr><td>Kritiktexte</td><td class="file-name">deinname_reviews.json</td></tr>
+            <tr><th>You added...</th><th>Download this file</th></tr>
+            <tr><td>Movies, TV Series, Shows</td><td class="file-name">yourname_items.json</td></tr>
+            <tr><td>Cast members</td><td class="file-name">yourname_cast.json</td></tr>
+            <tr><td>Name lists (for random generation)</td><td class="file-name">yourname_names.json</td></tr>
+            <tr><td>Review texts</td><td class="file-name">yourname_reviews.json</td></tr>
           </table>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">5</div>
         <div>
-          <h3>Lege die Dateien in den Mods-Ordner</h3>
-          <p>Öffne deinen Mad Television Tycoon Installationsordner. Ziehe deine heruntergeladenen JSON-Dateien in den <span class="code-tag">Mods</span>-Ordner darin.</p>
+          <h3>Drop the files into the Mods folder</h3>
+          <p>Open your Mad Television Tycoon installation folder. Drag and drop your downloaded JSON files into the <span class="code-tag">Mods</span> folder inside it.</p>
           <div class="guide-note">
-            <strong>Den Ordner auf Steam finden:</strong><br>
-            Klicke mit der rechten Maustaste auf Mad Television Tycoon in deiner Steam-Bibliothek → <em>Verwalten → Lokale Dateien durchsuchen</em>.<br>
-            Den <span class="code-tag">Mods</span>-Ordner findest du direkt dort.
+            <strong>Finding the folder on Steam:</strong><br>
+            Right-click Mad Television Tycoon in your Steam library → <em>Manage → Browse local files</em>.<br>
+            You'll see the <span class="code-tag">Mods</span> folder right there.
           </div>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">6</div>
         <div>
-          <h3>Starte das Spiel und viel Spaß!</h3>
-          <p>Starte Mad Television Tycoon ganz normal. Wenn der Modloader installiert ist und deine Dateien korrekt benannt sind, erscheinen deine Inhalte automatisch im Spiel.</p>
+          <h3>Launch the game and enjoy!</h3>
+          <p>Start Mad Television Tycoon normally. If the Modloader is installed and your files are named correctly, your content appears in the game automatically.</p>
           <div class="guide-note">
-            <strong>Checkliste falls etwas nicht funktioniert:</strong><br>
-            ✅ Modloader ist installiert<br>
-            ✅ Dateiname verwendet dieses Muster: <span class="code-tag">deinname_items.json</span><br>
-            ✅ Der Teil nach dem Unterstrich lautet exakt: <span class="code-tag">items</span>, <span class="code-tag">cast</span>, <span class="code-tag">names</span> oder <span class="code-tag">reviews</span><br>
-            ✅ Keine zwei Mods haben dasselbe Dateinamen-Präfix (den "deinname"-Teil)
+            <strong>Checklist if something isn't working:</strong><br>
+            ✅ Modloader is installed<br>
+            ✅ Filename uses this pattern: <span class="code-tag">yourname_items.json</span><br>
+            ✅ The part after the underscore is exactly: <span class="code-tag">items</span>, <span class="code-tag">cast</span>, <span class="code-tag">names</span>, or <span class="code-tag">reviews</span><br>
+            ✅ No two mods share the same filename prefix (the "yourname" part)
           </div>
         </div>
       </div>
@@ -414,13 +643,13 @@
 <!-- EXPORT PANEL -->
 <div id="exportPanel">
   <div class="export-panel-header">
-    <h2>⬇ Mod exportieren</h2>
+    <h2>⬇ Export Mod</h2>
     <button class="modal-close" onclick="closeExport()">✕</button>
   </div>
   <div class="export-panel-body" id="exportBody"></div>
 </div>
 
-<div id="toast">✅ <span id="toastMsg">Fertig!</span></div>
+<div id="toast">✅ <span id="toastMsg">Done!</span></div>
 
 <script>
 // ============ VANILLA DATA ============
@@ -434,13 +663,13 @@ const VANILLA_ITEM_IDS = new Set([1,2,3,4,5,6,7,8,9,10,11,100,101,102,103,104,10
 const store = { movies:[], series:[], shows:[], cast:[], names:[], reviews:[] };
 
 // ============ CONSTANTS ============
-const GENRES = [[0,'Action'],[1,'SciFi'],[2,'SciFi (Horror)'],[3,'Romantik'],[4,'Abenteuer'],[5,'Dokumentation'],[6,'Thriller'],[7,'Horror'],[8,'Mystery'],[9,'Antikrieg'],[10,'Fantasy'],[11,'Familie'],[12,'Krimi'],[13,'Drama'],[14,'Komödie'],[15,'Western'],[16,'Quizshow'],[17,'Realityshow'],[18,'Datingshow'],[19,'Kochshow'],[20,'Spielshow'],[21,'Talkshow'],[22,'Musikshow'],[23,'Talentshow'],[24,'Nachrichten'],[25,'Sonstiges']];
+const GENRES = [[0,'Action'],[1,'SciFi'],[2,'SciFi (Horror)'],[3,'Romance'],[4,'Adventure'],[5,'Documentary'],[6,'Thriller'],[7,'Horror'],[8,'Mystery'],[9,'Antiwar'],[10,'Fantasy'],[11,'Family'],[12,'Crime'],[13,'Drama'],[14,'Comedy'],[15,'Western'],[16,'Quiz Show'],[17,'Reality Show'],[18,'Dating Show'],[19,'Cooking Show'],[20,'Game Show'],[21,'Talk Show'],[22,'Music Show'],[23,'Talent Show'],[24,'News'],[25,'Misc']];
 const GENRE_OPTS = GENRES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
-const AGE_OPTS = [[0,'Alle Altersgruppen'],[6,'Ab 6 Jahren'],[12,'Ab 12 Jahren'],[16,'Ab 16 Jahren'],[18,'Ab 18 Jahren']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
-const COUNTRY_OPTS = [[0,'USA'],[1,'UK'],[2,'Deutschland'],[3,'Frankreich'],[4,'Japan'],[5,'Sonstiges']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
-const JOB_LABELS = ['Regisseur','Schauspieler/in','Produzent','Moderator','Moderator'];
+const AGE_OPTS = [[0,'All ages'],[6,'Age 6+'],[12,'Age 12+'],[16,'Age 16+'],[18,'Age 18+']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+const COUNTRY_OPTS = [[0,'USA'],[1,'UK'],[2,'Germany'],[3,'France'],[4,'Japan'],[5,'Other']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+const JOB_LABELS = ['Director','Actor/Actress','Producer','Presenter','Moderator'];
 const JOB_OPTS = JOB_LABELS.map((l,v)=>`<option value="${v}">${l}</option>`).join('');
-const SHOW_TYPES = [[16,'Quizshow'],[17,'Realityshow'],[18,'Datingshow'],[19,'Kochshow'],[20,'Spielshow'],[21,'Talkshow'],[22,'Musikshow'],[23,'Talentshow'],[24,'Nachrichten']];
+const SHOW_TYPES = [[16,'Quiz Show'],[17,'Reality Show'],[18,'Dating Show'],[19,'Cooking Show'],[20,'Game Show'],[21,'Talk Show'],[22,'Music Show'],[23,'Talent Show'],[24,'News']];
 const SHOW_TYPE_OPTS = SHOW_TYPES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
 const NAME_CATEGORIES = ['Action','Drama','SciFi','Romantic','Fantasy','Crime','Thriller','Horror','Mystery','Adventure','Family','Docu','Antiwar','Western','Comedy','QuizShow','RealityShow','DatingShow','CookingShow','GameShow','TalkShow','MusicShow','TalentShow'];
 
@@ -465,14 +694,6 @@ function generateSafeId(type) {
   return id;
 }
 
-// ============ TAB SWITCHING ============
-function switchTab(name) {
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-  document.getElementById('tab-'+name).classList.add('active');
-}
-
 // ============ GENERIC ENTRY ADD ============
 function addEntry(type) {
   const id = generateSafeId(type);
@@ -495,7 +716,7 @@ function renderType(type) {
 }
 
 function deleteEntry(type, i) {
-  if(!confirm('Diesen Eintrag löschen? Dies kann nicht rückgängig gemacht werden.')) return;
+  if(!confirm('Delete this entry? This cannot be undone.')) return;
   store[type].splice(i,1);
   renderType(type);
   updateCount(type);
@@ -531,14 +752,14 @@ function buildCreditsWidget(uid, selectedIds) {
   const selSet = new Set(selectedIds||[]);
   return `
     <div class="credits-wrapper" id="cw_${uid}">
-      <div class="credits-search"><input type="text" placeholder="🔍 Nach Name oder ID suchen..." oninput="filterCredits('${uid}',this.value)" id="csearch_${uid}"></div>
+      <div class="credits-search"><input type="text" placeholder="🔍 Search by name or ID..." oninput="filterCredits('${uid}',this.value)" id="csearch_${uid}"></div>
       <div class="credits-list" id="clist_${uid}">
         ${all.map((c,idx)=>`
           <label class="credits-item ${selSet.has(c.id)?'selected':''}" id="ci_${uid}_${c.id}">
             <input type="checkbox" value="${c.id}" ${selSet.has(c.id)?'checked':''}
               onchange="toggleCredit('${uid}',${c.id},this.checked)">
             <span class="ci-job job-${c.job}">${JOB_LABELS[c.job]||'?'}</span>
-            <span>${esc(c.name)}${c.isOwn?' <span style=\'color:var(--accent3);font-size:10px\'>(dein Mod)</span>':''}</span>
+            <span>${esc(c.name)}${c.isOwn?' <span style=\'color:var(--accent3);font-size:10px\'>(your mod)</span>':''}</span>
             <span class="ci-id">#${c.id}</span>
           </label>
         `).join('')}
@@ -569,7 +790,7 @@ function getSelectedCredits(uid) {
 }
 
 function buildCreditsPreview(selSet) {
-  if(!selSet.size) return '<span style="color:var(--text-dim)">Noch keine Mitwirkenden ausgewählt</span>';
+  if(!selSet.size) return '<span style="color:var(--text-dim)">No credits selected yet</span>';
   const all = getAllCast();
   const selected = all.filter(c=>selSet.has(c.id));
   return selected.map(c=>`<span style="color:var(--accent)">#${c.id}</span> ${esc(c.name)}`).join(' · ');
@@ -588,10 +809,10 @@ function range(id, min, max, val, step=1) {
 // ============ ID FIELD ============
 function idField(uid, id, type) {
   return `<div class="field">
-    <label>Eintrags-ID <span class="tip">(eindeutig — ändern bei Konflikt mit anderem Mod)</span></label>
+    <label>Entry ID <span class="tip">(unique — change if it conflicts with another mod)</span></label>
     <div class="id-row">
       <input type="number" id="${uid}_id" value="${id}" min="1" max="9999999" style="font-family:'JetBrains Mono',monospace;color:var(--accent3)">
-      <button class="id-regen-btn" onclick="regenId('${uid}','${type}')" title="Neue zufällige ID generieren">🎲 Neue ID</button>
+      <button class="id-regen-btn" onclick="regenId('${uid}','${type}')" title="Generate a new random ID">🎲 New ID</button>
     </div>
   </div>`;
 }
@@ -599,13 +820,13 @@ function idField(uid, id, type) {
 function regenId(uid, type) {
   const newId = generateSafeId(type);
   document.getElementById(uid+'_id').value = newId;
-  showToast('Neue ID: ' + newId);
+  showToast('New ID: ' + newId);
 }
 
 // ============ MOVIES ============
 function renderMovies() {
   const list = document.getElementById('movies-list');
-  if(!store.movies.length) { list.innerHTML = `<div class="empty-state"><div class="big-icon">🎬</div><h3>Noch keine Filme</h3><p>Click "Add Movie" to add your first film to the game.</p></div>`; return; }
+  if(!store.movies.length) { list.innerHTML = `<div class="empty-state"><div class="big-icon">🎬</div><h3>No movies yet</h3><p>Click "Add Movie" to add your first film to the game.</p></div>`; return; }
   list.innerHTML = store.movies.map((m,i)=>movieCard(m,i)).join('');
 }
 
@@ -616,7 +837,7 @@ function movieCard(m,i) {
     <div class="entry-header" onclick="toggleCard(document.getElementById('card_${uid}'))">
       <span class="entry-num">#${i+1}</span>
       <span class="entry-id-badge">ID:${m._id}</span>
-      <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Unbenannter Film'}</span>
+      <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Untitled Movie'}</span>
       <span class="entry-chevron">▶</span>
       <button class="entry-del" onclick="event.stopPropagation();deleteEntry('movies',${i})">🗑</button>
     </div>
@@ -624,51 +845,51 @@ function movieCard(m,i) {
       <div class="form-grid">
         ${idField(uid, m._id, 'items')}
         <div class="field">
-          <label>Filmtitel (Englisch)<span class="req">*</span></label>
-          <input type="text" id="${uid}_name" value="${esc(m.name)}" placeholder="z.B. Die dunkle Gasse"
-            oninput="store.movies[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Unbenannter Film')">
+          <label>Movie Title (English)<span class="req">*</span></label>
+          <input type="text" id="${uid}_name" value="${esc(m.name)}" placeholder="e.g. The Dark Alley"
+            oninput="store.movies[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Untitled Movie')">
         </div>
         <div class="field form-full">
-          <label>Titel auf Deutsch <span class="tip">(optional — wie Englisch, falls leer)</span></label>
-          <input type="text" id="${uid}_name_de" value="${esc(m.name_de)}" placeholder="Deutschen Titel">
+          <label>Title in German <span class="tip">(optional — same as English if blank)</span></label>
+          <input type="text" id="${uid}_name_de" value="${esc(m.name_de)}" placeholder="German title">
         </div>
         <div class="field form-full">
-          <label>Beschreibung / Handlung (Englisch)<span class="req">*</span></label>
-          <textarea id="${uid}_desc" placeholder="Kurze Inhaltsangabe...">${esc(m.desc)}</textarea>
+          <label>Description / Plot (English)<span class="req">*</span></label>
+          <textarea id="${uid}_desc" placeholder="Brief plot summary...">${esc(m.desc)}</textarea>
         </div>
         <div class="field form-full">
-          <label>Beschreibung (Deutsch) <span class="tip">(optional)</span></label>
+          <label>Description (German) <span class="tip">(optional)</span></label>
           <textarea id="${uid}_desc_de">${esc(m.desc_de)}</textarea>
         </div>
       </div>
       <div class="section-divider">Details</div>
       <div class="form-grid cols-3">
         <div class="field"><label>Genre</label><select id="${uid}_genre">${GENRE_OPTS}</select></div>
-        <div class="field"><label>Altersfreigabe</label><select id="${uid}_age">${AGE_OPTS}</select></div>
-        <div class="field"><label>Land</label><select id="${uid}_country">${COUNTRY_OPTS}</select></div>
-        <div class="field"><label>Erscheinungsjahr <span class="tip">(0 = unbekannt)</span></label><input type="number" id="${uid}_year" value="${m.year||0}" min="0" max="2099"></div>
-        <div class="field"><label>Länge (Blöcke) <span class="tip">1 Block ≈ 1 Std.</span></label><select id="${uid}_blocks"><option value="1">1 Block</option><option value="2" selected>2 Blöcke</option><option value="3">3 Blöcke</option></select></div>
-        <div class="field"><label>Preis</label><input type="number" id="${uid}_price" value="${m.price||0}" min="0"></div>
+        <div class="field"><label>Age Rating</label><select id="${uid}_age">${AGE_OPTS}</select></div>
+        <div class="field"><label>Country</label><select id="${uid}_country">${COUNTRY_OPTS}</select></div>
+        <div class="field"><label>Release Year <span class="tip">(0 = unknown)</span></label><input type="number" id="${uid}_year" value="${m.year||0}" min="0" max="2099"></div>
+        <div class="field"><label>Duration (Blocks) <span class="tip">1 block ≈ 1hr</span></label><select id="${uid}_blocks"><option value="1">1 Block</option><option value="2" selected>2 Blocks</option><option value="3">3 Blocks</option></select></div>
+        <div class="field"><label>Price</label><input type="number" id="${uid}_price" value="${m.price||0}" min="0"></div>
       </div>
-      <div class="section-divider">Bewertungen & Leistung</div>
+      <div class="section-divider">Ratings & Performance</div>
       <div class="form-grid">
-        <div class="field"><label>Qualitätsbewertung <span class="tip">(0–100)</span></label>${range(uid+'_rating',0,100,m.rating||60)}</div>
-        <div class="field"><label>Zuschaueranziehungskraft <span class="tip">(0–100)</span></label>${range(uid+'_potential',0,100,m.potential||50)}</div>
-        <div class="field"><label>Ausstrahlungschance <span class="tip">(% im Sendepool)</span></label>${range(uid+'_chance',0,100,m.chance||10)}</div>
-        <div class="field"><label>Freigabe <span class="tip">(255 = verfügbar)</span></label>${range(uid+'_approval',0,255,m.approval!=null?m.approval:255)}</div>
+        <div class="field"><label>Quality Rating <span class="tip">(0–100)</span></label>${range(uid+'_rating',0,100,m.rating||60)}</div>
+        <div class="field"><label>Audience Potential <span class="tip">(0–100)</span></label>${range(uid+'_potential',0,100,m.potential||50)}</div>
+        <div class="field"><label>Chance to Appear <span class="tip">(% in broadcast pool)</span></label>${range(uid+'_chance',0,100,m.chance||10)}</div>
+        <div class="field"><label>Approval <span class="tip">(255 = available)</span></label>${range(uid+'_approval',0,255,m.approval!=null?m.approval:255)}</div>
       </div>
-      <div class="section-divider">Besondere Eigenschaften</div>
+      <div class="section-divider">Special Flags</div>
       <div class="toggle-row">
-        <label class="toggle-item"><input type="checkbox" id="${uid}_cult" ${m.cult?'checked':''}> Kultklassiker</label>
-        <label class="toggle-item"><input type="checkbox" id="${uid}_timeless" ${m.timeless?'checked':''}> Zeitlos</label>
+        <label class="toggle-item"><input type="checkbox" id="${uid}_cult" ${m.cult?'checked':''}> Cult Classic</label>
+        <label class="toggle-item"><input type="checkbox" id="${uid}_timeless" ${m.timeless?'checked':''}> Timeless</label>
         <label class="toggle-item"><input type="checkbox" id="${uid}_evergreen" ${m.evergreen?'checked':''}> Evergreen</label>
         <label class="toggle-item"><input type="checkbox" id="${uid}_premium" ${m.premium?'checked':''}> Premium</label>
-        <label class="toggle-item"><input type="checkbox" id="${uid}_pirated" ${m.pirated?'checked':''}> Raubkopie</label>
+        <label class="toggle-item"><input type="checkbox" id="${uid}_pirated" ${m.pirated?'checked':''}> Pirated Copy</label>
       </div>
-      <div class="section-divider">Mitwirkende <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">— zuerst Regisseur(e), dann Schauspieler</span></div>
+      <div class="section-divider">Credits <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">— pick director(s) first, then actors</span></div>
       ${buildCreditsWidget(uid, selIds)}
       <div style="margin-top:18px;display:flex;justify-content:flex-end">
-        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveMovie(${i})">💾 Speichern</button>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveMovie(${i})">💾 Save</button>
       </div>
     </div>
   </div>`;
@@ -687,13 +908,13 @@ function saveMovie(i) {
   m.chance=vn(uid+'_chance'); m.approval=vn(uid+'_approval');
   m.cult=vc(uid+'_cult'); m.timeless=vc(uid+'_timeless');
   m.evergreen=vc(uid+'_evergreen'); m.premium=vc(uid+'_premium'); m.pirated=vc(uid+'_pirated');
-  showToast('Film gespeichert!'); renderMovies();
+  showToast('Movie saved!'); renderMovies();
 }
 
 // ============ SERIES ============
 function renderSeries() {
   const list=document.getElementById('series-list');
-  if(!store.series.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">📡</div><h3>Noch keine Serien</h3><p>Click "Add Series" to create a TV series with multiple episodes.</p></div>`; return; }
+  if(!store.series.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">📡</div><h3>No series yet</h3><p>Click "Add Series" to create a TV series with multiple episodes.</p></div>`; return; }
   list.innerHTML=store.series.map((s,i)=>seriesCard(s,i)).join('');
 }
 
@@ -703,49 +924,49 @@ function seriesCard(s,i) {
     <div class="entry-header" onclick="toggleCard(document.getElementById('card_${uid}'))">
       <span class="entry-num">#${i+1}</span>
       <span class="entry-id-badge">ID:${s._id}</span>
-      <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Unbenannte Serie'}</span>
+      <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Untitled Series'}</span>
       <span class="entry-chevron">▶</span>
       <button class="entry-del" onclick="event.stopPropagation();deleteEntry('series',${i})">🗑</button>
     </div>
     <div class="entry-body">
       <div class="form-grid">
         ${idField(uid, s._id, 'items')}
-        <div class="field"><label>Serientitel (Englisch)<span class="req">*</span></label>
-          <input type="text" id="${uid}_name" value="${esc(s.name)}" placeholder="z.B. Die Nachtwache"
-            oninput="store.series[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Unbenannte Serie')">
+        <div class="field"><label>Series Title (English)<span class="req">*</span></label>
+          <input type="text" id="${uid}_name" value="${esc(s.name)}" placeholder="e.g. Night Watch"
+            oninput="store.series[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Untitled Series')">
         </div>
-        <div class="field form-full"><label>Titel auf Deutsch <span class="tip">(optional)</span></label><input type="text" id="${uid}_name_de" value="${esc(s.name_de)}" placeholder="Deutschen Titel"></div>
-        <div class="field form-full"><label>Beschreibung (Englisch)<span class="req">*</span></label><textarea id="${uid}_desc" placeholder="Worum geht es in dieser Serie?">${esc(s.desc)}</textarea></div>
-        <div class="field form-full"><label>Beschreibung (Deutsch) <span class="tip">(optional)</span></label><textarea id="${uid}_desc_de">${esc(s.desc_de)}</textarea></div>
+        <div class="field form-full"><label>Title in German <span class="tip">(optional)</span></label><input type="text" id="${uid}_name_de" value="${esc(s.name_de)}" placeholder="German title"></div>
+        <div class="field form-full"><label>Description (English)<span class="req">*</span></label><textarea id="${uid}_desc" placeholder="What is this series about?">${esc(s.desc)}</textarea></div>
+        <div class="field form-full"><label>Description (German) <span class="tip">(optional)</span></label><textarea id="${uid}_desc_de">${esc(s.desc_de)}</textarea></div>
       </div>
       <div class="section-divider">Details</div>
       <div class="form-grid cols-3">
         <div class="field"><label>Genre</label><select id="${uid}_genre">${GENRE_OPTS}</select></div>
-        <div class="field"><label>Altersfreigabe</label><select id="${uid}_age">${AGE_OPTS}</select></div>
-        <div class="field"><label>Land</label><select id="${uid}_country">${COUNTRY_OPTS}</select></div>
-        <div class="field"><label>Erscheinungsjahr</label><input type="number" id="${uid}_year" value="${s.year||0}" min="0" max="2099"></div>
-        <div class="field"><label>Episoden</label><input type="number" id="${uid}_episodes" value="${s.episodes||1}" min="1" max="200"></div>
-        <div class="field"><label>Blöcke pro Episode</label><select id="${uid}_blocks"><option value="1" selected>1 Block</option><option value="2">2 Blöcke</option></select></div>
-        <div class="field"><label>Preis</label><input type="number" id="${uid}_price" value="${s.price||0}" min="0"></div>
+        <div class="field"><label>Age Rating</label><select id="${uid}_age">${AGE_OPTS}</select></div>
+        <div class="field"><label>Country</label><select id="${uid}_country">${COUNTRY_OPTS}</select></div>
+        <div class="field"><label>Release Year</label><input type="number" id="${uid}_year" value="${s.year||0}" min="0" max="2099"></div>
+        <div class="field"><label>Episodes</label><input type="number" id="${uid}_episodes" value="${s.episodes||1}" min="1" max="200"></div>
+        <div class="field"><label>Blocks per Episode</label><select id="${uid}_blocks"><option value="1" selected>1 Block</option><option value="2">2 Blocks</option></select></div>
+        <div class="field"><label>Price</label><input type="number" id="${uid}_price" value="${s.price||0}" min="0"></div>
       </div>
-      <div class="section-divider">Bewertungen & Leistung</div>
+      <div class="section-divider">Ratings & Performance</div>
       <div class="form-grid">
-        <div class="field"><label>Qualitätsbewertung (0–100)</label>${range(uid+'_rating',0,100,s.rating||65)}</div>
-        <div class="field"><label>Zuschaueranziehungskraft (0–100)</label>${range(uid+'_potential',0,100,s.potential||55)}</div>
-        <div class="field"><label>Ausstrahlungschance (%)</label>${range(uid+'_chance',0,100,s.chance||10)}</div>
-        <div class="field"><label>Freigabe (255 = verfügbar)</label>${range(uid+'_approval',0,255,s.approval!=null?s.approval:255)}</div>
+        <div class="field"><label>Quality Rating (0–100)</label>${range(uid+'_rating',0,100,s.rating||65)}</div>
+        <div class="field"><label>Audience Potential (0–100)</label>${range(uid+'_potential',0,100,s.potential||55)}</div>
+        <div class="field"><label>Chance to Appear (%)</label>${range(uid+'_chance',0,100,s.chance||10)}</div>
+        <div class="field"><label>Approval (255 = available)</label>${range(uid+'_approval',0,255,s.approval!=null?s.approval:255)}</div>
       </div>
-      <div class="section-divider">Besondere Eigenschaften</div>
+      <div class="section-divider">Special Flags</div>
       <div class="toggle-row">
-        <label class="toggle-item"><input type="checkbox" id="${uid}_cult" ${s.cult?'checked':''}> Kultklassiker</label>
-        <label class="toggle-item"><input type="checkbox" id="${uid}_timeless" ${s.timeless?'checked':''}> Zeitlos</label>
+        <label class="toggle-item"><input type="checkbox" id="${uid}_cult" ${s.cult?'checked':''}> Cult Classic</label>
+        <label class="toggle-item"><input type="checkbox" id="${uid}_timeless" ${s.timeless?'checked':''}> Timeless</label>
         <label class="toggle-item"><input type="checkbox" id="${uid}_evergreen" ${s.evergreen?'checked':''}> Evergreen</label>
         <label class="toggle-item"><input type="checkbox" id="${uid}_premium" ${s.premium?'checked':''}> Premium</label>
       </div>
       <div class="section-divider">Credits</div>
       ${buildCreditsWidget(uid, s.credits_ids||[])}
       <div style="margin-top:18px;display:flex;justify-content:flex-end">
-        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveSeries(${i})">💾 Speichern</button>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveSeries(${i})">💾 Save</button>
       </div>
     </div>
   </div>`;
@@ -764,13 +985,13 @@ function saveSeries(i) {
   s.chance=vn(uid+'_chance'); s.approval=vn(uid+'_approval');
   s.cult=vc(uid+'_cult'); s.timeless=vc(uid+'_timeless');
   s.evergreen=vc(uid+'_evergreen'); s.premium=vc(uid+'_premium');
-  showToast('Serie gespeichert!'); renderSeries();
+  showToast('Series saved!'); renderSeries();
 }
 
 // ============ SHOWS ============
 function renderShows() {
   const list=document.getElementById('shows-list');
-  if(!store.shows.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">🎭</div><h3>Noch keine Shows</h3><p>Klicke auf "Show hinzufügen" für Quizshows, Spielshows, Talkshows, Kochshows usw.</p></div>`; return; }
+  if(!store.shows.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">🎭</div><h3>No shows yet</h3><p>Click "Add Show" for quiz shows, game shows, talk shows, cooking shows, etc.</p></div>`; return; }
   list.innerHTML=store.shows.map((s,i)=>showCard(s,i)).join('');
 }
 
@@ -780,39 +1001,39 @@ function showCard(s,i) {
     <div class="entry-header" onclick="toggleCard(document.getElementById('card_${uid}'))">
       <span class="entry-num">#${i+1}</span>
       <span class="entry-id-badge">ID:${s._id}</span>
-      <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Unbenannte Show'}</span>
+      <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Untitled Show'}</span>
       <span class="entry-chevron">▶</span>
       <button class="entry-del" onclick="event.stopPropagation();deleteEntry('shows',${i})">🗑</button>
     </div>
     <div class="entry-body">
       <div class="form-grid">
         ${idField(uid, s._id, 'items')}
-        <div class="field"><label>Showtitel (Englisch)<span class="req">*</span></label>
-          <input type="text" id="${uid}_name" value="${esc(s.name)}" placeholder="z.B. Der große Quizabend"
-            oninput="store.shows[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Unbenannte Show')">
+        <div class="field"><label>Show Title (English)<span class="req">*</span></label>
+          <input type="text" id="${uid}_name" value="${esc(s.name)}" placeholder="e.g. The Big Quiz Night"
+            oninput="store.shows[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Untitled Show')">
         </div>
-        <div class="field form-full"><label>Titel auf Deutsch <span class="tip">(optional)</span></label><input type="text" id="${uid}_name_de" value="${esc(s.name_de)}" placeholder="Deutschen Titel"></div>
-        <div class="field form-full"><label>Beschreibung (Englisch)<span class="req">*</span></label><textarea id="${uid}_desc" placeholder="Was passiert in dieser Show?">${esc(s.desc)}</textarea></div>
-        <div class="field form-full"><label>Beschreibung (Deutsch) <span class="tip">(optional)</span></label><textarea id="${uid}_desc_de">${esc(s.desc_de)}</textarea></div>
+        <div class="field form-full"><label>Title in German <span class="tip">(optional)</span></label><input type="text" id="${uid}_name_de" value="${esc(s.name_de)}" placeholder="German title"></div>
+        <div class="field form-full"><label>Description (English)<span class="req">*</span></label><textarea id="${uid}_desc" placeholder="What happens in this show?">${esc(s.desc)}</textarea></div>
+        <div class="field form-full"><label>Description (German) <span class="tip">(optional)</span></label><textarea id="${uid}_desc_de">${esc(s.desc_de)}</textarea></div>
       </div>
-      <div class="section-divider">Showtyp & Details</div>
+      <div class="section-divider">Show Type & Details</div>
       <div class="form-grid cols-3">
-        <div class="field"><label>Showtyp</label><select id="${uid}_typ">${SHOW_TYPE_OPTS}</select></div>
-        <div class="field"><label>Altersfreigabe</label><select id="${uid}_age">${AGE_OPTS}</select></div>
-        <div class="field"><label>Länge (Blöcke)</label><select id="${uid}_blocks"><option value="1" selected>1 Block</option><option value="2">2 Blöcke</option></select></div>
-        <div class="field"><label>Erscheinungsjahr</label><input type="number" id="${uid}_year" value="${s.year||0}" min="0" max="2099"></div>
-        <div class="field"><label>Preis</label><input type="number" id="${uid}_price" value="${s.price||0}" min="0"></div>
+        <div class="field"><label>Show Type</label><select id="${uid}_typ">${SHOW_TYPE_OPTS}</select></div>
+        <div class="field"><label>Age Rating</label><select id="${uid}_age">${AGE_OPTS}</select></div>
+        <div class="field"><label>Duration (Blocks)</label><select id="${uid}_blocks"><option value="1" selected>1 Block</option><option value="2">2 Blocks</option></select></div>
+        <div class="field"><label>Release Year</label><input type="number" id="${uid}_year" value="${s.year||0}" min="0" max="2099"></div>
+        <div class="field"><label>Price</label><input type="number" id="${uid}_price" value="${s.price||0}" min="0"></div>
       </div>
-      <div class="section-divider">Bewertungen & Leistung</div>
+      <div class="section-divider">Ratings & Performance</div>
       <div class="form-grid">
-        <div class="field"><label>Qualitätsbewertung (0–100)</label>${range(uid+'_rating',0,100,s.rating||60)}</div>
-        <div class="field"><label>Zuschaueranziehungskraft (0–100)</label>${range(uid+'_potential',0,100,s.potential||50)}</div>
-        <div class="field"><label>Freigabe (255 = verfügbar)</label>${range(uid+'_approval',0,255,s.approval!=null?s.approval:255)}</div>
+        <div class="field"><label>Quality Rating (0–100)</label>${range(uid+'_rating',0,100,s.rating||60)}</div>
+        <div class="field"><label>Audience Potential (0–100)</label>${range(uid+'_potential',0,100,s.potential||50)}</div>
+        <div class="field"><label>Approval (255 = available)</label>${range(uid+'_approval',0,255,s.approval!=null?s.approval:255)}</div>
       </div>
-      <div class="section-divider">Mitwirkende <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">— Moderatoren, Hosts oder Besetzung</span></div>
+      <div class="section-divider">Credits <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">— pick presenter(s), hosts or cast</span></div>
       ${buildCreditsWidget(uid, s.credits_ids||[])}
       <div style="margin-top:18px;display:flex;justify-content:flex-end">
-        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveShow(${i})">💾 Speichern</button>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveShow(${i})">💾 Save</button>
       </div>
     </div>
   </div>`;
@@ -828,13 +1049,13 @@ function saveShow(i) {
   s.typ=vn(uid+'_typ'); s.age=vn(uid+'_age'); s.blocks=vn(uid+'_blocks');
   s.year=vn(uid+'_year'); s.price=vn(uid+'_price');
   s.rating=vn(uid+'_rating'); s.potential=vn(uid+'_potential'); s.approval=vn(uid+'_approval');
-  showToast('Show gespeichert!'); renderShows();
+  showToast('Show saved!'); renderShows();
 }
 
 // ============ CAST ============
 function renderCast() {
   const list=document.getElementById('cast-list');
-  if(!store.cast.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">🧑‍🎤</div><h3>Noch keine Besetzungsmitglieder</h3><p>Add directors, actors or other crew here.</p></div>`; return; }
+  if(!store.cast.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">🧑‍🎤</div><h3>No cast members yet</h3><p>Add directors, actors or other crew here.</p></div>`; return; }
   list.innerHTML=store.cast.map((c,i)=>castCard(c,i)).join('');
 }
 
@@ -844,32 +1065,32 @@ function castCard(c,i) {
     <div class="entry-header" onclick="toggleCard(document.getElementById('card_${uid}'))">
       <span class="entry-num">#${i+1}</span>
       <span class="entry-id-badge">ID:${c._id}</span>
-      <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Unbenannte Person'}</span>
+      <span class="entry-name-preview ${nameVal?'':'empty'}" id="prev_${uid}">${nameVal||'Unnamed Person'}</span>
       <span class="entry-chevron">▶</span>
       <button class="entry-del" onclick="event.stopPropagation();deleteEntry('cast',${i})">🗑</button>
     </div>
     <div class="entry-body">
       <div class="form-grid">
         <div class="field">
-          <label>Eintrags-ID <span class="tip">(muss über alle Mods hinweg eindeutig sein)</span></label>
+          <label>Entry ID <span class="tip">(must be unique across all mods)</span></label>
           <div class="id-row">
             <input type="number" id="${uid}_id" value="${c._id}" min="1" max="9999999" style="font-family:'JetBrains Mono',monospace;color:var(--accent3)">
-            <button class="id-regen-btn" onclick="regenId('${uid}','cast')" title="Neue zufällige ID generieren">🎲 Neue ID</button>
+            <button class="id-regen-btn" onclick="regenId('${uid}','cast')" title="Generate a new random ID">🎲 New ID</button>
           </div>
         </div>
         <div class="field">
-          <label>Vollständiger Name<span class="req">*</span></label>
-          <input type="text" id="${uid}_name" value="${esc(c.name)}" placeholder="z.B. Jane Doe"
-            oninput="store.cast[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Unbenannte Person')">
+          <label>Full Name<span class="req">*</span></label>
+          <input type="text" id="${uid}_name" value="${esc(c.name)}" placeholder="e.g. Jane Doe"
+            oninput="store.cast[${i}].name=this.value;updatePreview('prev_${uid}',this.value,'Unnamed Person')">
         </div>
-        <div class="field"><label>Beruf / Rolle</label><select id="${uid}_job">${JOB_OPTS}</select></div>
-        <div class="field"><label>Bevorzugtes Genre</label><select id="${uid}_genre">${GENRE_OPTS}</select></div>
-        <div class="field"><label>Geschlecht</label><select id="${uid}_gender"><option value="0">Männlich</option><option value="1">Weiblich</option></select></div>
-        <div class="field form-full"><label>Bekanntheitsgrad / Können (0–100) <span class="tip">Höher = bekannter und einflussreicher</span></label>${range(uid+'_rating',0,100,c.rating||50)}</div>
-        <div class="field"><label>Gehalt</label><input type="number" id="${uid}_salary" value="${c.salary||0}" min="0"></div>
+        <div class="field"><label>Job / Role</label><select id="${uid}_job">${JOB_OPTS}</select></div>
+        <div class="field"><label>Preferred Genre</label><select id="${uid}_genre">${GENRE_OPTS}</select></div>
+        <div class="field"><label>Gender</label><select id="${uid}_gender"><option value="0">Male</option><option value="1">Female</option></select></div>
+        <div class="field form-full"><label>Fame / Skill Rating (0–100) <span class="tip">Higher = better known & more impactful</span></label>${range(uid+'_rating',0,100,c.rating||50)}</div>
+        <div class="field"><label>Salary</label><input type="number" id="${uid}_salary" value="${c.salary||0}" min="0"></div>
       </div>
       <div style="margin-top:14px;display:flex;justify-content:flex-end">
-        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveCast(${i})">💾 Speichern</button>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveCast(${i})">💾 Save</button>
       </div>
     </div>
   </div>`;
@@ -881,33 +1102,33 @@ function saveCast(i) {
   c.name=vv(uid+'_name'); c.job=vn(uid+'_job');
   c.genre=vn(uid+'_genre'); c.gender=vn(uid+'_gender');
   c.rating=vn(uid+'_rating'); c.salary=vn(uid+'_salary');
-  showToast('Besetzungsmitglied gespeichert! ID: '+c._id); renderCast();
+  showToast('Cast member saved! ID: '+c._id); renderCast();
 }
 
 // ============ NAMES ============
 function renderNames() {
   const list=document.getElementById('names-list');
-  if(!store.names.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">📝</div><h3>Noch keine Namenslisten</h3><p>Add comma-separated title lists per genre.</p></div>`; return; }
+  if(!store.names.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">📝</div><h3>No name lists yet</h3><p>Add comma-separated title lists per genre.</p></div>`; return; }
   const catOpts=NAME_CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join('');
   list.innerHTML=store.names.map((n,i)=>`
     <div class="entry-card" id="ncard_${i}">
       <div class="entry-header" onclick="toggleCard(document.getElementById('ncard_${i}'))">
         <span class="entry-num">#${i+1}</span>
-        <span class="entry-name-preview">${n.category||'Kategorie'}</span>
+        <span class="entry-name-preview">${n.category||'Category'}</span>
         <span class="entry-chevron">▶</span>
         <button class="entry-del" onclick="event.stopPropagation();deleteEntry('names',${i})">🗑</button>
       </div>
       <div class="entry-body">
         <div class="form-grid">
-          <div class="field"><label>Genrekategorie</label>
+          <div class="field"><label>Genre Category</label>
             <select id="name_cat_${i}">${catOpts.replace(`value="${n.category}"`,`value="${n.category}" selected`)}</select>
           </div>
-          <div class="field form-full"><label>Namen / Titel <span class="tip">kommagetrennt</span></label>
-            <textarea id="name_vals_${i}" style="min-height:100px" placeholder="Name Eins, Name Zwei, Name Drei, ...">${esc(n.names)}</textarea>
+          <div class="field form-full"><label>Names / Titles <span class="tip">comma-separated</span></label>
+            <textarea id="name_vals_${i}" style="min-height:100px" placeholder="Name One, Name Two, Name Three, ...">${esc(n.names)}</textarea>
           </div>
         </div>
         <div style="margin-top:14px;display:flex;justify-content:flex-end">
-          <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveNames(${i})">💾 Speichern</button>
+          <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveNames(${i})">💾 Save</button>
         </div>
       </div>
     </div>`).join('');
@@ -916,14 +1137,14 @@ function renderNames() {
 function saveNames(i) {
   store.names[i].names=vv('name_vals_'+i);
   store.names[i].category=vv('name_cat_'+i);
-  showToast('Namensliste gespeichert!');
+  showToast('Name list saved!');
 }
 
 // ============ REVIEWS ============
 function renderReviews() {
   const list=document.getElementById('reviews-list');
-  if(!store.reviews.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">⭐</div><h3>Noch keine Kritiken</h3><p>Add review texts shown in-game when content is rated.</p></div>`; return; }
-  const scoreOpts=[['0-19','0–19% (Sehr schlecht)'],['20-39','20–39% (Schlecht)'],['39-49','39–49% (Unterdurchschnittlich)'],['50-69','50–69% (Durchschnittlich)'],['70-89','70–89% (Gut)'],['90-100','90–100% (Ausgezeichnet)']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  if(!store.reviews.length) { list.innerHTML=`<div class="empty-state"><div class="big-icon">⭐</div><h3>No reviews yet</h3><p>Add review texts shown in-game when content is rated.</p></div>`; return; }
+  const scoreOpts=[['0-19','0–19% (Very Bad)'],['20-39','20–39% (Bad)'],['39-49','39–49% (Below Average)'],['50-69','50–69% (Average)'],['70-89','70–89% (Good)'],['90-100','90–100% (Excellent)']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
   list.innerHTML=store.reviews.map((r,i)=>`
     <div class="entry-card" id="rcard_${i}">
       <div class="entry-header" onclick="toggleCard(document.getElementById('rcard_${i}'))">
@@ -934,22 +1155,22 @@ function renderReviews() {
       </div>
       <div class="entry-body">
         <div class="form-grid cols-3">
-          <div class="field"><label>Inhaltstyp</label><select id="rev_cat_${i}">
+          <div class="field"><label>Content Type</label><select id="rev_cat_${i}">
             <option value="Movie" ${r.category=='Movie'?'selected':''}>Movie</option>
             <option value="Series" ${r.category=='Series'?'selected':''}>Series</option>
             <option value="Show" ${r.category=='Show'?'selected':''}>Show</option>
           </select></div>
-          <div class="field"><label>Sprache</label><select id="rev_lang_${i}">
+          <div class="field"><label>Language</label><select id="rev_lang_${i}">
             <option value="EN" ${r.lang=='EN'?'selected':''}>English (EN)</option>
             <option value="DE" ${r.lang=='DE'?'selected':''}>German (DE)</option>
           </select></div>
-          <div class="field"><label>Bewertungsbereich</label><select id="rev_range_${i}">${scoreOpts.replace(`value="${r.scoreRange}"`,`value="${r.scoreRange}" selected`)}</select></div>
-          <div class="field form-full"><label>Kritiktext <span class="tip">z.B. "Ein fesselnder Thriller, der einen nicht mehr loslässt."</span></label>
-            <textarea id="rev_text_${i}" placeholder="Schreibe hier den Kritiktext...">${esc(r.text)}</textarea>
+          <div class="field"><label>Score Range</label><select id="rev_range_${i}">${scoreOpts.replace(`value="${r.scoreRange}"`,`value="${r.scoreRange}" selected`)}</select></div>
+          <div class="field form-full"><label>Review Text <span class="tip">e.g. "A gripping thriller that keeps you hooked."</span></label>
+            <textarea id="rev_text_${i}" placeholder="Write the review text here...">${esc(r.text)}</textarea>
           </div>
         </div>
         <div style="margin-top:14px;display:flex;justify-content:flex-end">
-          <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveReview(${i})">💾 Speichern</button>
+          <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveReview(${i})">💾 Save</button>
         </div>
       </div>
     </div>`).join('');
@@ -960,9 +1181,146 @@ function saveReview(i) {
   store.reviews[i].lang=vv('rev_lang_'+i);
   store.reviews[i].scoreRange=vv('rev_range_'+i);
   store.reviews[i].text=vv('rev_text_'+i);
-  renderReviews(); showToast('Kritik gespeichert!');
+  renderReviews(); showToast('Review saved!');
 }
 
+// ============ GAME SETTINGS STATE ============
+// Store only CHANGED values vs defaults — only changed keys get exported
+const DEFAULTS = {
+  viewHour: {h0:0.5,h1:0.4,h2:0.3,h3:0.25,h4:0.3,h5:0.35,h6:0.4,h7:0.45,h8:0.5,h9:0.45,h10:0.4,h11:0.35,h12:0.4,h13:0.45,h14:0.5,h15:0.6,h16:0.7,h17:0.8,h18:0.9,h19:1.0,h20:1.0,h21:1.0,h22:1.0,h23:0.9},
+  typHour: {movie:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.3,6:0.4,7:0.4,8:0.5,9:0.5,10:0.6,11:0.6,12:0.6,13:0.6,14:0.7,15:0.7,16:0.8,17:0.8,18:0.9,19:0.9,20:1.0,21:1.0,22:1.0,23:0.9},series:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.3,6:0.4,7:0.6,8:0.8,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:0.9},live:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:1.0,6:1.0,7:1.0,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},teleshop:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:1.0,6:1.0,7:1.0,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},show:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.3,6:0.4,7:0.5,8:0.6,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},news:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.5,6:1.0,7:0.5,8:0.3,9:0.3,10:0.3,11:0.5,12:1.0,13:0.5,14:0.3,15:0.3,16:0.3,17:0.5,18:0.5,19:1.0,20:0.5,21:0.3,22:0.3,23:0.3}},
+  genreHour: {action:{0:1.0,1:1.0,2:1.0,3:0.8,4:0.6,5:0.4,6:0.4,7:0.4,8:0.4,9:0.4,10:0.4,11:0.4,12:0.4,13:0.4,14:0.4,15:0.5,16:0.6,17:0.7,18:0.8,19:0.9,20:1.0,21:1.0,22:1.0,23:1.0},drama:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.4,7:0.5,8:0.5,9:0.6,10:0.7,11:0.8,12:0.9,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:0.9,20:0.8,21:0.8,22:0.8,23:0.8},scifi:{0:1.0,1:1.0,2:1.0,3:0.8,4:0.8,5:0.7,6:0.7,7:0.7,8:0.7,9:0.8,10:0.8,11:0.9,12:0.9,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},romantic:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.4,6:0.5,7:0.6,8:0.7,9:0.8,10:0.9,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:0.8},fantasy:{0:1.0,1:1.0,2:1.0,3:0.9,4:0.8,5:0.8,6:0.8,7:0.8,8:0.9,9:0.9,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},crime:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:1.0,6:0.8,7:0.6,8:0.4,9:0.4,10:0.4,11:0.4,12:0.4,13:0.6,14:0.6,15:0.7,16:0.7,17:0.8,18:0.9,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},thriller:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:1.0,6:0.8,7:0.6,8:0.4,9:0.4,10:0.4,11:0.4,12:0.4,13:0.4,14:0.4,15:0.6,16:0.6,17:0.7,18:0.8,19:0.9,20:1.0,21:1.0,22:1.0,23:1.0},horror:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:0.8,6:0.4,7:0.2,8:0.2,9:0.2,10:0.2,11:0.2,12:0.2,13:0.2,14:0.2,15:0.2,16:0.2,17:0.3,18:0.4,19:0.6,20:1.0,21:1.0,22:1.0,23:1.0},mystery:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:0.6,6:0.4,7:0.3,8:0.3,9:0.3,10:0.3,11:0.4,12:0.5,13:0.6,14:0.7,15:0.8,16:0.8,17:0.9,18:0.9,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},adventure:{0:0.9,1:0.8,2:0.7,3:0.6,4:0.5,5:0.5,6:0.6,7:0.6,8:0.6,9:0.6,10:0.6,11:0.7,12:0.8,13:0.9,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},family:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.6,6:0.8,7:1.0,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:0.9,21:0.8,22:0.8,23:0.7},docu:{0:0.5,1:0.5,2:0.5,3:0.5,4:0.6,5:0.7,6:0.8,7:0.9,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:0.8,22:0.6,23:0.5},quiz:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.3,6:0.4,7:0.5,8:0.6,9:0.7,10:0.8,11:0.9,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:0.9,23:0.8},reality:{0:0.9,1:0.7,2:0.5,3:0.3,4:0.3,5:0.3,6:0.4,7:0.5,8:0.6,9:0.7,10:0.8,11:0.9,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},antiwar:{0:1.0,1:1.0,2:1.0,3:1.0,4:0.8,5:0.8,6:0.6,7:0.4,8:0.3,9:0.3,10:0.3,11:0.3,12:0.3,13:0.3,14:0.3,15:0.3,16:0.4,17:0.6,18:0.8,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},western:{0:0.8,1:0.6,2:0.4,3:0.3,4:0.3,5:0.4,6:0.4,7:0.5,8:0.5,9:0.5,10:0.5,11:0.6,12:0.7,13:0.8,14:0.9,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},comedy:{0:0.7,1:0.6,2:0.5,3:0.4,4:0.4,5:0.5,6:0.6,7:0.7,8:0.8,9:0.9,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:0.9,23:0.8},infomercial:{0:1.0,1:1.0,2:1.0,3:1.0,4:0.8,5:0.8,6:1.0,7:1.0,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},dating:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:0.8,6:0.7,7:0.6,8:0.4,9:0.4,10:0.4,11:0.6,12:0.7,13:0.8,14:0.9,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},cooking:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.3,6:0.5,7:0.7,8:0.8,9:0.9,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:0.8,19:0.7,20:0.5,21:0.3,22:0.3,23:0.3},gameShow:{0:0.4,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.6,7:0.8,8:0.9,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:0.9,22:0.7,23:0.5},sport:{0:0.8,1:0.6,2:0.4,3:0.4,4:0.4,5:0.4,6:0.4,7:0.5,8:0.5,9:0.5,10:0.6,11:0.7,12:0.8,13:0.9,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},education:{0:0.8,1:0.6,2:0.4,3:0.4,4:0.4,5:0.4,6:0.6,7:0.7,8:0.8,9:0.9,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:0.9,21:0.9,22:0.9,23:0.8},talk:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.5,7:0.6,8:0.7,9:0.8,10:0.9,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:0.9,17:0.8,18:0.7,19:0.6,20:0.5,21:0.4,22:0.4,23:0.4},information:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.5,6:1.0,7:0.5,8:0.3,9:0.3,10:0.3,11:0.5,12:1.0,13:0.5,14:0.3,15:0.3,16:0.3,17:0.5,18:0.5,19:1.0,20:0.5,21:0.3,22:0.3,23:0.3},musicShow:{0:0.4,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.6,7:0.8,8:0.9,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:0.9,22:0.7,23:0.5},talentShow:{0:0.4,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.6,7:0.8,8:0.9,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:0.9,22:0.7,23:0.5}}
+};
+
+// Working state — only keys the user actually changed are stored here
+const gSettings = {
+  viewHour: {},    // key: "h0".."h23", value: float
+  typHour: {},     // key: "movie0".."news23"
+  genreHour: {},   // key: "action0".."talentShow23"
+  baseVars: {},    // key: field name, value: number or bool
+  baseVarsDebugChanged: {} // track which debug bools were explicitly set
+};
+
+// ============ HOUR GRID HELPERS ============
+function hourLabel(h) {
+  const ampm = h < 12 ? 'AM' : 'PM';
+  const h12 = h % 12 || 12;
+  return `${h12}${ampm}`;
+}
+
+function buildHourGrid(containerId, getVal, onChangeKey) {
+  const container = document.getElementById(containerId);
+  let html = '';
+  for(let h=0; h<24; h++) {
+    const val = Math.round(getVal(h) * 100) / 100;
+    const cellId = `${containerId}_h${h}`;
+    const isModified = onChangeKey ? isHourModified(onChangeKey, h) : false;
+    html += `<div class="hour-cell ${isModified?'modified':''}" id="hcell_${containerId}_${h}">
+      <div class="hour-label"><span>H${h}</span><span class="htime">${hourLabel(h)}</span></div>
+      <input type="range" id="${cellId}" min="0" max="1" step="0.05" value="${val}"
+        oninput="onHourInput('${containerId}','${onChangeKey||''}',${h},parseFloat(this.value))">
+      <div class="hour-val" id="${cellId}_v">${val.toFixed(2)}</div>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+function onHourInput(containerId, storeKey, h, val) {
+  val = Math.round(val * 100) / 100;
+  document.getElementById(`${containerId}_h${h}_v`).textContent = val.toFixed(2);
+  const cell = document.getElementById(`hcell_${containerId}_${h}`);
+
+  if(storeKey === 'viewHour') {
+    const def = DEFAULTS.viewHour[`h${h}`];
+    if(val !== def) { gSettings.viewHour[`h${h}`] = val; cell.classList.add('modified'); }
+    else { delete gSettings.viewHour[`h${h}`]; cell.classList.remove('modified'); }
+  } else if(storeKey.startsWith('typ:')) {
+    const typ = storeKey.slice(4);
+    const key = `${typ}${h}`;
+    const def = DEFAULTS.typHour[typ][h];
+    if(val !== def) { gSettings.typHour[key] = val; cell.classList.add('modified'); }
+    else { delete gSettings.typHour[key]; cell.classList.remove('modified'); }
+  } else if(storeKey.startsWith('genre:')) {
+    const genre = storeKey.slice(6);
+    const key = `${genre}${h}`;
+    const def = DEFAULTS.genreHour[genre][h];
+    if(val !== def) { gSettings.genreHour[key] = val; cell.classList.add('modified'); }
+    else { delete gSettings.genreHour[key]; cell.classList.remove('modified'); }
+  }
+}
+
+function isHourModified(storeKey, h) {
+  if(storeKey === 'viewHour') return `h${h}` in gSettings.viewHour;
+  if(storeKey.startsWith('typ:')) return `${storeKey.slice(4)}${h}` in gSettings.typHour;
+  if(storeKey.startsWith('genre:')) return `${storeKey.slice(6)}${h}` in gSettings.genreHour;
+  return false;
+}
+
+// ============ VIEW HOUR ============
+function renderViewHourGrid() {
+  buildHourGrid('viewhour-grid',
+    h => gSettings.viewHour[`h${h}`] ?? DEFAULTS.viewHour[`h${h}`],
+    'viewHour'
+  );
+}
+function saveViewHour() { showToast('Viewer hours saved! Export to download.'); }
+
+// ============ TYP HOUR ============
+function renderTypHourGrid() {
+  const typ = document.getElementById('typhour-type-select').value;
+  buildHourGrid('typhour-grid',
+    h => gSettings.typHour[`${typ}${h}`] ?? DEFAULTS.typHour[typ][h],
+    `typ:${typ}`
+  );
+}
+function saveTypHour() { showToast('Type hours saved! Export to download.'); }
+
+// ============ GENRE HOUR ============
+function renderGenreHourGrid() {
+  const genre = document.getElementById('genrehour-genre-select').value;
+  buildHourGrid('genrehour-grid',
+    h => gSettings.genreHour[`${genre}${h}`] ?? DEFAULTS.genreHour[genre][h],
+    `genre:${genre}`
+  );
+}
+function saveGenreHour() { showToast('Genre hours saved! Export to download.'); }
+
+// ============ BASE VARS ============
+function bvDebugChanged(key) {
+  gSettings.baseVarsDebugChanged[key] = true;
+}
+
+function saveBaseVars() {
+  const BV_FIELDS = [
+    'newGameMaxMovies','newGameMaxSeries','newGameMaxRealRating',
+    'difficulty0','difficulty1','difficulty2',
+    'viewsBase','viewsMovies','viewsSeries','viewsLive','viewsTeleshop','viewsShows','viewsNews',
+    'viewsMalus','viewsBonus','viewsCultMovie','viewsUnhappy','viewsTrailer',
+    'views1950','views1960','views1970','views1980','views1990','views2000','views2010','views2020',
+    'miscRecover','overheatMovie','overheatSeries','overheatLive','overheatTeleshop','overheatShow','overheatNews',
+    'moviePriceD0','moviePriceD1','moviePriceD2','movieRentPrice','moviePiracyPrice',
+    'newsPriceMin','newsPriceMax','penaltyPiracy','penaltyAge'
+  ];
+  const INT_FIELDS = new Set(['newGameMaxMovies','newGameMaxSeries','newsPriceMin','newsPriceMax','penaltyPiracy','penaltyAge']);
+  BV_FIELDS.forEach(k => {
+    const el = document.getElementById('bv_'+k);
+    if(el && el.value.trim() !== '') {
+      gSettings.baseVars[k] = INT_FIELDS.has(k) ? parseInt(el.value) : parseFloat(el.value);
+    } else {
+      delete gSettings.baseVars[k];
+    }
+  });
+  // Debug bools — only save if user touched them
+  ['debugKeys','debugShowTypHelp','debugShowGenreHelp'].forEach(k => {
+    if(gSettings.baseVarsDebugChanged[k]) {
+      gSettings.baseVars[k] = document.getElementById('bv_'+k).checked;
+    }
+  });
+  showToast('Base variables saved! Export to download.');
+}
+
+// Initialize grids when tabs are opened (lazy render)
+const _origSwitchTab = switchTab;
 // ============ GUIDE ============
 function openGuide() { document.getElementById('guideModal').classList.add('open'); }
 function closeGuide() { document.getElementById('guideModal').classList.remove('open'); }
@@ -970,6 +1328,17 @@ document.getElementById('guideBtn').onclick = openGuide;
 document.getElementById('guideModal').onclick = function(e){ if(e.target===this) closeGuide(); };
 document.getElementById('changelogBtn').onclick = function() { document.getElementById('changelogModal').classList.add('open'); };
 document.getElementById('changelogModal').onclick = function(e){ if(e.target===this) this.classList.remove('open'); };
+
+// Override switchTab to init settings grids on first open
+function switchTab(name) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='viewhour' && !document.getElementById('viewhour-grid').children.length) renderViewHourGrid();
+  if(name==='typhour' && !document.getElementById('typhour-grid').children.length) renderTypHourGrid();
+  if(name==='genrehour' && !document.getElementById('genrehour-grid').children.length) renderGenreHourGrid();
+}
 
 // ============ EXPORT ============
 function openExport() { buildExportPanel(); document.getElementById('exportPanel').classList.add('open'); }
@@ -983,33 +1352,64 @@ function buildExportPanel() {
   const mn=getModName();
   const ti=store.movies.length+store.series.length+store.shows.length;
   const tc=store.cast.length, tn=store.names.length, tr=store.reviews.length;
+  const tvh=Object.keys(gSettings.viewHour).length;
+  const tth=Object.keys(gSettings.typHour).length;
+  const tgh=Object.keys(gSettings.genreHour).length;
+  const tbv=Object.keys(gSettings.baseVars).length;
   document.getElementById('exportBody').innerHTML=`
     <div class="modloader-banner">
-      <h3>⚠ Modloader erforderlich</h3>
-      <p>Deine Mod-Dateien funktionieren nicht ohne den installierten Modloader. Stelle sicher, dass du ihn zuerst herunterlädst und installierst, bevor du Dateien in den Mods-Ordner kopierst.</p>
-      <p style="margin-top:8px"><a href="https://www.moddb.com/mods/modloader" target="_blank">⬇ Modloader von ModDB herunterladen →</a></p>
+      <h3>⚠ Modloader Required</h3>
+      <p>Your mod files won't do anything without the Modloader installed. Make sure to download and install it first before copying files into the Mods folder.</p>
+      <p style="margin-top:8px"><a href="https://www.moddb.com/mods/modloader" target="_blank">⬇ Download Modloader from ModDB →</a></p>
     </div>
     <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6">
-      Lade nur die Dateien herunter, für die du Inhalte hinzugefügt hast. Lege sie in den <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px">Mods</code>-Ordner im Installationsverzeichnis deines Spiels.
+      Download only the files for content you've added or changed. Drop them into the <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px">Mods</code> folder in your game's installation directory.
     </p>
-    ${fileCard(mn+'_items.json','Filme, Serien & Shows ('+ti+' Einträge)','Enthält alle deine Filme, Shows und Serien.','downloadItems',ti)}
-    ${fileCard(mn+'_cast.json','Besetzungsmitglieder ('+tc+' Einträge)','Enthält alle deine Regisseure, Schauspieler und Crew-Mitglieder.','downloadCast',tc)}
-    ${fileCard(mn+'_names.json','Namenslisten ('+tn+' Kategorien)','Enthält deine Titelnamenslisten für die zufällige Inhaltsgenerierung.','downloadNames',tn)}
-    ${fileCard(mn+'_reviews.json','Kritiktexte ('+tr+' Kritiken)','Enthält deine eigenen Kritiktexte im Spiel.','downloadReviews',tr)}
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)">Content Files</div>
+    ${fileCard(mn+'_items.json','Movies, TV Series & Shows ('+ti+' entries)','Contains all your movies, shows and series.','downloadItems',ti)}
+    ${fileCard(mn+'_cast.json','Cast Members ('+tc+' entries)','Contains all your directors, actors and crew.','downloadCast',tc)}
+    ${fileCard(mn+'_names.json','Name Lists ('+tn+' categories)','Contains your title name lists for random content generation.','downloadNames',tn)}
+    ${fileCard(mn+'_reviews.json','Review Texts ('+tr+' reviews)','Contains your custom in-game review blurbs.','downloadReviews',tr)}
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)">Game Settings Files</div>
+    ${fileCard(mn+'_viewHour.json','Viewer Hours ('+tvh+' changed values)','Overrides the overall TV audience multiplier per hour.','downloadViewHour',tvh,'modified values')}
+    ${fileCard(mn+'_typHour.json','Type Hours ('+tth+' changed values)','Overrides per content-type audience multipliers per hour.','downloadTypHour',tth,'modified values')}
+    ${fileCard(mn+'_genreHour.json','Genre Hours ('+tgh+' changed values)','Overrides per-genre audience multipliers per hour.','downloadGenreHour',tgh,'modified values')}
+    ${fileCard(mn+'_baseVars.json','Base Variables ('+tbv+' changed values)','Overrides core game balance values.','downloadBaseVars',tbv,'modified values')}
     <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:14px;font-size:12px;color:var(--text-muted);margin-top:4px;line-height:1.7">
-      <strong style="color:var(--accent)">📁 Speicherort des Mods-Ordners:</strong><br>
-      Steam → Rechtsklick auf Spiel → <em>Verwalten → Lokale Dateien durchsuchen</em> → Dateien in den <code style="background:var(--surface3);padding:1px 5px;border-radius:3px">Mods</code> Ordner legen.
+      <strong style="color:var(--accent)">📁 Mod folder location:</strong><br>
+      Steam → right-click game → <em>Manage → Browse local files</em> → drop files in the <code style="background:var(--surface3);padding:1px 5px;border-radius:3px">Mods</code> folder.
     </div>`;
 }
 
-function fileCard(fname, title, desc, fn, count) {
+function fileCard(fname, title, desc, fn, count, countLabel) {
+  const label = countLabel || 'entries';
   const disabled = count===0;
   return `<div class="export-file-card">
-    <h3><span>${fname}</span><span style="color:var(--text-dim);font-size:10px;font-weight:400">${count} entries</span></h3>
+    <h3><span>${fname}</span><span style="color:var(--text-dim);font-size:10px;font-weight:400">${count} ${label}</span></h3>
     <p>${desc}</p>
     <button class="dl-btn" onclick="${fn}()" ${disabled?'disabled':''}>⬇ Download ${fname}</button>
-    ${disabled?'<p style="margin-top:8px;font-size:11px;color:var(--text-dim)">Nothing added yet — nothing to export.</p>':''}
+    ${disabled?'<p style="margin-top:8px;font-size:11px;color:var(--text-dim)">Nothing changed yet — nothing to export.</p>':''}
   </div>`;
+}
+
+function downloadViewHour() {
+  if(!Object.keys(gSettings.viewHour).length) { showToast('No viewer hour changes to export.'); return; }
+  downloadFile(getModName()+'_viewHour.json', JSON.stringify(gSettings.viewHour, null, '\t'));
+}
+
+function downloadTypHour() {
+  if(!Object.keys(gSettings.typHour).length) { showToast('No type hour changes to export.'); return; }
+  downloadFile(getModName()+'_typHour.json', JSON.stringify(gSettings.typHour, null, '\t'));
+}
+
+function downloadGenreHour() {
+  if(!Object.keys(gSettings.genreHour).length) { showToast('No genre hour changes to export.'); return; }
+  downloadFile(getModName()+'_genreHour.json', JSON.stringify(gSettings.genreHour, null, '\t'));
+}
+
+function downloadBaseVars() {
+  if(!Object.keys(gSettings.baseVars).length) { showToast('No base variable changes to export.'); return; }
+  downloadFile(getModName()+'_baseVars.json', JSON.stringify(gSettings.baseVars, null, '\t'));
 }
 
 function downloadFile(filename, content) {
@@ -1017,7 +1417,7 @@ function downloadFile(filename, content) {
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a'); a.href=url; a.download=filename; a.click();
   URL.revokeObjectURL(url);
-  showToast('Heruntergeladen: '+filename);
+  showToast('Downloaded: '+filename);
 }
 
 function creditsStr(ids) {
