@@ -240,6 +240,7 @@
         </div>
         <ul class="cl-list">
           <li>✨ <strong>New:</strong> Added Game Settings.</li>
+          <li>🔧 <strong>Fix:</strong> Cast members now autofill/cap to always have 4 members.</li>
         </ul>
       </div>
 
@@ -477,14 +478,19 @@
         <div class="panel-title"><div><h2>⚙️ Base Variables</h2><p>Core game balance values — viewers, pricing, penalties and debug flags</p></div></div>
         <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveBaseVars()">💾 Save Changes</button>
       </div>
-      <div style="background:rgba(232,69,106,.08);border:1px solid rgba(232,69,106,.25);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
-        <strong style="color:var(--accent2)">⚠ Advanced:</strong> These values control core game balance. Only change values you understand. Leaving a field unchanged means it will <strong style="color:var(--text)">not</strong> be written to the exported file — the game's defaults will be used instead.
+      <div style="background:rgba(232,69,106,.13);border:2px solid var(--accent2);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;font-size:13px;line-height:1.8;color:var(--text-muted)">
+        <strong style="color:var(--accent2);font-size:15px;display:block;margin-bottom:6px">🚨 Warning — Editing these values can crash or break your game.</strong>
+        These are core internal game balance variables. Setting incorrect values <strong style="color:var(--text)">will cause crashes, softlocks, or broken saves</strong> that may be difficult to recover from. Only edit values you fully understand. If in doubt, leave the field blank — blank fields are not exported and the game's default is used instead.<br>
+        <span style="color:var(--text-dim);font-size:12px;margin-top:4px;display:block">💡 Tip: test changes on a new save before using them on a real playthrough.</span>
       </div>
 
       <div class="section-divider">New Game Limits</div>
+      <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.25);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-muted);line-height:1.6">
+        ⚠ <strong style="color:var(--accent)">Max Movies / Series at start are capped at 100.</strong> Values above 100 cause the game to crash on new game creation. Max Real Rating has no known cap but large values may cause display issues.
+      </div>
       <div class="form-grid cols-3" style="margin-bottom:18px">
-        <div class="field"><label>Max Movies at start <span class="tip">(default: 3)</span></label><input type="number" id="bv_newGameMaxMovies" placeholder="3" min="0"></div>
-        <div class="field"><label>Max Series at start <span class="tip">(default: 3)</span></label><input type="number" id="bv_newGameMaxSeries" placeholder="3" min="0"></div>
+        <div class="field"><label>Max Movies at start <span class="tip">(default: 3, max: 100)</span></label><input type="number" id="bv_newGameMaxMovies" placeholder="3" min="0" max="100" oninput="bvCapCheck(this,100)"></div>
+        <div class="field"><label>Max Series at start <span class="tip">(default: 3, max: 100)</span></label><input type="number" id="bv_newGameMaxSeries" placeholder="3" min="0" max="100" oninput="bvCapCheck(this,100)"></div>
         <div class="field"><label>Max real rating <span class="tip">(default: 30.0)</span></label><input type="number" id="bv_newGameMaxRealRating" placeholder="30.0" step="0.1" min="0"></div>
       </div>
 
@@ -1429,9 +1435,80 @@ function downloadFile(filename, content) {
   showToast('Downloaded: '+filename);
 }
 
-function creditsStr(ids) {
-  if(!ids||!ids.length) return '';
-  return ids.join(', ');
+// Helper: enforce cap on bv number fields with live visual feedback
+function bvCapCheck(el, cap) {
+  const v = parseInt(el.value);
+  if(!isNaN(v) && v > cap) {
+    el.value = cap;
+    el.style.borderColor = 'var(--accent2)';
+    showToast('⚠ Capped at ' + cap + ' — higher values crash the game.');
+    setTimeout(()=>{ el.style.borderColor = ''; }, 2000);
+  }
+}
+
+// ============ CREDITS SAFETY ============
+// Job codes: 0=Director, 1=Actor, 2=Producer, 3=Presenter, 4=Moderator
+// Vanilla fallback IDs (always exist in the base game):
+const FALLBACK = {
+  director:  [1, 2, 3, 4],             // Robert Rodriguez, Ridley Scott, Alfred Hitchcock, Stanley Kubrick
+  actor:     [10000, 10001, 10002, 10003], // Arnold Schwarzenegger, Linda Hamilton, Harvey Keitel, George Clooney
+  producer:  [100000, 100001, 100002, 100003], // Glen A. Larson, Sean Jara, Theo Mezger, Tom Patchett
+  presenter: [1000000, 1000001, 1000002, 1000003], // Lukas Weber, Sophie Keller, Jonas Schmidt, Laura Fischer
+  moderator: [10000000, 10000001, 10000002, 10000003] // Lukas Schneider, Matteo Rossi, Jean Dupont, Alejandro García
+};
+
+function buildSafeCredits(ids, contentType) {
+  // Get the full cast pool: vanilla + user-added cast
+  const allCast = getAllCast(); // returns [{id, name, job}, ...]
+  const castById = {};
+  allCast.forEach(c => { castById[c.id] = c; });
+
+  // Filter to only IDs that exist in the cast pool
+  const valid = (ids || []).filter(id => castById[id]);
+
+  // Determine required roles based on content type
+  // contentType: 'movie' | 'series' | 'show'
+  let leaderJob, fillerJob, leaderFallback, fillerFallback;
+  if(contentType === 'movie') {
+    leaderJob = 0; fillerJob = 1;
+    leaderFallback = FALLBACK.director; fillerFallback = FALLBACK.actor;
+  } else if(contentType === 'series') {
+    leaderJob = 2; fillerJob = 1;
+    leaderFallback = FALLBACK.producer; fillerFallback = FALLBACK.actor;
+  } else { // show
+    leaderJob = 3; fillerJob = 4;
+    leaderFallback = FALLBACK.presenter; fillerFallback = FALLBACK.moderator;
+  }
+
+  // Split selected ids into leaders (correct job) and fillers
+  const leaders = valid.filter(id => castById[id] && castById[id].job === leaderJob);
+  const fillers = valid.filter(id => castById[id] && castById[id].job !== leaderJob);
+
+  let result = [];
+
+  if(valid.length === 0) {
+    // Nothing selected — auto-fill: 1 leader + 3 fillers from vanilla fallbacks
+    result.push(leaderFallback[0]);
+    result.push(fillerFallback[0], fillerFallback[1], fillerFallback[2]);
+  } else if(valid.length < 4) {
+    // Has some but not enough — keep what user selected, pad fillers only
+    result = [...valid];
+    // Pad with fallback filler IDs not already in result
+    for(const fid of fillerFallback) {
+      if(result.length >= 4) break;
+      if(!result.includes(fid)) result.push(fid);
+    }
+    // Still not 4? pad with any fallback leader not in result
+    for(const lid of leaderFallback) {
+      if(result.length >= 4) break;
+      if(!result.includes(lid)) result.push(lid);
+    }
+  } else {
+    // 4 or more — trim to exactly 4
+    result = valid.slice(0, 4);
+  }
+
+  return result.join(', ');
 }
 
 function downloadItems() {
@@ -1439,7 +1516,7 @@ function downloadItems() {
   store.movies.forEach((m,i)=>{
     const e={_comment:m.name||'Movie '+(i+1),ID:m._id,ItemTyp:1,Name:m.name||'',Desc:m.desc||'',Genre:m.genre||0,Country:m.country||0,Date:m.year||0,Rating:m.rating||60,Blocks:m.blocks||2,AgeRate:m.age||0,Texture:1,Approval:m.approval??255,Potential:m.potential||50,Chance:(m.chance||10)*1.0};
     if(m.name_de) e.Name_DE=m.name_de; if(m.desc_de) e.Desc_DE=m.desc_de;
-    const cr=creditsStr(m.credits_ids); if(cr) e.Credits=cr;
+    const cr=buildSafeCredits(m.credits_ids,'movie'); if(cr) e.Credits=cr;
     if(m.price) e.Price=m.price;
     if(m.cult) e.Cult=true; if(m.timeless) e.Timeless=true; if(m.evergreen) e.Evergreen=true; if(m.premium) e.Premium=true; if(m.pirated) e.Pirated=true;
     data.push(e);
@@ -1447,7 +1524,7 @@ function downloadItems() {
   store.series.forEach((s,i)=>{
     const e={_comment:s.name||'Series '+(i+1),ID:s._id,ItemTyp:2,Name:s.name||'',Desc:s.desc||'',Genre:s.genre||0,Country:s.country||0,Date:s.year||0,Rating:s.rating||65,Blocks:s.blocks||1,AgeRate:s.age||0,Episodes:s.episodes||1,Texture:1,Approval:s.approval??255,Potential:s.potential||55,Chance:(s.chance||10)*1.0,CurrentEpisode:1};
     if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de;
-    const cr=creditsStr(s.credits_ids); if(cr) e.Credits=cr;
+    const cr=buildSafeCredits(s.credits_ids,'series'); if(cr) e.Credits=cr;
     if(s.price) e.Price=s.price;
     if(s.cult) e.Cult=true; if(s.timeless) e.Timeless=true; if(s.evergreen) e.Evergreen=true; if(s.premium) e.Premium=true;
     data.push(e);
@@ -1455,7 +1532,7 @@ function downloadItems() {
   store.shows.forEach((s,i)=>{
     const e={_comment:s.name||'Show '+(i+1),ID:s._id,ItemTyp:s.typ||16,Name:s.name||'',Desc:s.desc||'',Genre:s.typ||16,Date:s.year||0,Rating:s.rating||60,Blocks:s.blocks||1,AgeRate:s.age||0,Texture:1,Approval:s.approval??255,Potential:s.potential||50};
     if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de; if(s.price) e.Price=s.price;
-    const cr=creditsStr(s.credits_ids); if(cr) e.Credits=cr;
+    const cr=buildSafeCredits(s.credits_ids,'show'); if(cr) e.Credits=cr;
     data.push(e);
   });
   downloadFile(mn+'_items.json', JSON.stringify({data},null,2));
