@@ -153,12 +153,7 @@
   .dl-btn:hover { opacity: .85; }
   .dl-btn:disabled { opacity: .35; cursor: not-allowed; }
 
-  /* Modloader warning banner */
-  .modloader-banner { background: linear-gradient(135deg,rgba(232,69,106,.18),rgba(232,69,106,.08)); border: 2px solid var(--accent2); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px; }
-  .modloader-banner h3 { font-family: 'Bebas Neue',sans-serif; font-size: 20px; letter-spacing: 1px; color: var(--accent2); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-  .modloader-banner p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
-  .modloader-banner a { color: var(--accent); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(245,166,35,.4); }
-  .modloader-banner a:hover { border-bottom-color: var(--accent); }
+
 
   /* Toast */
   #toast { position: fixed; bottom: 30px; right: 30px; background: var(--surface2); border: 1px solid var(--green); color: var(--green); padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; z-index: 300; opacity: 0; pointer-events: none; transition: opacity .3s; display: flex; align-items: center; gap: 8px; }
@@ -197,6 +192,7 @@
     .form-grid.cols-3 { grid-template-columns: 1fr 1fr; }
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
 
@@ -234,13 +230,15 @@
 
       <div class="cl-version">
         <div class="cl-version-header">
-          <span class="cl-tag">v1.0.3</span>
-          <span class="cl-date">Unreleased</span>
+          <span class="cl-tag">v1.1.0</span>
+          <span class="cl-date">April 13, 2025</span>
           <span class="cl-badge new">Latest</span>
         </div>
         <ul class="cl-list">
-          <li>✨ <strong>New:</strong> Added Game Settings.</li>
-          <li>🔧 <strong>Fix:</strong> Cast members now autofill/cap to always have 4 members.</li>
+          <li>✨ <strong>New:</strong> Added Game Settings tabs (Viewer Hours, Type Hours, Genre Hours, Base Variables).</li>
+          <li>✨ <strong>New:</strong> Export Mod now downloads a ready-to-extract <strong>.zip</strong> with all files placed in the correct game folder structure automatically.</li>
+          <li>✨ <strong>New:</strong> Modloader is no longer required — mods are now natively supported by the game.</li>
+          <li>🔧 <strong>Fix:</strong> Cast members now autofill/cap to always have exactly 4 members to prevent bugs.</li>
         </ul>
       </div>
 
@@ -250,11 +248,11 @@
           <span class="cl-date">April 11, 2025</span>
         </div>
         <ul class="cl-list">
-          <li>🔧 <strong>Fix:</strong> Credits were not being written to exported JSON files — this is now resolved.</li>
           <li>✨ <strong>New:</strong> Shows now have a Credits field, same as Movies and TV Series.</li>
           <li>✨ <strong>New:</strong> Changelog button added to the header (you're reading it!).</li>
           <li>✨ <strong>New:</strong> Report Bug button added, linking to the GitHub issue tracker.</li>
           <li>✨ <strong>New:</strong> German translation added - https://alagesia.github.io/MTT-Modcreator/Deutsch/</li>
+          <li>🔧 <strong>Fix:</strong> Credits were not being written to exported JSON files — this is now resolved.</li>
         </ul>
       </div>
 
@@ -278,9 +276,8 @@
         <ul class="cl-list">
           <li>🎉 <strong>Initial release</strong> of the Mad Television Tycoon Mod Creator.</li>
           <li>✨ Add Movies, TV Series, Shows, Cast Members, Name Lists, and Review Texts through a visual interface — no JSON knowledge required.</li>
-          <li>✨ Export mod-ready JSON files named correctly for the Modloader (<code>yourname_items.json</code>, <code>_cast</code>, <code>_names</code>, <code>_reviews</code>).</li>
+          <li>✨ Export mod-ready JSON files with correct naming (<code>yourname_items.json</code>, <code>_cast</code>, <code>_names</code>, <code>_reviews</code>).</li>
           <li>✨ Built-in How to Install guide with step-by-step instructions.</li>
-          <li>✨ Modloader download link and installation warning included.</li>
         </ul>
       </div>
 
@@ -589,65 +586,45 @@
       <div class="guide-step">
         <div class="step-num">1</div>
         <div>
-          <h3>Install the Modloader — this is required!</h3>
-          <p>The Modloader is a small program that makes Mad Television Tycoon able to read your custom files. Without it, the game completely ignores the Mods folder and nothing you add will show up.</p>
-          <div class="guide-note" style="background:rgba(232,69,106,.08);border-color:rgba(232,69,106,.3);margin-top:10px">
-            <strong style="color:var(--accent2)">⚠ Your mod will NOT work without the Modloader.</strong><br>
-            <a href="https://www.moddb.com/mods/modloader" target="_blank" style="color:var(--accent);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(245,166,35,.5)">⬇ Download Modloader from ModDB →</a>
-          </div>
+          <h3>Set your Mod Name</h3>
+          <p>In the top bar of this tool, type a unique name into the <strong>Mod Name</strong> field — something like your username or the name of your mod. This becomes part of every filename your mod uses, so it must be unique. Letters and numbers only, no spaces.</p>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">2</div>
         <div>
-          <h3>Set your Mod Name</h3>
-          <p>In the top bar of this tool, type a unique name into the <strong>Mod Name</strong> field — something like your username or the name of your mod. This gets used as a prefix in your filenames to prevent clashes with other mods. Letters and numbers only, no spaces.</p>
+          <h3>Create your content</h3>
+          <p>Use the tabs on the left to add movies, TV series, shows, cast members, and more. No JSON knowledge needed — just fill out the forms and click Save on each entry.</p>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">3</div>
         <div>
-          <h3>Create your content here</h3>
-          <p>Use the tabs on the left to add movies, TV series, shows, cast members, and more. No JSON knowledge needed — just fill out the forms and click Save on each entry.</p>
+          <h3>Download your mod as a .zip</h3>
+          <p>Click <strong style="color:var(--accent)">Export Mod</strong> in the bottom-left, then click <strong style="color:var(--accent)">⬇ Download Mod (.zip)</strong>. Everything is packaged automatically — no need to worry about file structure.</p>
+          <div class="guide-note">
+            <strong style="color:var(--accent3)">💡 What's inside the zip?</strong><br>
+            The zip contains two folders with your JSON files already placed in the correct locations the game expects:<br>
+            <span class="code-tag">MadTelevisionTycoon\EXTERN\DATABASE\MOD\</span> — content files (movies, cast, etc.)<br>
+            <span class="code-tag">MadTelevisionTycoon\EXTERN\GMPL\MOD\</span> — game settings files
+          </div>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">4</div>
         <div>
-          <h3>Export your mod files</h3>
-          <p>Click <strong style="color:var(--accent)">Export Mod</strong> in the bottom-left. Download only the files for content you actually added. Each file type maps to a different part of the game:</p>
-          <table class="guide-table" style="margin-top:10px">
-            <tr><th>You added...</th><th>Download this file</th></tr>
-            <tr><td>Movies, TV Series, Shows</td><td class="file-name">yourname_items.json</td></tr>
-            <tr><td>Cast members</td><td class="file-name">yourname_cast.json</td></tr>
-            <tr><td>Name lists (for random generation)</td><td class="file-name">yourname_names.json</td></tr>
-            <tr><td>Review texts</td><td class="file-name">yourname_reviews.json</td></tr>
-          </table>
-        </div>
-      </div>
-      <div class="guide-step">
-        <div class="step-num">5</div>
-        <div>
-          <h3>Drop the files into the Mods folder</h3>
-          <p>Open your Mad Television Tycoon installation folder. Drag and drop your downloaded JSON files into the <span class="code-tag">Mods</span> folder inside it.</p>
+          <h3>Extract the zip into your Steam folder</h3>
+          <p>Find your Mad Television Tycoon installation folder on Steam, then extract the downloaded zip directly into it. The folders inside the zip will merge with what's already there.</p>
           <div class="guide-note">
-            <strong>Finding the folder on Steam:</strong><br>
-            Right-click Mad Television Tycoon in your Steam library → <em>Manage → Browse local files</em>.<br>
-            You'll see the <span class="code-tag">Mods</span> folder right there.
+            <strong>Finding the Steam folder:</strong><br>
+            Right-click <em>Mad Television Tycoon</em> in your Steam library → <em>Manage → Browse local files</em>.<br>
+            Extract the zip contents directly into this folder — the <span class="code-tag">MadTelevisionTycoon</span> folder in the zip should merge with the one already there.
           </div>
-        </div>
-      </div>
-      <div class="guide-step">
-        <div class="step-num">6</div>
-        <div>
-          <h3>Launch the game and enjoy!</h3>
-          <p>Start Mad Television Tycoon normally. If the Modloader is installed and your files are named correctly, your content appears in the game automatically.</p>
-          <div class="guide-note">
+          <div class="guide-note" style="margin-top:8px">
             <strong>Checklist if something isn't working:</strong><br>
-            ✅ Modloader is installed<br>
-            ✅ Filename uses this pattern: <span class="code-tag">yourname_items.json</span><br>
-            ✅ The part after the underscore is exactly: <span class="code-tag">items</span>, <span class="code-tag">cast</span>, <span class="code-tag">names</span>, or <span class="code-tag">reviews</span><br>
-            ✅ No two mods share the same filename prefix (the "yourname" part)
+            ✅ You extracted into the right folder (the one containing <span class="code-tag">MadTelevisionTycoon.exe</span>)<br>
+            ✅ No two mods share the same mod name prefix — if they do, rename one before extracting<br>
+            ✅ The game was restarted after adding the mod
           </div>
         </div>
       </div>
@@ -1371,28 +1348,38 @@ function buildExportPanel() {
   const tth=Object.keys(gSettings.typHour).length;
   const tgh=Object.keys(gSettings.genreHour).length;
   const tbv=Object.keys(gSettings.baseVars).length;
+  const totalContent = ti+tc+tn+tr;
+  const totalSettings = tvh+tth+tgh+tbv;
+  const totalAll = totalContent+totalSettings;
   document.getElementById('exportBody').innerHTML=`
-    <div class="modloader-banner">
-      <h3>⚠ Modloader Required</h3>
-      <p>Your mod files won't do anything without the Modloader installed. Make sure to download and install it first before copying files into the Mods folder.</p>
-      <p style="margin-top:8px"><a href="https://www.moddb.com/mods/modloader" target="_blank">⬇ Download Modloader from ModDB →</a></p>
+    <div style="background:rgba(86,211,100,.08);border:1px solid rgba(86,211,100,.3);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px">
+      <p style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:4px">✅ No Modloader required</p>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Mods are now natively supported by Mad Television Tycoon. Just download the zip below and extract it into your game folder.</p>
     </div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6">
-      Download only the files for content you've added or changed. Drop them into the <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px">Mods</code> folder in your game's installation directory.
-    </p>
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)">Content Files</div>
-    ${fileCard(mn+'_items.json','Movies, TV Series & Shows ('+ti+' entries)','Contains all your movies, shows and series.','downloadItems',ti)}
-    ${fileCard(mn+'_cast.json','Cast Members ('+tc+' entries)','Contains all your directors, actors and crew.','downloadCast',tc)}
-    ${fileCard(mn+'_names.json','Name Lists ('+tn+' categories)','Contains your title name lists for random content generation.','downloadNames',tn)}
-    ${fileCard(mn+'_reviews.json','Review Texts ('+tr+' reviews)','Contains your custom in-game review blurbs.','downloadReviews',tr)}
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)">Game Settings Files</div>
-    ${fileCard(mn+'_viewHour.json','Viewer Hours ('+tvh+' changed values)','Overrides the overall TV audience multiplier per hour.','downloadViewHour',tvh,'modified values')}
-    ${fileCard(mn+'_typHour.json','Type Hours ('+tth+' changed values)','Overrides per content-type audience multipliers per hour.','downloadTypHour',tth,'modified values')}
-    ${fileCard(mn+'_genreHour.json','Genre Hours ('+tgh+' changed values)','Overrides per-genre audience multipliers per hour.','downloadGenreHour',tgh,'modified values')}
-    ${fileCard(mn+'_baseVars.json','Base Variables ('+tbv+' changed values)','Overrides core game balance values.','downloadBaseVars',tbv,'modified values')}
-    <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:14px;font-size:12px;color:var(--text-muted);margin-top:4px;line-height:1.7">
-      <strong style="color:var(--accent)">📁 Mod folder location:</strong><br>
-      Steam → right-click game → <em>Manage → Browse local files</em> → drop files in the <code style="background:var(--surface3);padding:1px 5px;border-radius:3px">Mods</code> folder.
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text)">${mn}.zip</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:3px">${totalContent} content file${totalContent!==1?'s':''} &nbsp;·&nbsp; ${totalSettings} setting override${totalSettings!==1?'s':''}</div>
+        </div>
+        <button class="dl-btn" onclick="downloadModZip()" ${totalAll===0?'disabled':''} style="font-size:15px;padding:11px 22px">⬇ Download Mod (.zip)</button>
+      </div>
+      <div style="font-size:11px;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;color:var(--text-muted)">Zip contents</div>
+        ${ti>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_items.json</code> — ${ti} content entr${ti!==1?'ies':'y'}</div>`:''}
+        ${tc>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_cast.json</code> — ${tc} cast member${tc!==1?'s':''}</div>`:''}
+        ${tn>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_names.json</code> — ${tn} name list${tn!==1?'s':''}</div>`:''}
+        ${tr>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_reviews.json</code> — ${tr} review${tr!==1?'s':''}</div>`:''}
+        ${tvh>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_viewHour.json</code> — ${tvh} override${tvh!==1?'s':''}</div>`:''}
+        ${tth>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_typHour.json</code> — ${tth} override${tth!==1?'s':''}</div>`:''}
+        ${tgh>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_genreHour.json</code> — ${tgh} override${tgh!==1?'s':''}</div>`:''}
+        ${tbv>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_baseVars.json</code> — ${tbv} override${tbv!==1?'s':''}</div>`:''}
+        ${totalAll===0?'<div style="color:var(--text-dim);font-style:italic">No content or settings added yet — nothing to export.</div>':''}
+      </div>
+    </div>
+    <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:14px;font-size:12px;color:var(--text-muted);line-height:1.7">
+      <strong style="color:var(--accent)">📁 How to install:</strong><br>
+      Steam → right-click game → <em>Manage → Browse local files</em> → extract the zip directly into the game folder. The <code style="background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon</code> folder inside the zip will merge with the existing one.
     </div>`;
 }
 
@@ -1425,6 +1412,84 @@ function downloadGenreHour() {
 function downloadBaseVars() {
   if(!Object.keys(gSettings.baseVars).length) { showToast('No base variable changes to export.'); return; }
   downloadFile(getModName()+'_baseVars.json', JSON.stringify(gSettings.baseVars, null, '\t'));
+}
+
+async function downloadModZip() {
+  const mn = getModName();
+  const zip = new JSZip();
+  const dbPath = `MadTelevisionTycoon/EXTERN/DATABASE/MOD/`;
+  const gmplPath = `MadTelevisionTycoon/EXTERN/GMPL/MOD/`;
+
+  // ── Content files → DATABASE/MOD ──
+  const ti = store.movies.length + store.series.length + store.shows.length;
+  if(ti > 0) {
+    const data = [];
+    store.movies.forEach((m,i)=>{
+      const e={_comment:m.name||'Movie '+(i+1),ID:m._id,ItemTyp:1,Name:m.name||'',Desc:m.desc||'',Genre:m.genre||0,Country:m.country||0,Date:m.year||0,Rating:m.rating||60,Blocks:m.blocks||2,AgeRate:m.age||0,Texture:1,Approval:m.approval??255,Potential:m.potential||50,Chance:(m.chance||10)*1.0};
+      if(m.name_de) e.Name_DE=m.name_de; if(m.desc_de) e.Desc_DE=m.desc_de;
+      const cr=buildSafeCredits(m.credits_ids,'movie'); if(cr) e.Credits=cr;
+      if(m.price) e.Price=m.price;
+      if(m.cult) e.Cult=true; if(m.timeless) e.Timeless=true; if(m.evergreen) e.Evergreen=true; if(m.premium) e.Premium=true; if(m.pirated) e.Pirated=true;
+      data.push(e);
+    });
+    store.series.forEach((s,i)=>{
+      const e={_comment:s.name||'Series '+(i+1),ID:s._id,ItemTyp:2,Name:s.name||'',Desc:s.desc||'',Genre:s.genre||0,Country:s.country||0,Date:s.year||0,Rating:s.rating||65,Blocks:s.blocks||1,AgeRate:s.age||0,Episodes:s.episodes||1,Texture:1,Approval:s.approval??255,Potential:s.potential||55,Chance:(s.chance||10)*1.0,CurrentEpisode:1};
+      if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de;
+      const cr=buildSafeCredits(s.credits_ids,'series'); if(cr) e.Credits=cr;
+      if(s.price) e.Price=s.price;
+      if(s.cult) e.Cult=true; if(s.timeless) e.Timeless=true; if(s.evergreen) e.Evergreen=true; if(s.premium) e.Premium=true;
+      data.push(e);
+    });
+    store.shows.forEach((s,i)=>{
+      const e={_comment:s.name||'Show '+(i+1),ID:s._id,ItemTyp:s.typ||16,Name:s.name||'',Desc:s.desc||'',Genre:s.typ||16,Date:s.year||0,Rating:s.rating||60,Blocks:s.blocks||1,AgeRate:s.age||0,Texture:1,Approval:s.approval??255,Potential:s.potential||50};
+      if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de; if(s.price) e.Price=s.price;
+      const cr=buildSafeCredits(s.credits_ids,'show'); if(cr) e.Credits=cr;
+      data.push(e);
+    });
+    zip.file(dbPath + mn + '_items.json', JSON.stringify({data}, null, 2));
+  }
+
+  if(store.cast.length > 0) {
+    const data = store.cast.map(c=>{
+      const e={_comment:c.name||'',ID:c._id,Job:c.job||0,Genre:c.genre||0,Rating:c.rating||50,Name:c.name||''};
+      if(c.gender) e.Gender=c.gender; if(c.salary) e.Salary=c.salary;
+      return e;
+    });
+    zip.file(dbPath + mn + '_cast.json', JSON.stringify({data}, null, 2));
+  }
+
+  if(store.names.length > 0) {
+    const out = {};
+    store.names.forEach(n=>{ if(n.category&&n.names) out[n.category]=n.names; });
+    if(Object.keys(out).length) zip.file(dbPath + mn + '_names.json', JSON.stringify(out, null, 2));
+  }
+
+  if(store.reviews.length > 0) {
+    const out = {}; const counts = {};
+    store.reviews.forEach(r=>{
+      if(!r.text) return;
+      const key = r.category+'_'+r.lang;
+      counts[key] = (counts[key]||0)+1;
+      out[`${r.category}_${counts[key]}_${r.lang}`] = r.text;
+    });
+    if(Object.keys(out).length) zip.file(dbPath + mn + '_reviews.json', JSON.stringify(out, null, 2));
+  }
+
+  // ── Settings files → GMPL/MOD ──
+  if(Object.keys(gSettings.viewHour).length)
+    zip.file(gmplPath + mn + '_viewHour.json', JSON.stringify(gSettings.viewHour, null, '\t'));
+  if(Object.keys(gSettings.typHour).length)
+    zip.file(gmplPath + mn + '_typHour.json', JSON.stringify(gSettings.typHour, null, '\t'));
+  if(Object.keys(gSettings.genreHour).length)
+    zip.file(gmplPath + mn + '_genreHour.json', JSON.stringify(gSettings.genreHour, null, '\t'));
+  if(Object.keys(gSettings.baseVars).length)
+    zip.file(gmplPath + mn + '_baseVars.json', JSON.stringify(gSettings.baseVars, null, '\t'));
+
+  const blob = await zip.generateAsync({type:'blob'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=mn+'.zip'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Downloaded: '+mn+'.zip');
 }
 
 function downloadFile(filename, content) {
