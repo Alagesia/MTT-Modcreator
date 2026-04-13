@@ -230,7 +230,7 @@
 
       <div class="cl-version">
         <div class="cl-version-header">
-          <span class="cl-tag">v1.1.0</span>
+          <span class="cl-tag">v1.0.3</span>
           <span class="cl-date">April 13, 2025</span>
           <span class="cl-badge new">Latest</span>
         </div>
@@ -238,7 +238,8 @@
           <li>✨ <strong>New:</strong> Added Game Settings tabs (Viewer Hours, Type Hours, Genre Hours, Base Variables).</li>
           <li>✨ <strong>New:</strong> Export Mod now downloads a ready-to-extract <strong>.zip</strong> with all files placed in the correct game folder structure automatically.</li>
           <li>✨ <strong>New:</strong> Modloader is no longer required — mods are now natively supported by the game.</li>
-          <li>🔧 <strong>Fix:</strong> Cast members now autofill/cap to always have exactly 4 members to prevent bugs.</li>
+          <li>🔧 <strong>Fix:</strong> Cast members now autofill/cap to always have exactly 4 members to prevent game crashes.</li>
+          <li>🔧 <strong>Fix:</strong> BaseVars Max Movies/Series fields now capped at 100 to prevent crashes.</li>
         </ul>
       </div>
 
@@ -248,11 +249,11 @@
           <span class="cl-date">April 11, 2025</span>
         </div>
         <ul class="cl-list">
+          <li>🔧 <strong>Fix:</strong> Credits were not being written to exported JSON files — this is now resolved.</li>
           <li>✨ <strong>New:</strong> Shows now have a Credits field, same as Movies and TV Series.</li>
           <li>✨ <strong>New:</strong> Changelog button added to the header (you're reading it!).</li>
           <li>✨ <strong>New:</strong> Report Bug button added, linking to the GitHub issue tracker.</li>
           <li>✨ <strong>New:</strong> German translation added - https://alagesia.github.io/MTT-Modcreator/Deutsch/</li>
-          <li>🔧 <strong>Fix:</strong> Credits were not being written to exported JSON files — this is now resolved.</li>
         </ul>
       </div>
 
@@ -653,6 +654,63 @@ const VANILLA_ITEM_IDS = new Set([1,2,3,4,5,6,7,8,9,10,11,100,101,102,103,104,10
 
 // ============ STORE ============
 const store = { movies:[], series:[], shows:[], cast:[], names:[], reviews:[] };
+
+// ============ PERSISTENCE (localStorage) ============
+const LS_KEY = 'mtt_modcreator_save';
+
+function saveSession() {
+  try {
+    const snapshot = {
+      v: 1,
+      modName: document.getElementById('modNameInput')?.value || '',
+      store: JSON.parse(JSON.stringify(store)),
+      gSettings: {
+        viewHour: {...gSettings.viewHour},
+        typHour: {...gSettings.typHour},
+        genreHour: {...gSettings.genreHour},
+        baseVars: {...gSettings.baseVars},
+        baseVarsDebugChanged: {...gSettings.baseVarsDebugChanged}
+      }
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(snapshot));
+  } catch(e) { /* quota exceeded or private mode — silently ignore */ }
+}
+
+function loadSession() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return false;
+    const snap = JSON.parse(raw);
+    if(!snap || snap.v !== 1) return false;
+
+    // Restore store arrays
+    ['movies','series','shows','cast','names','reviews'].forEach(k => {
+      if(Array.isArray(snap.store[k])) store[k] = snap.store[k];
+    });
+
+    // Restore gSettings
+    if(snap.gSettings) {
+      Object.assign(gSettings.viewHour, snap.gSettings.viewHour || {});
+      Object.assign(gSettings.typHour, snap.gSettings.typHour || {});
+      Object.assign(gSettings.genreHour, snap.gSettings.genreHour || {});
+      Object.assign(gSettings.baseVars, snap.gSettings.baseVars || {});
+      Object.assign(gSettings.baseVarsDebugChanged, snap.gSettings.baseVarsDebugChanged || {});
+    }
+
+    // Restore mod name (after DOM is ready — called in DOMContentLoaded)
+    if(snap.modName) {
+      const inp = document.getElementById('modNameInput');
+      if(inp) inp.value = snap.modName;
+    }
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearSession() {
+  if(!confirm('Clear all saved progress? This cannot be undone.')) return;
+  localStorage.removeItem(LS_KEY);
+  location.reload();
+}
 
 // ============ CONSTANTS ============
 const GENRES = [[0,'Action'],[1,'SciFi'],[2,'SciFi (Horror)'],[3,'Romance'],[4,'Adventure'],[5,'Documentary'],[6,'Thriller'],[7,'Horror'],[8,'Mystery'],[9,'Antiwar'],[10,'Fantasy'],[11,'Family'],[12,'Crime'],[13,'Drama'],[14,'Comedy'],[15,'Western'],[16,'Quiz Show'],[17,'Reality Show'],[18,'Dating Show'],[19,'Cooking Show'],[20,'Game Show'],[21,'Talk Show'],[22,'Music Show'],[23,'Talent Show'],[24,'News'],[25,'Misc']];
@@ -1366,20 +1424,24 @@ function buildExportPanel() {
       </div>
       <div style="font-size:11px;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:12px">
         <div style="font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;color:var(--text-muted)">Zip contents</div>
-        ${ti>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_items.json</code> — ${ti} content entr${ti!==1?'ies':'y'}</div>`:''}
-        ${tc>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_cast.json</code> — ${tc} cast member${tc!==1?'s':''}</div>`:''}
-        ${tn>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_names.json</code> — ${tn} name list${tn!==1?'s':''}</div>`:''}
-        ${tr>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_reviews.json</code> — ${tr} review${tr!==1?'s':''}</div>`:''}
-        ${tvh>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_viewHour.json</code> — ${tvh} override${tvh!==1?'s':''}</div>`:''}
-        ${tth>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_typHour.json</code> — ${tth} override${tth!==1?'s':''}</div>`:''}
-        ${tgh>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_genreHour.json</code> — ${tgh} override${tgh!==1?'s':''}</div>`:''}
-        ${tbv>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_baseVars.json</code> — ${tbv} override${tbv!==1?'s':''}</div>`:''}
+        ${ti>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">${mn}_items.json</code> <span style="color:var(--text-dim)">— ${ti} content entr${ti!==1?'ies':'y'} · DATABASE/MOD</span></div>`:''}
+        ${tc>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">${mn}_cast.json</code> <span style="color:var(--text-dim)">— ${tc} cast member${tc!==1?'s':''} · DATABASE/MOD</span></div>`:''}
+        ${tn>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">${mn}_names.json</code> <span style="color:var(--text-dim)">— ${tn} name list${tn!==1?'s':''} · DATABASE/MOD</span></div>`:''}
+        ${tr>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">${mn}_reviews.json</code> <span style="color:var(--text-dim)">— ${tr} review${tr!==1?'s':''} · DATABASE/MOD</span></div>`:''}
+        ${tvh>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">${mn}_viewHour.json</code> <span style="color:var(--text-dim)">— viewer hours · GMPL/MOD</span></div>`:''}
+        ${tth>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">${mn}_typHour.json</code> <span style="color:var(--text-dim)">— type hours · GMPL/MOD</span></div>`:''}
+        ${tgh>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">${mn}_genreHour.json</code> <span style="color:var(--text-dim)">— genre hours · GMPL/MOD</span></div>`:''}
+        ${tbv>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">${mn}_baseVars.json</code> <span style="color:var(--text-dim)">— base variables · GMPL/MOD</span></div>`:''}
         ${totalAll===0?'<div style="color:var(--text-dim);font-style:italic">No content or settings added yet — nothing to export.</div>':''}
       </div>
     </div>
     <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:14px;font-size:12px;color:var(--text-muted);line-height:1.7">
       <strong style="color:var(--accent)">📁 How to install:</strong><br>
       Steam → right-click game → <em>Manage → Browse local files</em> → extract the zip directly into the game folder. The <code style="background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon</code> folder inside the zip will merge with the existing one.
+    </div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:11px;color:var(--text-dim)">💾 Progress is saved automatically in your browser.</span>
+      <button onclick="clearSession()" style="background:none;border:1px solid var(--border);color:var(--text-dim);font-size:11px;padding:5px 10px;border-radius:var(--radius-sm);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent2)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">🗑 Clear saved data</button>
     </div>`;
 }
 
@@ -1396,22 +1458,35 @@ function fileCard(fname, title, desc, fn, count, countLabel) {
 
 function downloadViewHour() {
   if(!Object.keys(gSettings.viewHour).length) { showToast('No viewer hour changes to export.'); return; }
-  downloadFile(getModName()+'_viewHour.json', JSON.stringify(gSettings.viewHour, null, '\t'));
+  const full = {};
+  for(let i=0;i<24;i++) { const k='h'+i; full[k] = gSettings.viewHour[k] ?? DEFAULTS.viewHour[k]; }
+  downloadFile(getModName()+'_viewHour.json', JSON.stringify(full, null, '\t'));
 }
 
 function downloadTypHour() {
   if(!Object.keys(gSettings.typHour).length) { showToast('No type hour changes to export.'); return; }
-  downloadFile(getModName()+'_typHour.json', JSON.stringify(gSettings.typHour, null, '\t'));
+  const full = {};
+  ['movie','series','live','teleshop','show','news'].forEach(typ => {
+    for(let i=0;i<24;i++) { const k=typ+i; full[k] = gSettings.typHour[k] ?? DEFAULTS.typHour[typ][i]; }
+  });
+  downloadFile(getModName()+'_typHour.json', JSON.stringify(full, null, '\t'));
 }
 
 function downloadGenreHour() {
   if(!Object.keys(gSettings.genreHour).length) { showToast('No genre hour changes to export.'); return; }
-  downloadFile(getModName()+'_genreHour.json', JSON.stringify(gSettings.genreHour, null, '\t'));
+  const full = {};
+  Object.keys(DEFAULTS.genreHour).forEach(genre => {
+    for(let i=0;i<24;i++) { const k=genre+i; full[k] = gSettings.genreHour[k] ?? DEFAULTS.genreHour[genre][i]; }
+  });
+  downloadFile(getModName()+'_genreHour.json', JSON.stringify(full, null, '\t'));
 }
 
 function downloadBaseVars() {
   if(!Object.keys(gSettings.baseVars).length) { showToast('No base variable changes to export.'); return; }
-  downloadFile(getModName()+'_baseVars.json', JSON.stringify(gSettings.baseVars, null, '\t'));
+  const BV_DEFAULTS = {newGameMaxMovies:3,newGameMaxSeries:3,newGameMaxRealRating:30.0,difficulty0:0.3,difficulty1:0.1,difficulty2:0.0,viewsBase:0.3,viewsMovies:0.5,viewsSeries:0.4,viewsLive:1.0,viewsTeleshop:0.02,viewsShows:0.6,viewsNews:0.5,viewsMalus:0.2,viewsBonus:0.5,viewsCultMovie:0.05,viewsUnhappy:0.5,viewsTrailer:0.10,views1950:0.35,views1960:0.4,views1970:0.5,views1980:0.6,views1990:0.7,views2000:0.8,views2010:0.9,views2020:1.0,miscRecover:50.0,overheatMovie:20.0,overheatSeries:5.0,overheatLive:5.0,overheatTeleshop:50.0,overheatShow:10.0,overheatNews:90.0,moviePriceD0:1.5,moviePriceD1:1.75,moviePriceD2:2.0,movieRentPrice:0.5,moviePiracyPrice:0.5,newsPriceMin:3,newsPriceMax:10,penaltyPiracy:250000,penaltyAge:2500,debugKeys:true,debugShowTypHelp:false,debugShowGenreHelp:false};
+  const full = {};
+  Object.keys(BV_DEFAULTS).forEach(k => { full[k] = (k in gSettings.baseVars) ? gSettings.baseVars[k] : BV_DEFAULTS[k]; });
+  downloadFile(getModName()+'_baseVars.json', JSON.stringify(full, null, '\t'));
 }
 
 async function downloadModZip() {
@@ -1475,15 +1550,32 @@ async function downloadModZip() {
     if(Object.keys(out).length) zip.file(dbPath + mn + '_reviews.json', JSON.stringify(out, null, 2));
   }
 
-  // ── Settings files → GMPL/MOD ──
-  if(Object.keys(gSettings.viewHour).length)
-    zip.file(gmplPath + mn + '_viewHour.json', JSON.stringify(gSettings.viewHour, null, '\t'));
-  if(Object.keys(gSettings.typHour).length)
-    zip.file(gmplPath + mn + '_typHour.json', JSON.stringify(gSettings.typHour, null, '\t'));
-  if(Object.keys(gSettings.genreHour).length)
-    zip.file(gmplPath + mn + '_genreHour.json', JSON.stringify(gSettings.genreHour, null, '\t'));
-  if(Object.keys(gSettings.baseVars).length)
-    zip.file(gmplPath + mn + '_baseVars.json', JSON.stringify(gSettings.baseVars, null, '\t'));
+  // ── Settings files → GMPL/MOD (always write complete file, not just overrides) ──
+  if(Object.keys(gSettings.viewHour).length) {
+    const full = {};
+    for(let i=0;i<24;i++) { const k='h'+i; full[k] = gSettings.viewHour[k] ?? DEFAULTS.viewHour[k]; }
+    zip.file(gmplPath + mn + '_viewHour.json', JSON.stringify(full, null, '\t'));
+  }
+  if(Object.keys(gSettings.typHour).length) {
+    const full = {};
+    ['movie','series','live','teleshop','show','news'].forEach(typ => {
+      for(let i=0;i<24;i++) { const k=typ+i; full[k] = gSettings.typHour[k] ?? DEFAULTS.typHour[typ][i]; }
+    });
+    zip.file(gmplPath + mn + '_typHour.json', JSON.stringify(full, null, '\t'));
+  }
+  if(Object.keys(gSettings.genreHour).length) {
+    const full = {};
+    Object.keys(DEFAULTS.genreHour).forEach(genre => {
+      for(let i=0;i<24;i++) { const k=genre+i; full[k] = gSettings.genreHour[k] ?? DEFAULTS.genreHour[genre][i]; }
+    });
+    zip.file(gmplPath + mn + '_genreHour.json', JSON.stringify(full, null, '\t'));
+  }
+  if(Object.keys(gSettings.baseVars).length) {
+    const BV_DEFAULTS = {newGameMaxMovies:3,newGameMaxSeries:3,newGameMaxRealRating:30.0,difficulty0:0.3,difficulty1:0.1,difficulty2:0.0,viewsBase:0.3,viewsMovies:0.5,viewsSeries:0.4,viewsLive:1.0,viewsTeleshop:0.02,viewsShows:0.6,viewsNews:0.5,viewsMalus:0.2,viewsBonus:0.5,viewsCultMovie:0.05,viewsUnhappy:0.5,viewsTrailer:0.10,views1950:0.35,views1960:0.4,views1970:0.5,views1980:0.6,views1990:0.7,views2000:0.8,views2010:0.9,views2020:1.0,miscRecover:50.0,overheatMovie:20.0,overheatSeries:5.0,overheatLive:5.0,overheatTeleshop:50.0,overheatShow:10.0,overheatNews:90.0,moviePriceD0:1.5,moviePriceD1:1.75,moviePriceD2:2.0,movieRentPrice:0.5,moviePiracyPrice:0.5,newsPriceMin:3,newsPriceMax:10,penaltyPiracy:250000,penaltyAge:2500,debugKeys:true,debugShowTypHelp:false,debugShowGenreHelp:false};
+    const full = {};
+    Object.keys(BV_DEFAULTS).forEach(k => { full[k] = (k in gSettings.baseVars) ? gSettings.baseVars[k] : BV_DEFAULTS[k]; });
+    zip.file(gmplPath + mn + '_baseVars.json', JSON.stringify(full, null, '\t'));
+  }
 
   const blob = await zip.generateAsync({type:'blob'});
   const url = URL.createObjectURL(blob);
@@ -1633,6 +1725,55 @@ function downloadReviews() {
 // ============ MOD NAME INPUT ============
 document.getElementById('modNameInput').addEventListener('input', function() {
   this.value=this.value.replace(/[^a-z0-9_\-]/gi,'');
+  saveSession();
+});
+
+// ============ AUTO-SAVE WIRING ============
+// Wrap the existing showToast so every save/delete action auto-persists
+const _origShowToast = showToast;
+function showToast(msg) {
+  _origShowToast(msg);
+  // Debounced auto-save — saves 500ms after the last action
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(saveSession, 500);
+}
+
+// ============ RESTORE SESSION ON LOAD ============
+document.addEventListener('DOMContentLoaded', () => {
+  const restored = loadSession();
+  if(restored) {
+    // Re-render all content tabs from restored data
+    renderMovies(); updateCount('movies');
+    renderSeries(); updateCount('series');
+    renderShows();  updateCount('shows');
+    renderCast();   updateCount('cast');
+    renderNames();  updateCount('names');
+    renderReviews(); updateCount('reviews');
+
+    // Restore baseVars fields if any were saved
+    if(Object.keys(gSettings.baseVars).length) {
+      const BV_FIELDS = ['newGameMaxMovies','newGameMaxSeries','newGameMaxRealRating','difficulty0','difficulty1','difficulty2','viewsBase','viewsMovies','viewsSeries','viewsLive','viewsTeleshop','viewsShows','viewsNews','viewsMalus','viewsBonus','viewsCultMovie','viewsUnhappy','viewsTrailer','views1950','views1960','views1970','views1980','views1990','views2000','views2010','views2020','miscRecover','overheatMovie','overheatSeries','overheatLive','overheatTeleshop','overheatShow','overheatNews','moviePriceD0','moviePriceD1','moviePriceD2','movieRentPrice','moviePiracyPrice','newsPriceMin','newsPriceMax','penaltyPiracy','penaltyAge'];
+      BV_FIELDS.forEach(k => {
+        if(k in gSettings.baseVars) {
+          const el = document.getElementById('bv_'+k);
+          if(el) el.value = gSettings.baseVars[k];
+        }
+      });
+      ['debugKeys','debugShowTypHelp','debugShowGenreHelp'].forEach(k => {
+        if(k in gSettings.baseVars) {
+          const el = document.getElementById('bv_'+k);
+          if(el) el.checked = gSettings.baseVars[k];
+        }
+      });
+    }
+
+    const mn = document.getElementById('modNameInput')?.value;
+    const total = store.movies.length + store.series.length + store.shows.length + store.cast.length + store.names.length + store.reviews.length;
+    if(total > 0 || mn) {
+      // Show a non-intrusive restore notice via the toast system
+      setTimeout(()=> _origShowToast('✅ Session restored — ' + total + ' item' + (total!==1?'s':'') + ' loaded.'), 300);
+    }
+  }
 });
 </script>
 </body>
