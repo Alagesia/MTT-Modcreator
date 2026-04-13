@@ -153,12 +153,7 @@
   .dl-btn:hover { opacity: .85; }
   .dl-btn:disabled { opacity: .35; cursor: not-allowed; }
 
-  /* Modloader warning banner */
-  .modloader-banner { background: linear-gradient(135deg,rgba(232,69,106,.18),rgba(232,69,106,.08)); border: 2px solid var(--accent2); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px; }
-  .modloader-banner h3 { font-family: 'Bebas Neue',sans-serif; font-size: 20px; letter-spacing: 1px; color: var(--accent2); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-  .modloader-banner p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
-  .modloader-banner a { color: var(--accent); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(245,166,35,.4); }
-  .modloader-banner a:hover { border-bottom-color: var(--accent); }
+
 
   /* Toast */
   #toast { position: fixed; bottom: 30px; right: 30px; background: var(--surface2); border: 1px solid var(--green); color: var(--green); padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; z-index: 300; opacity: 0; pointer-events: none; transition: opacity .3s; display: flex; align-items: center; gap: 8px; }
@@ -176,7 +171,18 @@
   .cl-list li { font-size: 13px; color: var(--text-muted); line-height: 1.5; padding-left: 4px; border-left: 2px solid var(--border); }
   .cl-list code { font-family: 'JetBrains Mono',monospace; background: var(--surface3); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: var(--accent3); }
 
+  /* Settings hour grid */
+  .settings-hour-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .hour-cell { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 10px 8px; display: flex; flex-direction: column; gap: 6px; transition: border-color .15s; }
+  .hour-cell:focus-within { border-color: var(--accent); }
+  .hour-cell .hour-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; }
+  .hour-cell .hour-label .htime { color: var(--accent3); font-family: 'JetBrains Mono',monospace; font-weight: 600; }
+  .hour-cell input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+  .hour-cell .hour-val { font-family: 'JetBrains Mono',monospace; font-size: 12px; color: var(--accent); font-weight: 600; text-align: center; background: var(--surface3); border-radius: 3px; padding: 2px 0; }
+  .hour-cell.modified { border-color: rgba(245,166,35,.5); background: rgba(245,166,35,.04); }
+
   @media (max-width:700px) {
+    .settings-hour-grid { grid-template-columns: repeat(4, 1fr); }
     .sidebar { width: 56px; }
     .tab-btn span, .tab-count, .sidebar-label { display: none; }
     .tab-btn { justify-content: center; padding: 12px; }
@@ -186,6 +192,7 @@
     .form-grid.cols-3 { grid-template-columns: 1fr 1fr; }
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
 
@@ -223,16 +230,29 @@
 
       <div class="cl-version">
         <div class="cl-version-header">
-          <span class="cl-tag">v1.0.2</span>
-          <span class="cl-date">April 11, 2025</span>
+          <span class="cl-tag">v1.1.0</span>
+          <span class="cl-date">April 13, 2025</span>
           <span class="cl-badge new">Latest</span>
         </div>
         <ul class="cl-list">
-          <li>🔧 <strong>Fix:</strong> Credits were not being written to exported JSON files — this is now resolved.</li>
+          <li>✨ <strong>New:</strong> Added Game Settings tabs (Viewer Hours, Type Hours, Genre Hours, Base Variables).</li>
+          <li>✨ <strong>New:</strong> Export Mod now downloads a ready-to-extract <strong>.zip</strong> with all files placed in the correct game folder structure automatically.</li>
+          <li>✨ <strong>New:</strong> Modloader is no longer required — mods are now natively supported by the game.</li>
+          <li>🔧 <strong>Fix:</strong> Cast members now autofill/cap to always have exactly 4 members to prevent bugs.</li>
+        </ul>
+      </div>
+
+      <div class="cl-version">
+        <div class="cl-version-header">
+          <span class="cl-tag">v1.0.2</span>
+          <span class="cl-date">April 11, 2025</span>
+        </div>
+        <ul class="cl-list">
           <li>✨ <strong>New:</strong> Shows now have a Credits field, same as Movies and TV Series.</li>
           <li>✨ <strong>New:</strong> Changelog button added to the header (you're reading it!).</li>
           <li>✨ <strong>New:</strong> Report Bug button added, linking to the GitHub issue tracker.</li>
           <li>✨ <strong>New:</strong> German translation added - https://alagesia.github.io/MTT-Modcreator/Deutsch/</li>
+          <li>🔧 <strong>Fix:</strong> Credits were not being written to exported JSON files — this is now resolved.</li>
         </ul>
       </div>
 
@@ -256,9 +276,8 @@
         <ul class="cl-list">
           <li>🎉 <strong>Initial release</strong> of the Mad Television Tycoon Mod Creator.</li>
           <li>✨ Add Movies, TV Series, Shows, Cast Members, Name Lists, and Review Texts through a visual interface — no JSON knowledge required.</li>
-          <li>✨ Export mod-ready JSON files named correctly for the Modloader (<code>yourname_items.json</code>, <code>_cast</code>, <code>_names</code>, <code>_reviews</code>).</li>
+          <li>✨ Export mod-ready JSON files with correct naming (<code>yourname_items.json</code>, <code>_cast</code>, <code>_names</code>, <code>_reviews</code>).</li>
           <li>✨ Built-in How to Install guide with step-by-step instructions.</li>
-          <li>✨ Modloader download link and installation warning included.</li>
         </ul>
       </div>
 
@@ -294,6 +313,23 @@
     <button class="tab-btn" onclick="switchTab('reviews')" id="tab-reviews">
       <span class="tab-icon">⭐</span><span>Reviews</span>
       <span class="tab-count" id="count-reviews">0</span>
+    </button>
+    <div class="sidebar-label">Game Settings</div>
+    <button class="tab-btn" onclick="switchTab('viewhour')" id="tab-viewhour">
+      <span class="tab-icon">📺</span><span>Viewer Hours</span>
+      <span class="tab-count" id="count-viewhour" style="display:none"></span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('typhour')" id="tab-typhour">
+      <span class="tab-icon">🎞️</span><span>Type Hours</span>
+      <span class="tab-count" id="count-typhour" style="display:none"></span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('genrehour')" id="tab-genrehour">
+      <span class="tab-icon">🎨</span><span>Genre Hours</span>
+      <span class="tab-count" id="count-genrehour" style="display:none"></span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('basevars')" id="tab-basevars">
+      <span class="tab-icon">⚙️</span><span>Base Vars</span>
+      <span class="tab-count" id="count-basevars" style="display:none"></span>
     </button>
     <div class="sidebar-export">
       <button class="export-btn" onclick="openExport()">⬇ Export Mod</button>
@@ -354,6 +390,188 @@
       <div class="entries-list" id="reviews-list"><div class="empty-state"><div class="big-icon">⭐</div><h3>No reviews yet</h3><p>Add review texts in English and/or German for movies, series, or shows.</p></div></div>
     </div>
 
+    <!-- ===== VIEWER HOURS PANEL ===== -->
+    <div class="panel" id="panel-viewhour">
+      <div class="panel-header">
+        <div class="panel-title"><div><h2>📺 Viewer Hours</h2><p>Overall TV audience multiplier per hour of the day (0 = nobody watching, 1 = peak audience)</p></div></div>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveViewHour()">💾 Save Changes</button>
+      </div>
+      <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
+        <strong style="color:var(--accent3)">📖 What is this?</strong> This multiplier scales the total number of viewers available at each hour. Hour 0 = midnight, hour 19 = 7 PM prime time. Values range from 0.0 (no viewers) to 1.0 (maximum). Only changed values will be written to the exported file.
+      </div>
+      <div id="viewhour-grid" class="settings-hour-grid"></div>
+    </div>
+
+    <!-- ===== TYPE HOURS PANEL ===== -->
+    <div class="panel" id="panel-typhour">
+      <div class="panel-header">
+        <div class="panel-title"><div><h2>🎞️ Type Hours</h2><p>Per content-type audience multiplier per hour (how well each content type performs at each hour)</p></div></div>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveTypHour()">💾 Save Changes</button>
+      </div>
+      <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
+        <strong style="color:var(--accent3)">📖 What is this?</strong> Each content type (Movies, Series, Shows, etc.) has its own multiplier per hour. For example, Movies peak late evening while News peaks at breakfast/lunch/evening. Select a type below to edit its 24-hour curve.
+      </div>
+      <div class="field" style="margin-bottom:18px;max-width:260px">
+        <label>Content Type</label>
+        <select id="typhour-type-select" onchange="renderTypHourGrid()">
+          <option value="movie">Movie</option>
+          <option value="series">Series</option>
+          <option value="show">Show</option>
+          <option value="live">Live</option>
+          <option value="teleshop">Teleshop</option>
+          <option value="news">News</option>
+        </select>
+      </div>
+      <div id="typhour-grid" class="settings-hour-grid"></div>
+    </div>
+
+    <!-- ===== GENRE HOURS PANEL ===== -->
+    <div class="panel" id="panel-genrehour">
+      <div class="panel-header">
+        <div class="panel-title"><div><h2>🎨 Genre Hours</h2><p>Per genre audience multiplier per hour (how well each genre performs at each hour)</p></div></div>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveGenreHour()">💾 Save Changes</button>
+      </div>
+      <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
+        <strong style="color:var(--accent3)">📖 What is this?</strong> Each genre has a performance curve across the day. Horror peaks at night, Family peaks during the day. Select a genre below to edit its 24-hour multiplier curve.
+      </div>
+      <div class="field" style="margin-bottom:18px;max-width:260px">
+        <label>Genre</label>
+        <select id="genrehour-genre-select" onchange="renderGenreHourGrid()">
+          <option value="action">Action</option>
+          <option value="drama">Drama</option>
+          <option value="scifi">SciFi</option>
+          <option value="romantic">Romantic</option>
+          <option value="fantasy">Fantasy</option>
+          <option value="crime">Crime</option>
+          <option value="thriller">Thriller</option>
+          <option value="horror">Horror</option>
+          <option value="mystery">Mystery</option>
+          <option value="adventure">Adventure</option>
+          <option value="family">Family</option>
+          <option value="docu">Documentary</option>
+          <option value="quiz">Quiz Show</option>
+          <option value="reality">Reality Show</option>
+          <option value="antiwar">Antiwar</option>
+          <option value="western">Western</option>
+          <option value="comedy">Comedy</option>
+          <option value="infomercial">Infomercial</option>
+          <option value="dating">Dating Show</option>
+          <option value="cooking">Cooking Show</option>
+          <option value="gameShow">Game Show</option>
+          <option value="sport">Sport</option>
+          <option value="education">Education</option>
+          <option value="talk">Talk Show</option>
+          <option value="information">Information</option>
+          <option value="musicShow">Music Show</option>
+          <option value="talentShow">Talent Show</option>
+        </select>
+      </div>
+      <div id="genrehour-grid" class="settings-hour-grid"></div>
+    </div>
+
+    <!-- ===== BASE VARS PANEL ===== -->
+    <div class="panel" id="panel-basevars">
+      <div class="panel-header">
+        <div class="panel-title"><div><h2>⚙️ Base Variables</h2><p>Core game balance values — viewers, pricing, penalties and debug flags</p></div></div>
+        <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveBaseVars()">💾 Save Changes</button>
+      </div>
+      <div style="background:rgba(232,69,106,.13);border:2px solid var(--accent2);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;font-size:13px;line-height:1.8;color:var(--text-muted)">
+        <strong style="color:var(--accent2);font-size:15px;display:block;margin-bottom:6px">🚨 Warning — Editing these values can crash or break your game.</strong>
+        These settings are largely untested and use at your own risk. Setting incorrect values <strong style="color:var(--text)">will cause crashes, softlocks, or broken saves</strong> that may be difficult to recover from. Only edit values you fully understand. If in doubt, leave the field blank — blank fields are not exported and the game's default is used instead.<br>
+        <span style="color:var(--text-dim);font-size:12px;margin-top:4px;display:block">💡 Tip: test changes on a new save before using them on a real playthrough.</span>
+      </div>
+
+      <div class="section-divider">New Game Limits</div>
+      <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.25);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-muted);line-height:1.6">
+        ⚠ <strong style="color:var(--accent)">Max Movies / Series at start are capped at 100.</strong> Game crashes on higher values, highest tested safe value is 10.
+      </div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Max Movies at start <span class="tip">(default: 3, max: 100)</span></label><input type="number" id="bv_newGameMaxMovies" placeholder="3" min="0" max="100" oninput="bvCapCheck(this,100)"></div>
+        <div class="field"><label>Max Series at start <span class="tip">(default: 3, max: 100)</span></label><input type="number" id="bv_newGameMaxSeries" placeholder="3" min="0" max="100" oninput="bvCapCheck(this,100)"></div>
+        <div class="field"><label>Max real rating <span class="tip">(default: 30.0)</span></label><input type="number" id="bv_newGameMaxRealRating" placeholder="30.0" step="0.1" min="0"></div>
+      </div>
+
+      <div class="section-divider">Difficulty Multipliers <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">(difficulty0 = Easy, 1 = Normal, 2 = Hard)</span></div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Easy (difficulty0) <span class="tip">(default: 0.2)</span></label><input type="number" id="bv_difficulty0" placeholder="0.2" step="0.05" min="0"></div>
+        <div class="field"><label>Normal (difficulty1) <span class="tip">(default: 0.1)</span></label><input type="number" id="bv_difficulty1" placeholder="0.1" step="0.05" min="0"></div>
+        <div class="field"><label>Hard (difficulty2) <span class="tip">(default: 0.0)</span></label><input type="number" id="bv_difficulty2" placeholder="0.0" step="0.05" min="0"></div>
+      </div>
+
+      <div class="section-divider">Base Viewer Multipliers</div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Base <span class="tip">(default: 0.3)</span></label><input type="number" id="bv_viewsBase" placeholder="0.3" step="0.01" min="0"></div>
+        <div class="field"><label>Movies <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_viewsMovies" placeholder="0.5" step="0.01" min="0"></div>
+        <div class="field"><label>Series <span class="tip">(default: 0.4)</span></label><input type="number" id="bv_viewsSeries" placeholder="0.4" step="0.01" min="0"></div>
+        <div class="field"><label>Live <span class="tip">(default: 1.0)</span></label><input type="number" id="bv_viewsLive" placeholder="1.0" step="0.01" min="0"></div>
+        <div class="field"><label>Teleshop <span class="tip">(default: 0.02)</span></label><input type="number" id="bv_viewsTeleshop" placeholder="0.02" step="0.01" min="0"></div>
+        <div class="field"><label>Shows <span class="tip">(default: 0.6)</span></label><input type="number" id="bv_viewsShows" placeholder="0.6" step="0.01" min="0"></div>
+        <div class="field"><label>News <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_viewsNews" placeholder="0.5" step="0.01" min="0"></div>
+      </div>
+
+      <div class="section-divider">Viewer Bonuses & Penalties</div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Malus <span class="tip">(default: 0.2)</span></label><input type="number" id="bv_viewsMalus" placeholder="0.2" step="0.01" min="0"></div>
+        <div class="field"><label>Bonus <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_viewsBonus" placeholder="0.5" step="0.01" min="0"></div>
+        <div class="field"><label>Cult Movie bonus <span class="tip">(default: 0.05)</span></label><input type="number" id="bv_viewsCultMovie" placeholder="0.05" step="0.01" min="0"></div>
+        <div class="field"><label>Unhappy viewers <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_viewsUnhappy" placeholder="0.5" step="0.01" min="0"></div>
+        <div class="field"><label>Trailer boost <span class="tip">(default: 0.10)</span></label><input type="number" id="bv_viewsTrailer" placeholder="0.10" step="0.01" min="0"></div>
+      </div>
+
+      <div class="section-divider">Era Multipliers <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--text-dim)">(audience modifier based on content release decade)</span></div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>1950s <span class="tip">(default: 0.35)</span></label><input type="number" id="bv_views1950" placeholder="0.35" step="0.05" min="0"></div>
+        <div class="field"><label>1960s <span class="tip">(default: 0.4)</span></label><input type="number" id="bv_views1960" placeholder="0.4" step="0.05" min="0"></div>
+        <div class="field"><label>1970s <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_views1970" placeholder="0.5" step="0.05" min="0"></div>
+        <div class="field"><label>1980s <span class="tip">(default: 0.6)</span></label><input type="number" id="bv_views1980" placeholder="0.6" step="0.05" min="0"></div>
+        <div class="field"><label>1990s <span class="tip">(default: 0.7)</span></label><input type="number" id="bv_views1990" placeholder="0.7" step="0.05" min="0"></div>
+        <div class="field"><label>2000s <span class="tip">(default: 0.8)</span></label><input type="number" id="bv_views2000" placeholder="0.8" step="0.05" min="0"></div>
+        <div class="field"><label>2010s <span class="tip">(default: 0.9)</span></label><input type="number" id="bv_views2010" placeholder="0.9" step="0.05" min="0"></div>
+        <div class="field"><label>2020s <span class="tip">(default: 1.0)</span></label><input type="number" id="bv_views2020" placeholder="1.0" step="0.05" min="0"></div>
+      </div>
+
+      <div class="section-divider">Overheat / Recovery</div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Misc recover <span class="tip">(default: 50.0)</span></label><input type="number" id="bv_miscRecover" placeholder="50.0" step="1" min="0"></div>
+        <div class="field"><label>Movie overheat <span class="tip">(default: 20.0)</span></label><input type="number" id="bv_overheatMovie" placeholder="20.0" step="1" min="0"></div>
+        <div class="field"><label>Series overheat <span class="tip">(default: 5.0)</span></label><input type="number" id="bv_overheatSeries" placeholder="5.0" step="1" min="0"></div>
+        <div class="field"><label>Live overheat <span class="tip">(default: 5.0)</span></label><input type="number" id="bv_overheatLive" placeholder="5.0" step="1" min="0"></div>
+        <div class="field"><label>Teleshop overheat <span class="tip">(default: 50.0)</span></label><input type="number" id="bv_overheatTeleshop" placeholder="50.0" step="1" min="0"></div>
+        <div class="field"><label>Show overheat <span class="tip">(default: 10.0)</span></label><input type="number" id="bv_overheatShow" placeholder="10.0" step="1" min="0"></div>
+        <div class="field"><label>News overheat <span class="tip">(default: 90.0)</span></label><input type="number" id="bv_overheatNews" placeholder="90.0" step="1" min="0"></div>
+      </div>
+
+      <div class="section-divider">Pricing</div>
+      <div class="form-grid cols-3" style="margin-bottom:18px">
+        <div class="field"><label>Movie price Easy <span class="tip">(default: 1.5)</span></label><input type="number" id="bv_moviePriceD0" placeholder="1.5" step="0.25" min="0"></div>
+        <div class="field"><label>Movie price Normal <span class="tip">(default: 1.75)</span></label><input type="number" id="bv_moviePriceD1" placeholder="1.75" step="0.25" min="0"></div>
+        <div class="field"><label>Movie price Hard <span class="tip">(default: 2.0)</span></label><input type="number" id="bv_moviePriceD2" placeholder="2.0" step="0.25" min="0"></div>
+        <div class="field"><label>Movie rent price <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_movieRentPrice" placeholder="0.5" step="0.1" min="0"></div>
+        <div class="field"><label>Piracy price <span class="tip">(default: 0.5)</span></label><input type="number" id="bv_moviePiracyPrice" placeholder="0.5" step="0.1" min="0"></div>
+        <div class="field"><label>News price min <span class="tip">(default: 3)</span></label><input type="number" id="bv_newsPriceMin" placeholder="3" min="0"></div>
+        <div class="field"><label>News price max <span class="tip">(default: 10)</span></label><input type="number" id="bv_newsPriceMax" placeholder="10" min="0"></div>
+      </div>
+
+      <div class="section-divider">Penalties</div>
+      <div class="form-grid" style="margin-bottom:18px">
+        <div class="field"><label>Piracy penalty <span class="tip">(default: 250000)</span></label><input type="number" id="bv_penaltyPiracy" placeholder="250000" min="0"></div>
+        <div class="field"><label>Age rating violation penalty <span class="tip">(default: 2500)</span></label><input type="number" id="bv_penaltyAge" placeholder="2500" min="0"></div>
+      </div>
+
+      <div class="section-divider">Debug Flags</div>
+      <div class="toggle-row" style="margin-bottom:18px">
+        <label class="toggle-item" id="bv_debugKeys_toggle">
+          <input type="checkbox" id="bv_debugKeys" onchange="bvDebugChanged('debugKeys')"> Debug Keys enabled
+        </label>
+        <label class="toggle-item" id="bv_debugShowTypHelp_toggle">
+          <input type="checkbox" id="bv_debugShowTypHelp" onchange="bvDebugChanged('debugShowTypHelp')"> Show Type Help overlay
+        </label>
+        <label class="toggle-item" id="bv_debugShowGenreHelp_toggle">
+          <input type="checkbox" id="bv_debugShowGenreHelp" onchange="bvDebugChanged('debugShowGenreHelp')"> Show Genre Help overlay
+        </label>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -368,65 +586,45 @@
       <div class="guide-step">
         <div class="step-num">1</div>
         <div>
-          <h3>Install the Modloader — this is required!</h3>
-          <p>The Modloader is a small program that makes Mad Television Tycoon able to read your custom files. Without it, the game completely ignores the Mods folder and nothing you add will show up.</p>
-          <div class="guide-note" style="background:rgba(232,69,106,.08);border-color:rgba(232,69,106,.3);margin-top:10px">
-            <strong style="color:var(--accent2)">⚠ Your mod will NOT work without the Modloader.</strong><br>
-            <a href="https://www.moddb.com/mods/modloader" target="_blank" style="color:var(--accent);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(245,166,35,.5)">⬇ Download Modloader from ModDB →</a>
-          </div>
+          <h3>Set your Mod Name</h3>
+          <p>In the top bar of this tool, type a unique name into the <strong>Mod Name</strong> field — something like your username or the name of your mod. This becomes part of every filename your mod uses, so it must be unique. Letters and numbers only, no spaces.</p>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">2</div>
         <div>
-          <h3>Set your Mod Name</h3>
-          <p>In the top bar of this tool, type a unique name into the <strong>Mod Name</strong> field — something like your username or the name of your mod. This gets used as a prefix in your filenames to prevent clashes with other mods. Letters and numbers only, no spaces.</p>
+          <h3>Create your content</h3>
+          <p>Use the tabs on the left to add movies, TV series, shows, cast members, and more. No JSON knowledge needed — just fill out the forms and click Save on each entry.</p>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">3</div>
         <div>
-          <h3>Create your content here</h3>
-          <p>Use the tabs on the left to add movies, TV series, shows, cast members, and more. No JSON knowledge needed — just fill out the forms and click Save on each entry.</p>
+          <h3>Download your mod as a .zip</h3>
+          <p>Click <strong style="color:var(--accent)">Export Mod</strong> in the bottom-left, then click <strong style="color:var(--accent)">⬇ Download Mod (.zip)</strong>. Everything is packaged automatically — no need to worry about file structure.</p>
+          <div class="guide-note">
+            <strong style="color:var(--accent3)">💡 What's inside the zip?</strong><br>
+            The zip contains two folders with your JSON files already placed in the correct locations the game expects:<br>
+            <span class="code-tag">MadTelevisionTycoon\EXTERN\DATABASE\MOD\</span> — content files (movies, cast, etc.)<br>
+            <span class="code-tag">MadTelevisionTycoon\EXTERN\GMPL\MOD\</span> — game settings files
+          </div>
         </div>
       </div>
       <div class="guide-step">
         <div class="step-num">4</div>
         <div>
-          <h3>Export your mod files</h3>
-          <p>Click <strong style="color:var(--accent)">Export Mod</strong> in the bottom-left. Download only the files for content you actually added. Each file type maps to a different part of the game:</p>
-          <table class="guide-table" style="margin-top:10px">
-            <tr><th>You added...</th><th>Download this file</th></tr>
-            <tr><td>Movies, TV Series, Shows</td><td class="file-name">yourname_items.json</td></tr>
-            <tr><td>Cast members</td><td class="file-name">yourname_cast.json</td></tr>
-            <tr><td>Name lists (for random generation)</td><td class="file-name">yourname_names.json</td></tr>
-            <tr><td>Review texts</td><td class="file-name">yourname_reviews.json</td></tr>
-          </table>
-        </div>
-      </div>
-      <div class="guide-step">
-        <div class="step-num">5</div>
-        <div>
-          <h3>Drop the files into the Mods folder</h3>
-          <p>Open your Mad Television Tycoon installation folder. Drag and drop your downloaded JSON files into the <span class="code-tag">Mods</span> folder inside it.</p>
+          <h3>Extract the zip into your Steam folder</h3>
+          <p>Find your Mad Television Tycoon installation folder on Steam, then extract the downloaded zip directly into it. The folders inside the zip will merge with what's already there.</p>
           <div class="guide-note">
-            <strong>Finding the folder on Steam:</strong><br>
-            Right-click Mad Television Tycoon in your Steam library → <em>Manage → Browse local files</em>.<br>
-            You'll see the <span class="code-tag">Mods</span> folder right there.
+            <strong>Finding the Steam folder:</strong><br>
+            Right-click <em>Mad Television Tycoon</em> in your Steam library → <em>Manage → Browse local files</em>.<br>
+            Extract the zip contents directly into this folder — the <span class="code-tag">MadTelevisionTycoon</span> folder in the zip should merge with the one already there.
           </div>
-        </div>
-      </div>
-      <div class="guide-step">
-        <div class="step-num">6</div>
-        <div>
-          <h3>Launch the game and enjoy!</h3>
-          <p>Start Mad Television Tycoon normally. If the Modloader is installed and your files are named correctly, your content appears in the game automatically.</p>
-          <div class="guide-note">
+          <div class="guide-note" style="margin-top:8px">
             <strong>Checklist if something isn't working:</strong><br>
-            ✅ Modloader is installed<br>
-            ✅ Filename uses this pattern: <span class="code-tag">yourname_items.json</span><br>
-            ✅ The part after the underscore is exactly: <span class="code-tag">items</span>, <span class="code-tag">cast</span>, <span class="code-tag">names</span>, or <span class="code-tag">reviews</span><br>
-            ✅ No two mods share the same filename prefix (the "yourname" part)
+            ✅ You extracted into the right folder (the one containing <span class="code-tag">MadTelevisionTycoon.exe</span>)<br>
+            ✅ No two mods share the same mod name prefix — if they do, rename one before extracting<br>
+            ✅ The game was restarted after adding the mod
           </div>
         </div>
       </div>
@@ -486,14 +684,6 @@ function generateSafeId(type) {
     if(attempts > 10000) { id = Date.now() % 9000000 + 9000000; break; }
   } while(used.has(id) || (type !== 'cast' && VANILLA_ITEM_IDS.has(id)));
   return id;
-}
-
-// ============ TAB SWITCHING ============
-function switchTab(name) {
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-  document.getElementById('tab-'+name).classList.add('active');
 }
 
 // ============ GENERIC ENTRY ADD ============
@@ -986,6 +1176,143 @@ function saveReview(i) {
   renderReviews(); showToast('Review saved!');
 }
 
+// ============ GAME SETTINGS STATE ============
+// Store only CHANGED values vs defaults — only changed keys get exported
+const DEFAULTS = {
+  viewHour: {h0:0.5,h1:0.4,h2:0.3,h3:0.25,h4:0.3,h5:0.35,h6:0.4,h7:0.45,h8:0.5,h9:0.45,h10:0.4,h11:0.35,h12:0.4,h13:0.45,h14:0.5,h15:0.6,h16:0.7,h17:0.8,h18:0.9,h19:1.0,h20:1.0,h21:1.0,h22:1.0,h23:0.9},
+  typHour: {movie:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.3,6:0.4,7:0.4,8:0.5,9:0.5,10:0.6,11:0.6,12:0.6,13:0.6,14:0.7,15:0.7,16:0.8,17:0.8,18:0.9,19:0.9,20:1.0,21:1.0,22:1.0,23:0.9},series:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.3,6:0.4,7:0.6,8:0.8,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:0.9},live:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:1.0,6:1.0,7:1.0,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},teleshop:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:1.0,6:1.0,7:1.0,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},show:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.3,6:0.4,7:0.5,8:0.6,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},news:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.5,6:1.0,7:0.5,8:0.3,9:0.3,10:0.3,11:0.5,12:1.0,13:0.5,14:0.3,15:0.3,16:0.3,17:0.5,18:0.5,19:1.0,20:0.5,21:0.3,22:0.3,23:0.3}},
+  genreHour: {action:{0:1.0,1:1.0,2:1.0,3:0.8,4:0.6,5:0.4,6:0.4,7:0.4,8:0.4,9:0.4,10:0.4,11:0.4,12:0.4,13:0.4,14:0.4,15:0.5,16:0.6,17:0.7,18:0.8,19:0.9,20:1.0,21:1.0,22:1.0,23:1.0},drama:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.4,7:0.5,8:0.5,9:0.6,10:0.7,11:0.8,12:0.9,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:0.9,20:0.8,21:0.8,22:0.8,23:0.8},scifi:{0:1.0,1:1.0,2:1.0,3:0.8,4:0.8,5:0.7,6:0.7,7:0.7,8:0.7,9:0.8,10:0.8,11:0.9,12:0.9,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},romantic:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.4,6:0.5,7:0.6,8:0.7,9:0.8,10:0.9,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:0.8},fantasy:{0:1.0,1:1.0,2:1.0,3:0.9,4:0.8,5:0.8,6:0.8,7:0.8,8:0.9,9:0.9,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},crime:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:1.0,6:0.8,7:0.6,8:0.4,9:0.4,10:0.4,11:0.4,12:0.4,13:0.6,14:0.6,15:0.7,16:0.7,17:0.8,18:0.9,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},thriller:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:1.0,6:0.8,7:0.6,8:0.4,9:0.4,10:0.4,11:0.4,12:0.4,13:0.4,14:0.4,15:0.6,16:0.6,17:0.7,18:0.8,19:0.9,20:1.0,21:1.0,22:1.0,23:1.0},horror:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:0.8,6:0.4,7:0.2,8:0.2,9:0.2,10:0.2,11:0.2,12:0.2,13:0.2,14:0.2,15:0.2,16:0.2,17:0.3,18:0.4,19:0.6,20:1.0,21:1.0,22:1.0,23:1.0},mystery:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:0.6,6:0.4,7:0.3,8:0.3,9:0.3,10:0.3,11:0.4,12:0.5,13:0.6,14:0.7,15:0.8,16:0.8,17:0.9,18:0.9,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},adventure:{0:0.9,1:0.8,2:0.7,3:0.6,4:0.5,5:0.5,6:0.6,7:0.6,8:0.6,9:0.6,10:0.6,11:0.7,12:0.8,13:0.9,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},family:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.6,6:0.8,7:1.0,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:0.9,21:0.8,22:0.8,23:0.7},docu:{0:0.5,1:0.5,2:0.5,3:0.5,4:0.6,5:0.7,6:0.8,7:0.9,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:0.8,22:0.6,23:0.5},quiz:{0:0.6,1:0.4,2:0.3,3:0.3,4:0.3,5:0.3,6:0.4,7:0.5,8:0.6,9:0.7,10:0.8,11:0.9,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:0.9,23:0.8},reality:{0:0.9,1:0.7,2:0.5,3:0.3,4:0.3,5:0.3,6:0.4,7:0.5,8:0.6,9:0.7,10:0.8,11:0.9,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},antiwar:{0:1.0,1:1.0,2:1.0,3:1.0,4:0.8,5:0.8,6:0.6,7:0.4,8:0.3,9:0.3,10:0.3,11:0.3,12:0.3,13:0.3,14:0.3,15:0.3,16:0.4,17:0.6,18:0.8,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},western:{0:0.8,1:0.6,2:0.4,3:0.3,4:0.3,5:0.4,6:0.4,7:0.5,8:0.5,9:0.5,10:0.5,11:0.6,12:0.7,13:0.8,14:0.9,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},comedy:{0:0.7,1:0.6,2:0.5,3:0.4,4:0.4,5:0.5,6:0.6,7:0.7,8:0.8,9:0.9,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:0.9,23:0.8},infomercial:{0:1.0,1:1.0,2:1.0,3:1.0,4:0.8,5:0.8,6:1.0,7:1.0,8:1.0,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},dating:{0:1.0,1:1.0,2:1.0,3:1.0,4:1.0,5:0.8,6:0.7,7:0.6,8:0.4,9:0.4,10:0.4,11:0.6,12:0.7,13:0.8,14:0.9,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},cooking:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.3,6:0.5,7:0.7,8:0.8,9:0.9,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:0.8,19:0.7,20:0.5,21:0.3,22:0.3,23:0.3},gameShow:{0:0.4,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.6,7:0.8,8:0.9,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:0.9,22:0.7,23:0.5},sport:{0:0.8,1:0.6,2:0.4,3:0.4,4:0.4,5:0.4,6:0.4,7:0.5,8:0.5,9:0.5,10:0.6,11:0.7,12:0.8,13:0.9,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:1.0,22:1.0,23:1.0},education:{0:0.8,1:0.6,2:0.4,3:0.4,4:0.4,5:0.4,6:0.6,7:0.7,8:0.8,9:0.9,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:0.9,21:0.9,22:0.9,23:0.8},talk:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.5,7:0.6,8:0.7,9:0.8,10:0.9,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:0.9,17:0.8,18:0.7,19:0.6,20:0.5,21:0.4,22:0.4,23:0.4},information:{0:0.3,1:0.3,2:0.3,3:0.3,4:0.3,5:0.5,6:1.0,7:0.5,8:0.3,9:0.3,10:0.3,11:0.5,12:1.0,13:0.5,14:0.3,15:0.3,16:0.3,17:0.5,18:0.5,19:1.0,20:0.5,21:0.3,22:0.3,23:0.3},musicShow:{0:0.4,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.6,7:0.8,8:0.9,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:0.9,22:0.7,23:0.5},talentShow:{0:0.4,1:0.3,2:0.3,3:0.3,4:0.3,5:0.4,6:0.6,7:0.8,8:0.9,9:1.0,10:1.0,11:1.0,12:1.0,13:1.0,14:1.0,15:1.0,16:1.0,17:1.0,18:1.0,19:1.0,20:1.0,21:0.9,22:0.7,23:0.5}}
+};
+
+// Working state — only keys the user actually changed are stored here
+const gSettings = {
+  viewHour: {},    // key: "h0".."h23", value: float
+  typHour: {},     // key: "movie0".."news23"
+  genreHour: {},   // key: "action0".."talentShow23"
+  baseVars: {},    // key: field name, value: number or bool
+  baseVarsDebugChanged: {} // track which debug bools were explicitly set
+};
+
+// ============ HOUR GRID HELPERS ============
+function hourLabel(h) {
+  const ampm = h < 12 ? 'AM' : 'PM';
+  const h12 = h % 12 || 12;
+  return `${h12}${ampm}`;
+}
+
+function buildHourGrid(containerId, getVal, onChangeKey) {
+  const container = document.getElementById(containerId);
+  let html = '';
+  for(let h=0; h<24; h++) {
+    const val = Math.round(getVal(h) * 100) / 100;
+    const cellId = `${containerId}_h${h}`;
+    const isModified = onChangeKey ? isHourModified(onChangeKey, h) : false;
+    html += `<div class="hour-cell ${isModified?'modified':''}" id="hcell_${containerId}_${h}">
+      <div class="hour-label"><span>H${h}</span><span class="htime">${hourLabel(h)}</span></div>
+      <input type="range" id="${cellId}" min="0" max="1" step="0.05" value="${val}"
+        oninput="onHourInput('${containerId}','${onChangeKey||''}',${h},parseFloat(this.value))">
+      <div class="hour-val" id="${cellId}_v">${val.toFixed(2)}</div>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+function onHourInput(containerId, storeKey, h, val) {
+  val = Math.round(val * 100) / 100;
+  document.getElementById(`${containerId}_h${h}_v`).textContent = val.toFixed(2);
+  const cell = document.getElementById(`hcell_${containerId}_${h}`);
+
+  if(storeKey === 'viewHour') {
+    const def = DEFAULTS.viewHour[`h${h}`];
+    if(val !== def) { gSettings.viewHour[`h${h}`] = val; cell.classList.add('modified'); }
+    else { delete gSettings.viewHour[`h${h}`]; cell.classList.remove('modified'); }
+  } else if(storeKey.startsWith('typ:')) {
+    const typ = storeKey.slice(4);
+    const key = `${typ}${h}`;
+    const def = DEFAULTS.typHour[typ][h];
+    if(val !== def) { gSettings.typHour[key] = val; cell.classList.add('modified'); }
+    else { delete gSettings.typHour[key]; cell.classList.remove('modified'); }
+  } else if(storeKey.startsWith('genre:')) {
+    const genre = storeKey.slice(6);
+    const key = `${genre}${h}`;
+    const def = DEFAULTS.genreHour[genre][h];
+    if(val !== def) { gSettings.genreHour[key] = val; cell.classList.add('modified'); }
+    else { delete gSettings.genreHour[key]; cell.classList.remove('modified'); }
+  }
+}
+
+function isHourModified(storeKey, h) {
+  if(storeKey === 'viewHour') return `h${h}` in gSettings.viewHour;
+  if(storeKey.startsWith('typ:')) return `${storeKey.slice(4)}${h}` in gSettings.typHour;
+  if(storeKey.startsWith('genre:')) return `${storeKey.slice(6)}${h}` in gSettings.genreHour;
+  return false;
+}
+
+// ============ VIEW HOUR ============
+function renderViewHourGrid() {
+  buildHourGrid('viewhour-grid',
+    h => gSettings.viewHour[`h${h}`] ?? DEFAULTS.viewHour[`h${h}`],
+    'viewHour'
+  );
+}
+function saveViewHour() { showToast('Viewer hours saved! Export to download.'); }
+
+// ============ TYP HOUR ============
+function renderTypHourGrid() {
+  const typ = document.getElementById('typhour-type-select').value;
+  buildHourGrid('typhour-grid',
+    h => gSettings.typHour[`${typ}${h}`] ?? DEFAULTS.typHour[typ][h],
+    `typ:${typ}`
+  );
+}
+function saveTypHour() { showToast('Type hours saved! Export to download.'); }
+
+// ============ GENRE HOUR ============
+function renderGenreHourGrid() {
+  const genre = document.getElementById('genrehour-genre-select').value;
+  buildHourGrid('genrehour-grid',
+    h => gSettings.genreHour[`${genre}${h}`] ?? DEFAULTS.genreHour[genre][h],
+    `genre:${genre}`
+  );
+}
+function saveGenreHour() { showToast('Genre hours saved! Export to download.'); }
+
+// ============ BASE VARS ============
+function bvDebugChanged(key) {
+  gSettings.baseVarsDebugChanged[key] = true;
+}
+
+function saveBaseVars() {
+  const BV_FIELDS = [
+    'newGameMaxMovies','newGameMaxSeries','newGameMaxRealRating',
+    'difficulty0','difficulty1','difficulty2',
+    'viewsBase','viewsMovies','viewsSeries','viewsLive','viewsTeleshop','viewsShows','viewsNews',
+    'viewsMalus','viewsBonus','viewsCultMovie','viewsUnhappy','viewsTrailer',
+    'views1950','views1960','views1970','views1980','views1990','views2000','views2010','views2020',
+    'miscRecover','overheatMovie','overheatSeries','overheatLive','overheatTeleshop','overheatShow','overheatNews',
+    'moviePriceD0','moviePriceD1','moviePriceD2','movieRentPrice','moviePiracyPrice',
+    'newsPriceMin','newsPriceMax','penaltyPiracy','penaltyAge'
+  ];
+  const INT_FIELDS = new Set(['newGameMaxMovies','newGameMaxSeries','newsPriceMin','newsPriceMax','penaltyPiracy','penaltyAge']);
+  BV_FIELDS.forEach(k => {
+    const el = document.getElementById('bv_'+k);
+    if(el && el.value.trim() !== '') {
+      gSettings.baseVars[k] = INT_FIELDS.has(k) ? parseInt(el.value) : parseFloat(el.value);
+    } else {
+      delete gSettings.baseVars[k];
+    }
+  });
+  // Debug bools — only save if user touched them
+  ['debugKeys','debugShowTypHelp','debugShowGenreHelp'].forEach(k => {
+    if(gSettings.baseVarsDebugChanged[k]) {
+      gSettings.baseVars[k] = document.getElementById('bv_'+k).checked;
+    }
+  });
+  showToast('Base variables saved! Export to download.');
+}
+
+// Initialize grids when tabs are opened (lazy render)
+const _origSwitchTab = switchTab;
 // ============ GUIDE ============
 function openGuide() { document.getElementById('guideModal').classList.add('open'); }
 function closeGuide() { document.getElementById('guideModal').classList.remove('open'); }
@@ -993,6 +1320,17 @@ document.getElementById('guideBtn').onclick = openGuide;
 document.getElementById('guideModal').onclick = function(e){ if(e.target===this) closeGuide(); };
 document.getElementById('changelogBtn').onclick = function() { document.getElementById('changelogModal').classList.add('open'); };
 document.getElementById('changelogModal').onclick = function(e){ if(e.target===this) this.classList.remove('open'); };
+
+// Override switchTab to init settings grids on first open
+function switchTab(name) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='viewhour' && !document.getElementById('viewhour-grid').children.length) renderViewHourGrid();
+  if(name==='typhour' && !document.getElementById('typhour-grid').children.length) renderTypHourGrid();
+  if(name==='genrehour' && !document.getElementById('genrehour-grid').children.length) renderGenreHourGrid();
+}
 
 // ============ EXPORT ============
 function openExport() { buildExportPanel(); document.getElementById('exportPanel').classList.add('open'); }
@@ -1006,33 +1344,152 @@ function buildExportPanel() {
   const mn=getModName();
   const ti=store.movies.length+store.series.length+store.shows.length;
   const tc=store.cast.length, tn=store.names.length, tr=store.reviews.length;
+  const tvh=Object.keys(gSettings.viewHour).length;
+  const tth=Object.keys(gSettings.typHour).length;
+  const tgh=Object.keys(gSettings.genreHour).length;
+  const tbv=Object.keys(gSettings.baseVars).length;
+  const totalContent = ti+tc+tn+tr;
+  const totalSettings = tvh+tth+tgh+tbv;
+  const totalAll = totalContent+totalSettings;
   document.getElementById('exportBody').innerHTML=`
-    <div class="modloader-banner">
-      <h3>⚠ Modloader Required</h3>
-      <p>Your mod files won't do anything without the Modloader installed. Make sure to download and install it first before copying files into the Mods folder.</p>
-      <p style="margin-top:8px"><a href="https://www.moddb.com/mods/modloader" target="_blank">⬇ Download Modloader from ModDB →</a></p>
+    <div style="background:rgba(86,211,100,.08);border:1px solid rgba(86,211,100,.3);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px">
+      <p style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:4px">✅ No Modloader required</p>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Mods are now natively supported by Mad Television Tycoon. Just download the zip below and extract it into your game folder.</p>
     </div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6">
-      Download only the files for content you've added. Drop them into the <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px">Mods</code> folder in your game's installation directory.
-    </p>
-    ${fileCard(mn+'_items.json','Movies, TV Series & Shows ('+ti+' entries)','Contains all your movies, shows and series.','downloadItems',ti)}
-    ${fileCard(mn+'_cast.json','Cast Members ('+tc+' entries)','Contains all your directors, actors and crew.','downloadCast',tc)}
-    ${fileCard(mn+'_names.json','Name Lists ('+tn+' categories)','Contains your title name lists for random content generation.','downloadNames',tn)}
-    ${fileCard(mn+'_reviews.json','Review Texts ('+tr+' reviews)','Contains your custom in-game review blurbs.','downloadReviews',tr)}
-    <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:14px;font-size:12px;color:var(--text-muted);margin-top:4px;line-height:1.7">
-      <strong style="color:var(--accent)">📁 Mod folder location:</strong><br>
-      Steam → right-click game → <em>Manage → Browse local files</em> → drop files in the <code style="background:var(--surface3);padding:1px 5px;border-radius:3px">Mods</code> folder.
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text)">${mn}.zip</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:3px">${totalContent} content file${totalContent!==1?'s':''} &nbsp;·&nbsp; ${totalSettings} setting override${totalSettings!==1?'s':''}</div>
+        </div>
+        <button class="dl-btn" onclick="downloadModZip()" ${totalAll===0?'disabled':''} style="font-size:15px;padding:11px 22px">⬇ Download Mod (.zip)</button>
+      </div>
+      <div style="font-size:11px;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;color:var(--text-muted)">Zip contents</div>
+        ${ti>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_items.json</code> — ${ti} content entr${ti!==1?'ies':'y'}</div>`:''}
+        ${tc>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_cast.json</code> — ${tc} cast member${tc!==1?'s':''}</div>`:''}
+        ${tn>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_names.json</code> — ${tn} name list${tn!==1?'s':''}</div>`:''}
+        ${tr>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\DATABASE\MOD\${mn}_reviews.json</code> — ${tr} review${tr!==1?'s':''}</div>`:''}
+        ${tvh>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_viewHour.json</code> — ${tvh} override${tvh!==1?'s':''}</div>`:''}
+        ${tth>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_typHour.json</code> — ${tth} override${tth!==1?'s':''}</div>`:''}
+        ${tgh>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_genreHour.json</code> — ${tgh} override${tgh!==1?'s':''}</div>`:''}
+        ${tbv>0?`<div>📄 <code style="font-family:'JetBrains Mono',monospace;background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon\EXTERN\GMPL\MOD\${mn}_baseVars.json</code> — ${tbv} override${tbv!==1?'s':''}</div>`:''}
+        ${totalAll===0?'<div style="color:var(--text-dim);font-style:italic">No content or settings added yet — nothing to export.</div>':''}
+      </div>
+    </div>
+    <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:14px;font-size:12px;color:var(--text-muted);line-height:1.7">
+      <strong style="color:var(--accent)">📁 How to install:</strong><br>
+      Steam → right-click game → <em>Manage → Browse local files</em> → extract the zip directly into the game folder. The <code style="background:var(--surface3);padding:1px 5px;border-radius:3px">MadTelevisionTycoon</code> folder inside the zip will merge with the existing one.
     </div>`;
 }
 
-function fileCard(fname, title, desc, fn, count) {
+function fileCard(fname, title, desc, fn, count, countLabel) {
+  const label = countLabel || 'entries';
   const disabled = count===0;
   return `<div class="export-file-card">
-    <h3><span>${fname}</span><span style="color:var(--text-dim);font-size:10px;font-weight:400">${count} entries</span></h3>
+    <h3><span>${fname}</span><span style="color:var(--text-dim);font-size:10px;font-weight:400">${count} ${label}</span></h3>
     <p>${desc}</p>
     <button class="dl-btn" onclick="${fn}()" ${disabled?'disabled':''}>⬇ Download ${fname}</button>
-    ${disabled?'<p style="margin-top:8px;font-size:11px;color:var(--text-dim)">Nothing added yet — nothing to export.</p>':''}
+    ${disabled?'<p style="margin-top:8px;font-size:11px;color:var(--text-dim)">Nothing changed yet — nothing to export.</p>':''}
   </div>`;
+}
+
+function downloadViewHour() {
+  if(!Object.keys(gSettings.viewHour).length) { showToast('No viewer hour changes to export.'); return; }
+  downloadFile(getModName()+'_viewHour.json', JSON.stringify(gSettings.viewHour, null, '\t'));
+}
+
+function downloadTypHour() {
+  if(!Object.keys(gSettings.typHour).length) { showToast('No type hour changes to export.'); return; }
+  downloadFile(getModName()+'_typHour.json', JSON.stringify(gSettings.typHour, null, '\t'));
+}
+
+function downloadGenreHour() {
+  if(!Object.keys(gSettings.genreHour).length) { showToast('No genre hour changes to export.'); return; }
+  downloadFile(getModName()+'_genreHour.json', JSON.stringify(gSettings.genreHour, null, '\t'));
+}
+
+function downloadBaseVars() {
+  if(!Object.keys(gSettings.baseVars).length) { showToast('No base variable changes to export.'); return; }
+  downloadFile(getModName()+'_baseVars.json', JSON.stringify(gSettings.baseVars, null, '\t'));
+}
+
+async function downloadModZip() {
+  const mn = getModName();
+  const zip = new JSZip();
+  const dbPath = `MadTelevisionTycoon/EXTERN/DATABASE/MOD/`;
+  const gmplPath = `MadTelevisionTycoon/EXTERN/GMPL/MOD/`;
+
+  // ── Content files → DATABASE/MOD ──
+  const ti = store.movies.length + store.series.length + store.shows.length;
+  if(ti > 0) {
+    const data = [];
+    store.movies.forEach((m,i)=>{
+      const e={_comment:m.name||'Movie '+(i+1),ID:m._id,ItemTyp:1,Name:m.name||'',Desc:m.desc||'',Genre:m.genre||0,Country:m.country||0,Date:m.year||0,Rating:m.rating||60,Blocks:m.blocks||2,AgeRate:m.age||0,Texture:1,Approval:m.approval??255,Potential:m.potential||50,Chance:(m.chance||10)*1.0};
+      if(m.name_de) e.Name_DE=m.name_de; if(m.desc_de) e.Desc_DE=m.desc_de;
+      const cr=buildSafeCredits(m.credits_ids,'movie'); if(cr) e.Credits=cr;
+      if(m.price) e.Price=m.price;
+      if(m.cult) e.Cult=true; if(m.timeless) e.Timeless=true; if(m.evergreen) e.Evergreen=true; if(m.premium) e.Premium=true; if(m.pirated) e.Pirated=true;
+      data.push(e);
+    });
+    store.series.forEach((s,i)=>{
+      const e={_comment:s.name||'Series '+(i+1),ID:s._id,ItemTyp:2,Name:s.name||'',Desc:s.desc||'',Genre:s.genre||0,Country:s.country||0,Date:s.year||0,Rating:s.rating||65,Blocks:s.blocks||1,AgeRate:s.age||0,Episodes:s.episodes||1,Texture:1,Approval:s.approval??255,Potential:s.potential||55,Chance:(s.chance||10)*1.0,CurrentEpisode:1};
+      if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de;
+      const cr=buildSafeCredits(s.credits_ids,'series'); if(cr) e.Credits=cr;
+      if(s.price) e.Price=s.price;
+      if(s.cult) e.Cult=true; if(s.timeless) e.Timeless=true; if(s.evergreen) e.Evergreen=true; if(s.premium) e.Premium=true;
+      data.push(e);
+    });
+    store.shows.forEach((s,i)=>{
+      const e={_comment:s.name||'Show '+(i+1),ID:s._id,ItemTyp:s.typ||16,Name:s.name||'',Desc:s.desc||'',Genre:s.typ||16,Date:s.year||0,Rating:s.rating||60,Blocks:s.blocks||1,AgeRate:s.age||0,Texture:1,Approval:s.approval??255,Potential:s.potential||50};
+      if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de; if(s.price) e.Price=s.price;
+      const cr=buildSafeCredits(s.credits_ids,'show'); if(cr) e.Credits=cr;
+      data.push(e);
+    });
+    zip.file(dbPath + mn + '_items.json', JSON.stringify({data}, null, 2));
+  }
+
+  if(store.cast.length > 0) {
+    const data = store.cast.map(c=>{
+      const e={_comment:c.name||'',ID:c._id,Job:c.job||0,Genre:c.genre||0,Rating:c.rating||50,Name:c.name||''};
+      if(c.gender) e.Gender=c.gender; if(c.salary) e.Salary=c.salary;
+      return e;
+    });
+    zip.file(dbPath + mn + '_cast.json', JSON.stringify({data}, null, 2));
+  }
+
+  if(store.names.length > 0) {
+    const out = {};
+    store.names.forEach(n=>{ if(n.category&&n.names) out[n.category]=n.names; });
+    if(Object.keys(out).length) zip.file(dbPath + mn + '_names.json', JSON.stringify(out, null, 2));
+  }
+
+  if(store.reviews.length > 0) {
+    const out = {}; const counts = {};
+    store.reviews.forEach(r=>{
+      if(!r.text) return;
+      const key = r.category+'_'+r.lang;
+      counts[key] = (counts[key]||0)+1;
+      out[`${r.category}_${counts[key]}_${r.lang}`] = r.text;
+    });
+    if(Object.keys(out).length) zip.file(dbPath + mn + '_reviews.json', JSON.stringify(out, null, 2));
+  }
+
+  // ── Settings files → GMPL/MOD ──
+  if(Object.keys(gSettings.viewHour).length)
+    zip.file(gmplPath + mn + '_viewHour.json', JSON.stringify(gSettings.viewHour, null, '\t'));
+  if(Object.keys(gSettings.typHour).length)
+    zip.file(gmplPath + mn + '_typHour.json', JSON.stringify(gSettings.typHour, null, '\t'));
+  if(Object.keys(gSettings.genreHour).length)
+    zip.file(gmplPath + mn + '_genreHour.json', JSON.stringify(gSettings.genreHour, null, '\t'));
+  if(Object.keys(gSettings.baseVars).length)
+    zip.file(gmplPath + mn + '_baseVars.json', JSON.stringify(gSettings.baseVars, null, '\t'));
+
+  const blob = await zip.generateAsync({type:'blob'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=mn+'.zip'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Downloaded: '+mn+'.zip');
 }
 
 function downloadFile(filename, content) {
@@ -1043,9 +1500,80 @@ function downloadFile(filename, content) {
   showToast('Downloaded: '+filename);
 }
 
-function creditsStr(ids) {
-  if(!ids||!ids.length) return '';
-  return ids.join(', ');
+// Helper: enforce cap on bv number fields with live visual feedback
+function bvCapCheck(el, cap) {
+  const v = parseInt(el.value);
+  if(!isNaN(v) && v > cap) {
+    el.value = cap;
+    el.style.borderColor = 'var(--accent2)';
+    showToast('⚠ Capped at ' + cap + ' — higher values crash the game.');
+    setTimeout(()=>{ el.style.borderColor = ''; }, 2000);
+  }
+}
+
+// ============ CREDITS SAFETY ============
+// Job codes: 0=Director, 1=Actor, 2=Producer, 3=Presenter, 4=Moderator
+// Vanilla fallback IDs (always exist in the base game):
+const FALLBACK = {
+  director:  [1, 2, 3, 4],             // Robert Rodriguez, Ridley Scott, Alfred Hitchcock, Stanley Kubrick
+  actor:     [10000, 10001, 10002, 10003], // Arnold Schwarzenegger, Linda Hamilton, Harvey Keitel, George Clooney
+  producer:  [100000, 100001, 100002, 100003], // Glen A. Larson, Sean Jara, Theo Mezger, Tom Patchett
+  presenter: [1000000, 1000001, 1000002, 1000003], // Lukas Weber, Sophie Keller, Jonas Schmidt, Laura Fischer
+  moderator: [10000000, 10000001, 10000002, 10000003] // Lukas Schneider, Matteo Rossi, Jean Dupont, Alejandro García
+};
+
+function buildSafeCredits(ids, contentType) {
+  // Get the full cast pool: vanilla + user-added cast
+  const allCast = getAllCast(); // returns [{id, name, job}, ...]
+  const castById = {};
+  allCast.forEach(c => { castById[c.id] = c; });
+
+  // Filter to only IDs that exist in the cast pool
+  const valid = (ids || []).filter(id => castById[id]);
+
+  // Determine required roles based on content type
+  // contentType: 'movie' | 'series' | 'show'
+  let leaderJob, fillerJob, leaderFallback, fillerFallback;
+  if(contentType === 'movie') {
+    leaderJob = 0; fillerJob = 1;
+    leaderFallback = FALLBACK.director; fillerFallback = FALLBACK.actor;
+  } else if(contentType === 'series') {
+    leaderJob = 2; fillerJob = 1;
+    leaderFallback = FALLBACK.producer; fillerFallback = FALLBACK.actor;
+  } else { // show
+    leaderJob = 3; fillerJob = 4;
+    leaderFallback = FALLBACK.presenter; fillerFallback = FALLBACK.moderator;
+  }
+
+  // Split selected ids into leaders (correct job) and fillers
+  const leaders = valid.filter(id => castById[id] && castById[id].job === leaderJob);
+  const fillers = valid.filter(id => castById[id] && castById[id].job !== leaderJob);
+
+  let result = [];
+
+  if(valid.length === 0) {
+    // Nothing selected — auto-fill: 1 leader + 3 fillers from vanilla fallbacks
+    result.push(leaderFallback[0]);
+    result.push(fillerFallback[0], fillerFallback[1], fillerFallback[2]);
+  } else if(valid.length < 4) {
+    // Has some but not enough — keep what user selected, pad fillers only
+    result = [...valid];
+    // Pad with fallback filler IDs not already in result
+    for(const fid of fillerFallback) {
+      if(result.length >= 4) break;
+      if(!result.includes(fid)) result.push(fid);
+    }
+    // Still not 4? pad with any fallback leader not in result
+    for(const lid of leaderFallback) {
+      if(result.length >= 4) break;
+      if(!result.includes(lid)) result.push(lid);
+    }
+  } else {
+    // 4 or more — trim to exactly 4
+    result = valid.slice(0, 4);
+  }
+
+  return result.join(', ');
 }
 
 function downloadItems() {
@@ -1053,7 +1581,7 @@ function downloadItems() {
   store.movies.forEach((m,i)=>{
     const e={_comment:m.name||'Movie '+(i+1),ID:m._id,ItemTyp:1,Name:m.name||'',Desc:m.desc||'',Genre:m.genre||0,Country:m.country||0,Date:m.year||0,Rating:m.rating||60,Blocks:m.blocks||2,AgeRate:m.age||0,Texture:1,Approval:m.approval??255,Potential:m.potential||50,Chance:(m.chance||10)*1.0};
     if(m.name_de) e.Name_DE=m.name_de; if(m.desc_de) e.Desc_DE=m.desc_de;
-    const cr=creditsStr(m.credits_ids); if(cr) e.Credits=cr;
+    const cr=buildSafeCredits(m.credits_ids,'movie'); if(cr) e.Credits=cr;
     if(m.price) e.Price=m.price;
     if(m.cult) e.Cult=true; if(m.timeless) e.Timeless=true; if(m.evergreen) e.Evergreen=true; if(m.premium) e.Premium=true; if(m.pirated) e.Pirated=true;
     data.push(e);
@@ -1061,7 +1589,7 @@ function downloadItems() {
   store.series.forEach((s,i)=>{
     const e={_comment:s.name||'Series '+(i+1),ID:s._id,ItemTyp:2,Name:s.name||'',Desc:s.desc||'',Genre:s.genre||0,Country:s.country||0,Date:s.year||0,Rating:s.rating||65,Blocks:s.blocks||1,AgeRate:s.age||0,Episodes:s.episodes||1,Texture:1,Approval:s.approval??255,Potential:s.potential||55,Chance:(s.chance||10)*1.0,CurrentEpisode:1};
     if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de;
-    const cr=creditsStr(s.credits_ids); if(cr) e.Credits=cr;
+    const cr=buildSafeCredits(s.credits_ids,'series'); if(cr) e.Credits=cr;
     if(s.price) e.Price=s.price;
     if(s.cult) e.Cult=true; if(s.timeless) e.Timeless=true; if(s.evergreen) e.Evergreen=true; if(s.premium) e.Premium=true;
     data.push(e);
@@ -1069,7 +1597,7 @@ function downloadItems() {
   store.shows.forEach((s,i)=>{
     const e={_comment:s.name||'Show '+(i+1),ID:s._id,ItemTyp:s.typ||16,Name:s.name||'',Desc:s.desc||'',Genre:s.typ||16,Date:s.year||0,Rating:s.rating||60,Blocks:s.blocks||1,AgeRate:s.age||0,Texture:1,Approval:s.approval??255,Potential:s.potential||50};
     if(s.name_de) e.Name_DE=s.name_de; if(s.desc_de) e.Desc_DE=s.desc_de; if(s.price) e.Price=s.price;
-    const cr=creditsStr(s.credits_ids); if(cr) e.Credits=cr;
+    const cr=buildSafeCredits(s.credits_ids,'show'); if(cr) e.Credits=cr;
     data.push(e);
   });
   downloadFile(mn+'_items.json', JSON.stringify({data},null,2));
