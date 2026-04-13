@@ -396,8 +396,10 @@
         <div class="panel-title"><div><h2>📺 Viewer Hours</h2><p>Overall TV audience multiplier per hour of the day (0 = nobody watching, 1 = peak audience)</p></div></div>
         <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveViewHour()">💾 Save Changes</button>
       </div>
+      <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.25);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-muted);line-height:1.6">
+        ⚠ <strong style="color:var(--accent)">May currently not work</strong> Changes you apply here might not be reflected in-game.
+      </div>
       <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
-        ⚠ <strong style="color:var(--accent)">May currently not work</strong> Changes you make here may not apply correctly in-game. Working on a fix.
         <strong style="color:var(--accent3)">📖 What is this?</strong> This multiplier scales the total number of viewers available at each hour. Hour 0 = midnight, hour 19 = 7 PM prime time. Values range from 0.0 (no viewers) to 1.0 (maximum). Only changed values will be written to the exported file.
       </div>
       <div id="viewhour-grid" class="settings-hour-grid"></div>
@@ -409,8 +411,10 @@
         <div class="panel-title"><div><h2>🎞️ Type Hours</h2><p>Per content-type audience multiplier per hour (how well each content type performs at each hour)</p></div></div>
         <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveTypHour()">💾 Save Changes</button>
       </div>
+      <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.25);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-muted);line-height:1.6">
+        ⚠ <strong style="color:var(--accent)">May currently not work</strong> Changes you apply here might not be reflected in-game.
+      </div>
       <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
-        ⚠ <strong style="color:var(--accent)">May currently not work</strong> Changes you make here may not apply correctly in-game. Working on a fix.
         <strong style="color:var(--accent3)">📖 What is this?</strong> Each content type (Movies, Series, Shows, etc.) has its own multiplier per hour. For example, Movies peak late evening while News peaks at breakfast/lunch/evening. Select a type below to edit its 24-hour curve.
       </div>
       <div class="field" style="margin-bottom:18px;max-width:260px">
@@ -433,8 +437,10 @@
         <div class="panel-title"><div><h2>🎨 Genre Hours</h2><p>Per genre audience multiplier per hour (how well each genre performs at each hour)</p></div></div>
         <button class="add-btn" style="border-style:solid;background:rgba(86,211,100,.08);border-color:var(--green);color:var(--green)" onclick="saveGenreHour()">💾 Save Changes</button>
       </div>
+      <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.25);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-muted);line-height:1.6">
+        ⚠ <strong style="color:var(--accent)">May currently not work</strong> Changes you apply here might not be reflected in-game.
+      </div>
       <div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text-muted)">
-        ⚠ <strong style="color:var(--accent)">May currently not work</strong> Changes you make here may not apply correctly in-game. Working on a fix.
         <strong style="color:var(--accent3)">📖 What is this?</strong> Each genre has a performance curve across the day. Horror peaks at night, Family peaks during the day. Select a genre below to edit its 24-hour multiplier curve.
       </div>
       <div class="field" style="margin-bottom:18px;max-width:260px">
