@@ -235,7 +235,7 @@
           <span class="cl-badge new">Latest</span>
         </div>
         <ul class="cl-list">
-          <li>✨ <strong>New:</strong> Added persisent saving — if you close out of the page and return at a later time, your progress is still there!</li>
+          <li>✨ <strong>New:</strong> Added persistent saving — if you close out of the page and return at a later time, your progress is still there!</li>
           <li>🔧 <strong>Fix:</strong> Game settings now correctly export the entire JSON file.</li>
           <li>🥤 <strong>Todo:</strong> Language selector now allows you to pick your language. <strong>(v1.2.0)</strong></li>
           <li>🥤 <strong>Todo:</strong> Moved page to root directory, English/Deutsch now refer to the new page location. <strong>(v1.2.0)</strong></li>
@@ -795,11 +795,17 @@ function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'
 function vv(id) { const e=document.getElementById(id); return e?e.value:''; }
 function vc(id) { const e=document.getElementById(id); return e?e.checked:false; }
 function vn(id) { return parseInt(vv(id))||0; }
-function showToast(msg) {
+function _showToastCore(msg) {
   const t=document.getElementById('toast');
   document.getElementById('toastMsg').textContent=msg;
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
+}
+function showToast(msg) {
+  _showToastCore(msg);
+  // Debounced auto-save — persists session 500ms after the last user action
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(saveSession, 500);
 }
 
 // ============ CREDITS WIDGET ============
@@ -1741,14 +1747,7 @@ document.getElementById('modNameInput').addEventListener('input', function() {
 });
 
 // ============ AUTO-SAVE WIRING ============
-// Wrap the existing showToast so every save/delete action auto-persists
-const _origShowToast = showToast;
-function showToast(msg) {
-  _origShowToast(msg);
-  // Debounced auto-save — saves 500ms after the last action
-  clearTimeout(showToast._timer);
-  showToast._timer = setTimeout(saveSession, 500);
-}
+// showToast is already wired to saveSession above (_showToastCore / showToast split).
 
 // ============ RESTORE SESSION ON LOAD ============
 document.addEventListener('DOMContentLoaded', () => {
@@ -1783,7 +1782,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const total = store.movies.length + store.series.length + store.shows.length + store.cast.length + store.names.length + store.reviews.length;
     if(total > 0 || mn) {
       // Show a non-intrusive restore notice via the toast system
-      setTimeout(()=> _origShowToast('✅ Session restored — ' + total + ' item' + (total!==1?'s':'') + ' loaded.'), 300);
+      setTimeout(()=> _showToastCore('✅ Session restored — ' + total + ' item' + (total!==1?'s':'') + ' loaded.'), 300);
     }
   }
 });
